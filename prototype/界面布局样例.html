@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>喵游记 · 界面布局样例 v1.3.1</title>
+<title>喵游记 · 界面布局样例 v1.4</title>
 <style>
   :root{
     --bg:#e9edf3; --panel:#ffffff; --panel2:#f2f5fa; --line:#d8dfeb;
@@ -24,30 +24,31 @@
   .mini-stat b{color:var(--txt)}
   header .money{margin-left:auto;font-size:13px}
   header .money span{color:#c78a1e}
-  /* ===== 三栏六区：地图列加宽、中列收窄 ===== */
+  header .tool-btn{background:#efe7f8;border:1px solid #cdb6ec;color:#6d3fb8;border-radius:8px;padding:5px 14px;cursor:pointer;font-size:13px;font-weight:600}
+  header .tool-btn:hover{filter:brightness(.96)}
+  /* ===== 三栏六区 ===== */
   main{flex:1;display:grid;grid-template-columns:minmax(430px,1.3fr) minmax(270px,.9fr) minmax(310px,1.05fr);grid-template-rows:47% 53%;gap:8px;padding:8px;min-height:0}
   .zone{background:var(--panel);border:1px solid var(--line);border-radius:10px;display:flex;flex-direction:column;min-height:0;overflow:hidden}
   .zone-title{flex:none;display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:13px;font-weight:600;color:var(--amber);border-bottom:1px solid var(--line);background:var(--panel2)}
   .zone-body{flex:1;min-height:0;overflow:auto}
   .z-map{grid-area:1/1}.z-monster{grid-area:1/2}.z-world{grid-area:1/3}
   .z-log{grid-area:2/1}.z-player{grid-area:2/2}.z-channel{grid-area:2/3}
-  /* ===== 地图区域（背景图 + 数字方块格） ===== */
+  /* ===== 地图区域（小格子 + 乱序 + 不规则 + 视野） ===== */
   .map-wrap{padding:10px;display:flex;flex-direction:column;gap:8px;height:100%;min-height:0}
-  .map-view{position:relative;flex:1;min-height:0;border-radius:10px;overflow:hidden;border:1px solid #c4cf9e}
-  .map-bg{position:absolute;inset:0;background:url("地图背景.svg") center/cover no-repeat}
-  .map-shade{position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.06),rgba(30,50,30,.10));pointer-events:none}
-  #mapGrid{position:absolute;inset:8px;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);gap:5px}
-  .cell{position:relative;background:rgba(255,255,255,.66);border:2px solid rgba(70,84,110,.38);border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.1s;backdrop-filter:blur(1px)}
-  .cell:hover{border-color:#e08a00;background:rgba(255,255,255,.88)}
-  .cell .num{font:700 15px/1 Consolas,monospace;color:#42506e;letter-spacing:1px}
-  .cell .mm{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:11px;line-height:1;filter:drop-shadow(0 1px 1px rgba(255,255,255,.9))}
-  .cell .badge{position:absolute;top:-7px;right:-6px;background:#d64545;color:#fff;font-size:10px;font-weight:700;border-radius:9px;padding:1px 6px;border:1px solid #fff}
-  .cell.me{border-color:#2f9e44;background:rgba(180,235,175,.75);box-shadow:0 0 0 2px rgba(47,158,68,.35)}
-  .cell.town{border-color:#c78a1e;background:rgba(255,225,160,.78)}
-  .cell.boss{border-color:#d64545;background:rgba(255,190,185,.72)}
-  .cell.cur{outline:3px solid #ffb01f;outline-offset:-1px}
+  .map-view{position:relative;flex:1;min-height:0;border-radius:10px;overflow:hidden;border:1px solid #b7c493;background:#a9cf8e}
+  #world{position:absolute;top:0;left:0;transition:transform .18s ease;will-change:transform}
+  .world-bg{position:absolute;inset:0;background:url("地图背景.svg");background-size:512px 512px;pointer-events:none}
+  .world-shade{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,transparent 30%,rgba(20,40,20,.18) 100%);pointer-events:none}
+  .cell{position:absolute;width:52px;height:52px;background:rgba(255,255,255,.72);border:2px solid rgba(70,84,110,.4);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:opacity .25s;user-select:none}
+  .cell:hover{border-color:#e08a00;background:rgba(255,255,255,.92)}
+  .cell .num{font:700 15px/1 Consolas,monospace;color:#42506e}
+  .cell.dim{opacity:.18;filter:grayscale(.7)}
+  .cell.me{border-color:#2f9e44;background:rgba(190,240,180,.85);box-shadow:0 0 0 3px rgba(47,158,68,.3)}
+  .cell.me .paw{position:absolute;bottom:1px;left:0;right:0;text-align:center;font-size:13px;line-height:1}
+  .cell.town{border-color:#c78a1e;background:rgba(255,228,165,.85)}
+  .cell.town .num{font-size:12px;position:absolute;top:3px;left:0;right:0;text-align:center}
+  .cell.town .mm{position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:15px}
   .map-legend{font-size:11.5px;color:var(--dim);display:flex;gap:14px;flex-wrap:wrap}
-  .map-legend b{color:#42506e}
   /* ===== 实体列表 ===== */
   .entity-list{list-style:none;padding:6px}
   .entity-list li{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;border:1px solid transparent}
@@ -99,6 +100,22 @@
   .btn{border-radius:8px;border:1px solid var(--line);background:#eef1f6;color:var(--txt);padding:6px 16px;cursor:pointer}
   .btn.primary{background:#fdecec;border-color:#efb3b3;color:#c0454a;font-weight:700}
   .btn.primary:hover,.btn:hover{filter:brightness(.96)}
+  /* ===== AI 猫仙人面板 ===== */
+  #aiMask{position:fixed;inset:0;background:rgba(40,50,70,.35);display:none;align-items:center;justify-content:center;z-index:60}
+  #aiMask.show{display:flex}
+  .ai-panel{width:480px;max-width:94vw;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 12px 40px rgba(30,40,60,.2)}
+  .ai-head{display:flex;align-items:center;gap:8px;padding:11px 14px;background:#f3edfb;border-bottom:1px solid var(--line);font-weight:700;color:#6d3fb8}
+  .ai-head .tag{font-size:10px;font-weight:400;background:#6d3fb8;color:#fff;border-radius:8px;padding:1px 8px}
+  .ai-head .x{margin-left:auto;cursor:pointer;color:var(--dim)}
+  .ai-head .x:hover{color:var(--red)}
+  .ai-set{padding:10px 14px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:52px 1fr;gap:6px 8px;align-items:center;font-size:12px;color:var(--dim)}
+  .ai-set input{border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:12px;outline:none;width:100%}
+  .ai-set .mock{grid-column:1/3;display:flex;align-items:center;gap:6px;cursor:pointer}
+  .ai-log{height:280px;overflow:auto;padding:10px 14px;display:flex;flex-direction:column;gap:6px;background:var(--panel2)}
+  .ai-msg{max-width:86%;padding:7px 11px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap}
+  .ai-msg.user{align-self:flex-end;background:#dcebfd;color:#2b4d80}
+  .ai-msg.assistant{align-self:flex-start;background:#fff;border:1px solid var(--line)}
+  .ai-err{align-self:center;font-size:11.5px;color:#c0454a;background:#fdecec;border:1px solid #efb3b3;border-radius:8px;padding:4px 10px}
   #toast{position:fixed;top:56px;left:50%;transform:translateX(-50%);z-index:99;display:flex;flex-direction:column;gap:6px;pointer-events:none}
   .toast-item{background:rgba(255,255,255,.96);border:1px solid #d99a2b;color:#8a5a10;padding:7px 18px;border-radius:20px;font-size:13px;box-shadow:0 4px 14px rgba(30,40,60,.12);animation:tin .2s}
   @keyframes tin{from{opacity:0;transform:translateY(-8px)}to{opacity:1}}
@@ -117,18 +134,18 @@
   </div></div>
   <span class="mini-stat">🍖 饱食 <b>72</b>　😊 心情 <b>85</b>　💤 疲劳 <b>23</b></span>
   <span class="money">🪙 <span>12,640</span>　💎 86</span>
+  <button class="tool-btn" onclick="openAi()">🧙 猫仙人 AI</button>
 </header>
 
 <main>
-  <!-- ① 左上：地图区域（背景图 + 数字方块格） -->
+  <!-- ① 左上：地图区域 -->
   <section class="zone z-map">
-    <div class="zone-title">🗺️ 地图区域 · <span style="color:var(--txt)">月牙森林</span>（Lv.10~20）<span id="posTip" style="margin-left:auto;color:var(--dim);font-weight:400;font-size:12px">当前位于 07</span></div>
+    <div class="zone-title">🗺️ 地图区域 · <span style="color:var(--txt)">月牙森林</span>（Lv.10~20）<span id="posTip" style="margin-left:auto;color:var(--dim);font-weight:400;font-size:12px"></span></div>
     <div class="map-wrap">
-      <div class="map-view">
-        <div class="map-bg"></div><div class="map-shade"></div>
-        <div id="mapGrid"></div>
+      <div class="map-view" id="mapView">
+        <div id="world"><div class="world-bg"></div><div class="world-shade"></div></div>
       </div>
-      <div class="map-legend"><span>格子编号 <b>00-35</b></span><span><b>每次只能走一格</b>（点击相邻格子）</span><span>角标数字 = 怪物数量</span><span>🏘️ 00 草原小镇</span><span>👑 35 BOSS</span></div>
+      <div class="map-legend"><span><b>乱序编号</b></span><span><b>每次只能走一格</b></span><span>视野外格子不可见（走动探索）</span><span>怪物<b>隐藏</b>，抵达格子随机出现</span></div>
     </div>
   </section>
 
@@ -172,6 +189,22 @@
 </main>
 
 <div id="mask" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal"></div></div>
+
+<!-- AI 猫仙人（GLM 大模型） -->
+<div id="aiMask" onclick="if(event.target===this)closeAi()">
+  <div class="ai-panel">
+    <div class="ai-head">🧙‍♂️ 猫仙人 <span class="tag">GLM</span><span style="font-weight:400;font-size:12px;color:var(--dim)">AI 智能NPC · 玩法指引 / 闲聊</span><span class="x" onclick="closeAi()">✕</span></div>
+    <div class="ai-set">
+      <span>模型</span><input id="aiModel" type="text" value="glm-5.3-flash">
+      <span>接口</span><input id="aiUrl" type="text" value="https://open.bigmodel.cn/api/paas/v4/chat/completions">
+      <span>Key</span><input id="aiKey" type="password" placeholder="演示模式无需填写">
+      <label class="mock"><input type="checkbox" id="aiMock" checked> 演示模式（本地模拟回复，不调用接口）</label>
+    </div>
+    <div class="ai-log" id="aiLog"></div>
+    <div class="chat-input"><input id="aiInput" placeholder="向猫仙人提问，例如：怎么打赢狼王？" onkeydown="if(event.key==='Enter')sendAi()"><button onclick="sendAi()">发送</button></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -184,123 +217,140 @@ const ICON = {
   chat: c=>`<button class="ibtn" title="聊天" onclick="event.stopPropagation();${c}"><svg viewBox="0 0 24 24" width="15" height="15" fill="#22a55c"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9l-5.5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg></button>`
 };
 
-/* ============ 数据 ============ */
-const monsters = {
-  1:{id:1,name:'灰狼',emoji:'🐺',lv:14,type:'普通',element:'风 · 被火克制',hp:180,maxHp:180,atk:52,def:26,spd:19,rec:12,skills:['撕咬 物理130%','嚎叫 攻击UP'],drops:[['狼皮',35],['兽肉',50],['C级爪子',8]]},
-  2:{id:2,name:'松鼠',emoji:'🐿️',lv:12,type:'普通',element:'地 · 被风克制',hp:120,maxHp:120,atk:38,def:18,spd:22,rec:10,skills:['坚果投掷 物理110%'],drops:[['松果',60],['毛皮',25]]},
-  3:{id:3,name:'猫头鹰',emoji:'🦉',lv:15,type:'普通',element:'风 · 被火克制',hp:165,maxHp:165,atk:58,def:22,spd:20,rec:11,skills:['俯冲 物理140%','夜枭凝视 30%眩晕'],drops:[['羽毛',40],['风之羽',6]]},
-  4:{id:4,name:'毒蘑菇',emoji:'🍄',lv:13,type:'精英',element:'地 · 被风克制',hp:340,maxHp:340,atk:60,def:40,spd:10,rec:26,skills:['毒雾 中毒3回合','孢子扩散 群体80%'],drops:[['毒囊',80],['毒系技能书',15]]},
-  5:{id:5,name:'月影狼王',emoji:'👑',lv:20,type:'BOSS',element:'暗 · 被光克制',hp:1900,maxHp:1900,atk:120,def:60,spd:28,rec:104,skills:['月牙斩 物理180%','召唤狼群','狂暴（阶段2）'],drops:[['A级武器·银月弯爪',100],['进化石',30],['BOSS称号',100]]}
+/* ============ 怪物模板 ============ */
+const MTPL = {
+  1:{name:'灰狼',emoji:'🐺',lv:14,type:'普通',element:'风 · 被火克制',hp:180,atk:52,def:26,spd:19,rec:12,skills:['撕咬 物理130%','嚎叫 攻击UP'],drops:[['狼皮',35],['兽肉',50],['C级爪子',8]]},
+  2:{name:'松鼠',emoji:'🐿️',lv:12,type:'普通',element:'地 · 被风克制',hp:120,atk:38,def:18,spd:22,rec:10,skills:['坚果投掷 物理110%'],drops:[['松果',60],['毛皮',25]]},
+  3:{name:'猫头鹰',emoji:'🦉',lv:15,type:'普通',element:'风 · 被火克制',hp:165,atk:58,def:22,spd:20,rec:11,skills:['俯冲 物理140%','夜枭凝视 30%眩晕'],drops:[['羽毛',40],['风之羽',6]]},
+  4:{name:'毒蘑菇',emoji:'🍄',lv:13,type:'精英',element:'地 · 被风克制',hp:340,atk:60,def:40,spd:10,rec:26,skills:['毒雾 中毒3回合','孢子扩散 群体80%'],drops:[['毒囊',80],['毒系技能书',15]]},
+  5:{name:'月影狼王',emoji:'👑',lv:20,type:'BOSS',element:'暗 · 被光克制',hp:1900,atk:120,def:60,spd:28,rec:104,skills:['月牙斩 物理180%','召唤狼群','狂暴（阶段2）'],drops:[['A级武器·银月弯爪',100],['进化石',30],['BOSS称号',100]]}
 };
-/* 每个格子的怪物分布（一格格子多种怪物） */
-const cellMonsters = {
-  8:[1,2], 9:[2], 13:[2,3], 14:[1], 15:[1,2,3],
-  20:[3,4], 21:[4], 26:[2], 27:[1,3], 33:[1,2], 34:[1], 35:[5]
-};
-const TOWN=0, BOSS_CELL=35;
-let pos=7; /* 玩家起始格子 07 */
 
-const players = [
-  {name:'橘座驾到',emoji:'🐱',breed:'橘猫',lv:18,title:'干饭王',gear:'银月弯爪 +7 · 蛛丝软甲 +5',guild:'猫饭同好会',cell:12},
-  {name:'夜里翻墙',emoji:'🐱',breed:'黑猫',lv:16,title:'夜行者',gear:'暗影之爪 +6 · 夜行软甲 +4',guild:'月光旅团',cell:35},
-  {name:'布偶不是偶',emoji:'🐱',breed:'布偶猫',lv:15,title:'首席奶妈',gear:'圣光法杖 +5 · 布偶长袍 +6',guild:'猫饭同好会',cell:16},
-  {name:'三花聚顶',emoji:'🐱',breed:'三花猫',lv:17,title:'欧皇',gear:'幸运戒指 +7 · 三花护符 +3',guild:'流浪猫联盟',cell:22}
-];
-const worldChats=[
-  ['夜里翻墙','狼王在 35 格，有人一起吗，求组！','o2'],
-  ['橘座驾到','刚在餐厅吃了大餐，饱食度拉满，开干','o1'],
-  ['三花聚顶','出货了！！狼王掉了银月弯爪，幸运值就是真理','o3'],
-  ['布偶不是偶','收毒囊，有的喵私聊我，价格好说','o2']
-];
-const anns=[
-  ['系统公告','🎉 新玩法「虚空魔窟」现已开放，Lv.50 以上的猫侠可以挑战梦魇之影！'],
-  ['系统公告','⚙️ 今晚 02:00-04:00 服务器维护，请提前下线保存。'],
-  ['GM·大白','有任何问题请在世界频道 @GM，在线时间 9:00-22:00。']
-];
-const chData={
-  '私人':[['布偶不是偶','你好呀，毒囊还有吗？','o2'],['你','有 5 个，你出多少？','me'],['布偶不是偶','800 金一个全收！','o2']],
-  '队伍':['你当前没有队伍，点击玩家列表的「组队」按钮邀请好友。'],
-  '公会':[['会长·大橘','今晚 8 点公会战集合，都在群里吼一声'],['布偶不是偶','收到，我奶妈到位']]
-};
-chData['区域']=[['夜里翻墙','狼王刷新在 35 格了，快来'],['橘座驾到','等我吃完这口'],['夜里翻墙','……你到底是来吃饭还是来打架的']];
+/* ============ 世界生成：小格子 / 乱序编号 / 不规则分布 / 视野 ============ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rng=mulberry32(20260911);           // 固定种子：刷新页面地图不变
+const GW=16,GH=12,CS=52,GAP=7,PITCH=CS+GAP; // 世界 16×12，格子 52px
+const VIS=4;                               // 视野半径（切比雪夫距离）
+const pad2=n=>String(n).padStart(2,'0');
+
+const world=[];
+for(let y=0;y<GH;y++){world[y]=[];for(let x=0;x<GW;x++)world[y][x]={x,y,ok:rng()>0.22,jx:Math.round(rng()*10-5),jy:Math.round(rng()*10-5),num:null,roster:null,town:false,boss:false};}
+// 连通性：从起点 BFS，不可达格子视为空地（保证能走到任何格子）
+let start=null;
+for(let y=Math.floor(GH/2);y<GH&&!start;y++)for(let x=0;x<GW;x++)if(world[y][x].ok){start=world[y][x];break;}
+(function(){const q=[start],seen=new Set([start.x+','+start.y]);
+  while(q.length){const c=q.shift();
+    [[1,0],[-1,0],[0,1],[0,-1]].forEach(d=>{const n=(world[c.y+d[1]]||[])[c.x+d[0]];
+      if(n&&n.ok&&!seen.has(n.x+','+n.y)){seen.add(n.x+','+n.y);q.push(n);}});}
+  for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){const c=world[y][x];if(c.ok&&!seen.has(c.x+','+c.y))c.ok=false;}
+})();
+// 乱序编号：所有可通行格子随机洗牌后分配编号
+const cells=[];for(let y=0;y<GH;y++)for(let x=0;x<GW;x++)if(world[y][x].ok)cells.push(world[y][x]);
+for(let i=cells.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[cells[i],cells[j]]=[cells[j],cells[i]];}
+cells.forEach((c,i)=>c.num=pad2(i));
+// 城镇与 BOSS：取距离起点最远的格子当 BOSS，另选一个远格当城镇
+const far=cells.slice().sort((a,b)=>(Math.abs(b.x-start.x)+Math.abs(b.y-start.y))-(Math.abs(a.x-start.x)+Math.abs(a.y-start.y)));
+far[0].boss=true;
+const townCell=far.find(c=>!c.boss&&Math.abs(c.x-start.x)+Math.abs(c.y-start.y)>10)||far[1];
+townCell.town=true;
+let pos=start,uidSeq=0;const insts={};
 
 /* ============ 工具 ============ */
 const $=s=>document.querySelector(s);
-const pad2=n=>String(n).padStart(2,'0');
-const xy=i=>({x:i%6,y:Math.floor(i/6)});
 function toast(msg){const d=document.createElement('div');d.className='toast-item';d.textContent=msg;$('#toast').appendChild(d);setTimeout(()=>d.remove(),2600);}
 function log(html,cls){const b=$('#logBox');const p=document.createElement('p');p.className=cls||'l-sys';p.innerHTML=html;b.appendChild(p);while(b.children.length>200)b.firstChild.remove();b.scrollTop=b.scrollHeight;}
 function clearLog(){$('#logBox').innerHTML='';log('记录已清屏。');}
 function chatLine(who,text,cls,ann){return '<p class="chat-line '+(ann?'ann':'')+'"><span class="who '+(cls||'')+'">'+who+'</span>：'+text+'</p>';}
 
-/* ============ 地图（数字方块格 + 背景图 + 单格移动） ============ */
-function cellAlive(i){return (cellMonsters[i]||[]).filter(id=>monsters[id].hp>0);}
+/* ============ 地图渲染（视野内才显示，镜头跟随） ============ */
 function renderMap(){
-  const g=$('#mapGrid');g.innerHTML='';
-  for(let i=0;i<36;i++){
-    const c=document.createElement('div');c.className='cell';
-    if(i===TOWN)c.classList.add('town');
-    if(i===BOSS_CELL)c.classList.add('boss');
-    if(i===pos)c.classList.add('me','cur');
-    const alive=cellAlive(i);
-    let inner='<span class="num">'+pad2(i)+'</span>';
-    if(i===TOWN)inner+='<span class="mm">🏘️</span>';
-    else if(alive.length){inner+='<span class="mm">'+alive.map(id=>monsters[id].emoji).join('')+'</span>'+'<span class="badge">'+alive.length+'</span>';}
-    c.innerHTML=inner;
-    c.onclick=()=>clickCell(i);
-    g.appendChild(c);
+  const w=$('#world');
+  w.style.width=GW*PITCH+'px';w.style.height=GH*PITCH+'px';
+  let html='';
+  for(const c of cells){
+    const d=Math.max(Math.abs(c.x-pos.x),Math.abs(c.y-pos.y));
+    if(d>VIS)continue; // 视野外：不渲染
+    const cls='cell'+(c===pos?' me':'')+(c.town?' town':'')+(d===VIS?' dim':'');
+    let inner='<span class="num">'+c.num+'</span>';
+    if(c===pos)inner+='<span class="paw">🐱</span>';
+    if(c.town)inner='<span class="mm">🏘️</span>';
+    html+='<div class="'+cls+'" data-k="'+c.x+','+c.y+'" style="left:'+(c.x*PITCH+c.jx)+'px;top:'+(c.y*PITCH+c.jy)+'px">'+inner+'</div>';
   }
-  $('#posTip').textContent='当前位于 '+pad2(pos);
+  w.innerHTML='<div class="world-bg"></div><div class="world-shade"></div>'+html;
+  const v=$('#mapView'),vw=v.clientWidth,vh=v.clientHeight;
+  w.style.transform='translate('+(vw/2-(pos.x*PITCH+CS/2))+'px,'+(vh/2-(pos.y*PITCH+CS/2))+'px)';
+  $('#posTip').textContent='当前位于 '+pos.num;
 }
-function clickCell(i){
-  if(i===pos)return;
-  const a=xy(pos),b=xy(i);
-  if(Math.abs(a.x-b.x)+Math.abs(a.y-b.y)!==1){toast('每次只能走一格，请点击相邻格子');return;}
-  pos=i;renderMap();
-  log('你从 <b>'+pad2(a.y*6+a.x)+'</b> 移动到了 <b>'+pad2(i)+'</b>。','l-move');
-  if(i===TOWN){toast('进入 🏘️ 草原小镇（安全区）');log('你进入了 🏘️ 草原小镇。','l-move');}
+$('#mapView').addEventListener('click',e=>{
+  const el=e.target.closest('.cell');if(!el)return;
+  const [x,y]=el.dataset.k.split(',').map(Number);
+  clickCell(world[y][x]);
+});
+function clickCell(c){
+  if(c===pos)return;
+  if(Math.abs(c.x-pos.x)+Math.abs(c.y-pos.y)!==1){toast('每次只能走一格，请点击相邻格子');return;}
+  const from=pos;pos=c;renderMap();
+  log('你从 <b>'+from.num+'</b> 走到了 <b>'+c.num+'</b>。','l-move');
+  arrive(c);
+}
+/* ============ 抵达格子：怪物随机生成（玩家事先不知道） ============ */
+function spawnRoster(c){
+  if(c.town)return [];
+  if(c.boss)return [mkInst(5)];
+  if(Math.random()<0.5)return [];          // 一半格子没怪
+  const pool=[1,1,1,2,2,3,3,4];             // 普通怪为主，精英较少
+  const n=1+Math.floor(Math.random()*3);    // 1~3 只
+  const r=[];
+  for(let i=0;i<n;i++)r.push(mkInst(pool[Math.floor(Math.random()*pool.length)]));
+  return r;
+}
+function mkInst(tplId){const t=MTPL[tplId];const uid=++uidSeq;
+  const m={uid,tpl:tplId,name:t.name,emoji:t.emoji,lv:t.lv+(Math.random()<0.3?1:0),type:t.type,element:t.element,hp:t.hp,maxHp:t.hp,atk:t.atk,def:t.def,spd:t.spd,rec:t.rec,skills:t.skills,drops:t.drops};
+  insts[uid]=m;return m;}
+function arrive(c){
+  if(c.town){toast('进入 🏘️ 草原小镇（安全区）');log('🏘️ 你走进了草原小镇，这里没有怪物。','l-move');renderMonsters();return;}
+  if(c.roster===null){
+    c.roster=spawnRoster(c);
+    if(c.boss)log('👑 格子 <b>'+c.num+'</b> 弥漫着强大的气息——<b>月影狼王</b>（Lv.20 BOSS）现身！','l-crit');
+    else if(c.roster.length)log('👀 格子 <b>'+c.num+'</b> 的草丛里窜出了 <b>'+c.roster.length+'</b> 只怪物：'+c.roster.map(m=>m.name).join('、')+'！','l-hit');
+    else log('🍃 格子 <b>'+c.num+'</b> 静悄悄的，没有怪物。');
+  }
   renderMonsters();
 }
 
 /* ============ 怪物列表（当前格子） ============ */
 function renderMonsters(){
-  const alive=cellAlive(pos);
-  $('#cellTip').textContent='格子 '+pad2(pos)+(alive.length?(' · '+alive.length+' 只怪物'):'');
+  const roster=pos.roster||[];
+  const alive=roster.filter(m=>m.hp>0);
+  $('#cellTip').textContent='格子 '+pos.num+(pos.town?' · 安全区':(alive.length?(' · '+alive.length+' 只怪物'):''));
   const ul=$('#monsterList');
-  if(!alive.length){ul.innerHTML='<div class="empty-tip">当前格子没有怪物<br>走到带 👾 角标的格子试试</div>';return;}
-  ul.innerHTML=alive.map(id=>{const m=monsters[id];return '<li class="'+(m.hp<=0?'dead':'')+'">' +
+  if(!alive.length){ul.innerHTML='<div class="empty-tip">'+(pos.town?'安全区，没有怪物':'当前格子没有怪物<br>走动探索其他格子吧')+'</div>';return;}
+  ul.innerHTML=alive.map(m=>'<li>' +
     '<span class="e-face">'+m.emoji+'</span>' +
     '<div class="e-main">' +
-    '<span class="e-name t-'+m.type+'" onclick="openMonster(monsters['+id+'])">'+m.name+' <span style="color:var(--dim);font-weight:400;font-size:11px">Lv.'+m.lv+' · '+m.type+'</span></span>' +
+    '<span class="e-name t-'+m.type+'" onclick="openMonster(insts['+m.uid+'])">'+m.name+' <span style="color:var(--dim);font-weight:400;font-size:11px">Lv.'+m.lv+' · '+m.type+'</span></span>' +
     '<div class="hpbar"><i style="width:'+Math.max(0,m.hp)/m.maxHp*100+'%"></i></div>' +
     '<div class="e-sub">HP '+Math.max(0,m.hp)+'/'+m.maxHp+' · '+m.element+'</div></div>' +
-    (m.hp>0?ICON.atk('attackMonster('+id+')'):'')+'</li>';}).join('');
+    ICON.atk('attackMonster('+m.uid+')')+'</li>').join('');
 }
 function openMonster(m){
   $('#modal').innerHTML=
     '<div class="m-head"><span class="face">'+m.emoji+'</span><div><h3 class="t-'+m.type+'">'+m.name+' <span style="font-size:12px;color:var(--dim);font-weight:400">Lv.'+m.lv+' · '+m.type+' · '+m.element+'</span></h3>' +
     '<span style="font-size:12px;color:'+(m.lv>18?'#d92a30':'#1f8a4c')+'">推荐等级 '+m.lv+(m.lv>18?'（危险，建议组队）':'')+'</span></div><span class="x" onclick="closeModal()">✕</span></div>' +
     '<div class="m-body">' +
-    '<div class="kv"><b>所在格子</b><span>'+pad2(pos)+'</span><b>HP</b><span>'+m.maxHp+'</span><b>物攻 / 魔攻</b><span>'+m.atk+' / '+Math.round(m.atk*0.7)+'</span><b>物防 / 魔防</b><span>'+m.def+' / '+Math.round(m.def*0.9)+'</span><b>速度</b><span>'+m.spd+'</span><b>经验 / 金币</b><span>'+(m.rec*4)+' / '+(m.rec*2)+'</span></div>' +
+    '<div class="kv"><b>所在格子</b><span>'+pos.num+'</span><b>HP</b><span>'+m.maxHp+'</span><b>物攻 / 魔攻</b><span>'+m.atk+' / '+Math.round(m.atk*0.7)+'</span><b>物防 / 魔防</b><span>'+m.def+' / '+Math.round(m.def*0.9)+'</span><b>速度</b><span>'+m.spd+'</span><b>经验 / 金币</b><span>'+(m.rec*4)+' / '+(m.rec*2)+'</span></div>' +
     '<b style="font-size:13px">⚔️ 技能</b><div class="drops">'+m.skills.map(s=>'<span>'+s+'</span>').join('')+'</div>' +
     '<b style="font-size:13px">🎁 掉落（基础概率）</b><div class="drops">'+m.drops.map(d=>'<span>'+d[0]+' '+d[1]+'%</span>').join('')+'</div>' +
     '</div>' +
-    '<div class="m-foot"><button class="btn" onclick="closeModal()">关闭</button>'+(m.hp>0?'<button class="btn primary" onclick="attackMonster('+m.id+');closeModal()">⚔ 发起攻击</button>':'')+'</div>';
-  $('#mask').classList.add('show');
-}
-function openPlayer(p){
-  $('#modal').innerHTML=
-    '<div class="m-head"><span class="face">'+p.emoji+'</span><div><h3>'+p.name+' <span style="font-size:12px;color:var(--dim);font-weight:400">Lv.'+p.lv+' '+p.breed+'</span></h3><span style="font-size:12px;color:var(--amber)">称号：'+p.title+' · 公会：'+p.guild+' · 所在格子 '+pad2(p.cell)+'</span></div><span class="x" onclick="closeModal()">✕</span></div>' +
-    '<div class="m-body"><div class="kv"><b>装备</b><span>'+p.gear+'</span><b>状态</b><span style="color:#1f8a4c">在线 · 同地图</span></div></div>' +
-    '<div class="m-foot"><button class="btn" onclick="closeModal()">关闭</button></div>';
+    '<div class="m-foot"><button class="btn" onclick="closeModal()">关闭</button>'+(m.hp>0?'<button class="btn primary" onclick="attackMonster('+m.uid+');closeModal()">⚔ 发起攻击</button>':'')+'</div>';
   $('#mask').classList.add('show');
 }
 function closeModal(){$('#mask').classList.remove('show');}
 
 /* ============ 战斗模拟 ============ */
-function attackMonster(id){
-  const m=monsters[id];if(!m||m.hp<=0)return;
-  toast('⚔ 对 '+m.name+' 发起攻击！');log('—— 你对 <b>'+m.name+'</b>（格子 '+pad2(pos)+'）发起了攻击 ——');
+function attackMonster(uid){
+  const m=insts[uid];if(!m||m.hp<=0)return;
+  toast('⚔ 对 '+m.name+' 发起攻击！');log('—— 你对 <b>'+m.name+'</b>（格子 '+pos.num+'）发起了攻击 ——');
   let t=0;
   const rounds=()=>{t++;const crit=Math.random()<0.2;let dmg=Math.round((85+Math.random()*40)*(crit?1.6:1)*(m.type==='BOSS'?0.55:1));
     m.hp-=dmg;log(crit?('💥 <b>暴击！</b>你对 '+m.name+' 造成 <b>'+dmg+'</b> 点伤害'):('你对 '+m.name+' 造成 '+dmg+' 点伤害'),crit?'l-crit':'l-hit');
@@ -309,25 +359,41 @@ function attackMonster(id){
       log('🏆 你击败了 <b>'+m.name+'</b>！获得经验 +'+exp+'、金币 +'+gold,'l-get');
       const drop=m.drops.filter(d=>Math.random()*100<d[1]);
       if(drop.length)log('🎁 掉落：'+drop.map(d=>d[0]).join('、'),'l-drop');
-      m.deadT=5;
-      const cd=setInterval(()=>{m.deadT--;renderMonsters();renderMap();
-        if(m.deadT<=0){clearInterval(cd);m.hp=m.maxHp;log('♻️ '+m.name+' 在格子 '+pad2(pos)+' 刷新了');renderMonsters();renderMap();}},1000);
+      // 该格子怪物全灭 8 秒后重新随机生成
+      if((pos.roster||[]).every(x=>x.hp<=0)){
+        const cell=pos;
+        setTimeout(()=>{cell.roster=null;log('♻️ 格子 <b>'+cell.num+'</b> 附近又有动静了……');if(pos===cell)arrive(cell);else renderMonsters();},8000);
+      }
     } else if(t<3){
       setTimeout(()=>{const back=Math.round(m.atk*(0.6+Math.random()*0.5)*0.8);
         log(m.name+' 对你造成 '+back+' 点伤害','l-hit');setTimeout(rounds,450);},450);
     }
-    renderMonsters();renderMap();};
+    renderMonsters();};
   setTimeout(rounds,200);
 }
 
 /* ============ 玩家列表 ============ */
+const players=[
+  {name:'橘座驾到',emoji:'🐱',breed:'橘猫',lv:18,title:'干饭王',gear:'银月弯爪 +7 · 蛛丝软甲 +5',guild:'猫饭同好会'},
+  {name:'夜里翻墙',emoji:'🐱',breed:'黑猫',lv:16,title:'夜行者',gear:'暗影之爪 +6 · 夜行软甲 +4',guild:'月光旅团'},
+  {name:'布偶不是偶',emoji:'🐱',breed:'布偶猫',lv:15,title:'首席奶妈',gear:'圣光法杖 +5 · 布偶长袍 +6',guild:'猫饭同好会'},
+  {name:'三花聚顶',emoji:'🐱',breed:'三花猫',lv:17,title:'欧皇',gear:'幸运戒指 +7 · 三花护符 +3',guild:'流浪猫联盟'}
+];
+players.forEach(p=>p.cell=cells[Math.floor(rng()*cells.length)].num);
 function renderPlayers(){
   $('#playerList').innerHTML=players.map((p,i)=>
     '<li><span class="e-face">'+p.emoji+'</span>' +
     '<div class="e-main">' +
     '<span class="e-name" onclick="openPlayer(players['+i+'])">'+p.name+' <span style="color:var(--dim);font-weight:400;font-size:11px">Lv.'+p.lv+' '+p.breed+' · '+p.title+'</span></span>' +
-    '<div class="e-sub">公会：'+p.guild+' · 所在格子 '+pad2(p.cell)+'</div></div>' +
+    '<div class="e-sub">公会：'+p.guild+' · 所在格子 '+p.cell+'</div></div>' +
     '<div class="btns">'+ICON.chat("act('聊天','"+p.name+"')")+ICON.paw("act('跟随','"+p.name+"')")+ICON.team("act('组队','"+p.name+"')")+ICON.trade("act('交易','"+p.name+"')")+ICON.atk("act('切磋','"+p.name+"')")+'</div></li>').join('');
+}
+function openPlayer(p){
+  $('#modal').innerHTML=
+    '<div class="m-head"><span class="face">'+p.emoji+'</span><div><h3>'+p.name+' <span style="font-size:12px;color:var(--dim);font-weight:400">Lv.'+p.lv+' '+p.breed+'</span></h3><span style="font-size:12px;color:var(--amber)">称号：'+p.title+' · 公会：'+p.guild+' · 所在格子 '+p.cell+'</span></div><span class="x" onclick="closeModal()">✕</span></div>' +
+    '<div class="m-body"><div class="kv"><b>装备</b><span>'+p.gear+'</span><b>状态</b><span style="color:#1f8a4c">在线 · 同地图</span></div></div>' +
+    '<div class="m-foot"><button class="btn" onclick="closeModal()">关闭</button></div>';
+  $('#mask').classList.add('show');
 }
 function act(type,name){
   if(type==='聊天'){switchCh('私人');toast('已打开与 '+name+' 的私聊');$('#chatInput').focus();}
@@ -338,6 +404,23 @@ function act(type,name){
 }
 
 /* ============ 聊天区 ============ */
+const worldChats=[
+  ['夜里翻墙','这地图格子编号居然是乱的，走着走着就迷路了哈哈','o2'],
+  ['橘座驾到','刚在餐厅吃了大餐，饱食度拉满，开干','o1'],
+  ['三花聚顶','出货了！！狼王掉了银月弯爪，幸运值就是真理','o3'],
+  ['布偶不是偶','收毒囊，有的喵私聊我，价格好说','o2']
+];
+const anns=[
+  ['系统公告','🎉 新玩法「虚空魔窟」现已开放，Lv.50 以上的猫侠可以挑战梦魇之影！'],
+  ['系统公告','⚙️ 今晚 02:00-04:00 服务器维护，请提前下线保存。'],
+  ['GM·大白','有任何问题请找 🧙 猫仙人 AI 或在世界频道 @GM。']
+];
+const chData={
+  '私人':[['布偶不是偶','你好呀，毒囊还有吗？','o2'],['你','有 5 个，你出多少？','me'],['布偶不是偶','800 金一个全收！','o2']],
+  '队伍':['你当前没有队伍，点击玩家列表的「组队」按钮邀请好友。'],
+  '公会':[['会长·大橘','今晚 8 点公会战集合，都在群里吼一声'],['布偶不是偶','收到，我奶妈到位']]
+};
+chData['区域']=[['夜里翻墙','你们格子里的怪是什么？我这刷了三只松鼠…'],['橘座驾到','我这也是，别问，问就是松鼠开会'],['夜里翻墙','哈哈哈这随机性没谁了']];
 let worldTab='chat',chTab='区域';
 function renderWorld(){
   $('#worldBox').innerHTML=worldTab==='chat'
@@ -351,22 +434,62 @@ function renderCh(){
 }
 function switchCh(t){chTab=t;document.querySelectorAll('#chTabs .tab').forEach(e=>e.classList.toggle('on',e.dataset.ch===t));renderCh();}
 function sendChat(){const v=$('#chatInput').value.trim();if(!v)return;chData[chTab].push(['你',v,'me']);$('#chatInput').value='';renderCh();}
-
-/* ============ 事件绑定 ============ */
 document.querySelectorAll('[data-wt]').forEach(t=>t.onclick=function(){worldTab=t.dataset.wt;document.querySelectorAll('[data-wt]').forEach(e=>e.classList.toggle('on',e===t));renderWorld();});
 document.querySelectorAll('#chTabs .tab').forEach(t=>t.onclick=function(){switchCh(t.dataset.ch);});
 $('#chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat();});
 
-/* 走动记录 & 世界聊天滚动模拟 */
-const moves=['橘座驾到 离开了月牙森林，前往 幽暗洞穴','夜里翻墙 从格子 35 移动到了 34','布偶不是偶 进入了月牙森林','三花聚顶 在格子 22 发现了宝箱','夜里翻墙 离开了月牙森林，前往 猫之城'];
+/* ============ AI 猫仙人（GLM 大模型） ============ */
+const AI_SYS='你是网页游戏《喵游记》中的神秘NPC"猫仙人"——一只活了九百年的智者猫。用简短（50字内）、幽默、偶尔带"喵"的语气回答玩家问题，可以给战斗、装备、宠物养成、地图探索方面的建议。';
+const aiMsgs=[{role:'system',content:AI_SYS}];
+function openAi(){$('#aiMask').classList.add('show');loadAiCfg();}
+function closeAi(){saveAiCfg();$('#aiMask').classList.remove('show');}
+function loadAiCfg(){try{const c=JSON.parse(localStorage.getItem('maoyouji_ai')||'{}');
+  if(c.model)$('#aiModel').value=c.model;if(c.url)$('#aiUrl').value=c.url;if(c.key)$('#aiKey').value=c.key;
+  $('#aiMock').checked=c.mock!==false;}catch(e){}}
+function saveAiCfg(){localStorage.setItem('maoyouji_ai',JSON.stringify({model:$('#aiModel').value.trim(),url:$('#aiUrl').value.trim(),key:$('#aiKey').value.trim(),mock:$('#aiMock').checked}));}
+function aiPush(role,text){aiMsgs.push({role:role==='user'?'user':'assistant',content:text});
+  const d=document.createElement('div');d.className='ai-msg '+(role==='user'?'user':'assistant');d.textContent=text;
+  $('#aiLog').appendChild(d);$('#aiLog').scrollTop=9e9;}
+function mockReply(q){
+  if(/狼王|boss|BOSS|打不/.test(q))return '狼王嘛…带几瓶猫罐头，先催眠再输出喵。血量一半会狂暴，记得留九命护盾喵！';
+  if(/装备|强化|武器/.test(q))return '强化+7前随便赌，+10后靠保底喵。狼王掉的银月弯爪，很适合你这身板喵。';
+  if(/宠物|品种|选猫/.test(q))return '选猫看天赋不看脸喵…好吧也看脸。狸花能打，橘猫能抗，三花运气好喵。';
+  if(/地图|格子|走|迷路/.test(q))return '格子编号是乱序的，怪物也藏着，走一步看一步才有冒险的味道喵。迷路了就往回走喵。';
+  if(/你好|你是|你好/.test(q))return '老朽在此修行九百年，专治各种不会玩喵。想问什么尽管开口喵。';
+  const pool=['这个问题嘛…先喂饱自己再打架，准没错喵。','喵呜…命运的丝线告诉我，你该去打只松鼠练练手了。','天机不可泄露，但可以花 10 金币买通老朽喵。'];
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+async function sendAi(){
+  const v=$('#aiInput').value.trim();if(!v)return;$('#aiInput').value='';
+  aiPush('user',v);
+  if($('#aiMock').checked){saveAiCfg();setTimeout(()=>aiPush('assistant',mockReply(v)),400+Math.random()*500);return;}
+  saveAiCfg();
+  const url=$('#aiUrl').value.trim(),key=$('#aiKey').value.trim(),model=$('#aiModel').value.trim()||'glm-5.3-flash';
+  try{
+    const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({model:model,messages:aiMsgs,temperature:0.8,max_tokens:200})});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    aiPush('assistant',(j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'……喵？');
+  }catch(e){
+    const d=document.createElement('div');d.className='ai-err';
+    d.textContent='调用失败：'+e.message+'（浏览器直连可能被 CORS 拦截，正式版需走服务端代理；可先勾选演示模式体验）';
+    $('#aiLog').appendChild(d);$('#aiLog').scrollTop=9e9;
+  }
+}
+
+/* ============ 走动记录 & 世界聊天模拟 ============ */
+const moves=['橘座驾到 离开了月牙森林，前往 幽暗洞穴','夜里翻墙 在雾里摸索着走远了几格','布偶不是偶 进入了月牙森林','三花聚顶 翻开一处草丛，好像发现了什么','夜里翻墙 离开了月牙森林，前往 猫之城'];
 let mi=0;setInterval(()=>{log(moves[mi++%moves.length],'l-move');},6000);
-let wi=0;const wc=[['布偶不是偶','狼王几点刷？'],['三花聚顶','刚摸了个金色宝箱，美滋滋'],['夜里翻墙','收风之羽，高价收'],['橘座驾到','强化又失败，第3次了，下把必成！'],['会长·大橘','公会战报名开始啦，大家踊跃参加']];
+let wi=0;const wc=[['布偶不是偶','刚才那个格子空无一怪，下一个直接仨松鼠围我'],['三花聚顶','刚摸了个金色宝箱，美滋滋'],['夜里翻墙','收风之羽，高价收'],['橘座驾到','强化又失败，第3次了，下把必成！'],['会长·大橘','公会战报名开始啦，大家踊跃参加']];
 setInterval(()=>{worldChats.push(wc[wi%wc.length]);wi++;if(worldTab==='chat')renderWorld();},9000);
 
 /* ============ 初始化 ============ */
-renderMap();renderMonsters();renderPlayers();renderWorld();renderCh();
-log('欢迎来到 <b>月牙森林</b>（Lv.10~20），你目前在 <b>07</b> 格。');
-log('提示：点击相邻格子移动（每次一格）；带 👾 角标的格子有怪物，走到后在中上列表点击攻击。');
+window.addEventListener('resize',renderMap);
+renderMap();renderPlayers();renderWorld();renderCh();
+arrive(start);
+log('欢迎来到 <b>月牙森林</b>（Lv.10~20）。');
+log('本图共 <b>'+cells.length+'</b> 个格子，编号乱序分布；只能看到身边的格子，走过去才知道里面藏着什么喵。');
 </script>
 </body>
 </html>
