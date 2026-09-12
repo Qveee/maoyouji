@@ -881,7 +881,7 @@ EDGES.forEach(([a,b])=>{ (ADJ[pad(a)]=ADJ[pad(a)]||[]).push(pad(b)); (ADJ[pad(b)
 })();
 
 /* 点击节点 → 移动 */
-const VPW=440, VPH=380;   /* 镜头视口:世界大于视口,视野外节点照样存在 */
+const VPW=580, VPH=500;   /* 镜头视口:世界大于视口,视野外节点照样存在(拉远视角) */
 let camX=0, camY=0, camT=null;
 function applyCam(){ $('#map-svg').setAttribute('viewBox', `${camX} ${camY} ${VPW} ${VPH}`); }
 function camTo(id, smooth){
