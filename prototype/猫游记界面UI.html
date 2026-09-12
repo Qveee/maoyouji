@@ -36,7 +36,7 @@ body{
   width:1400px;height:832px;flex:none;
   display:grid;
   grid-template-columns:1fr 292px 408px;
-  grid-template-rows:44px 1fr 40px 86px;
+  grid-template-rows:44px 1fr 40px 246px;
   gap:6px;padding:6px;
 }
 
@@ -135,9 +135,6 @@ body{
 .node:hover rect{fill:#fff3c8;stroke:#d8a94e}
 .node.cur rect{fill:#3f8fd8;stroke:#1c6fad}
 .node.cur text{fill:#fff}
-/* 礼物盒倒计时 */
-.gift-timer{font:bold 15px Verdana;fill:#fff;stroke:#000;stroke-width:3px;paint-order:stroke;text-anchor:middle}
-
 #chat-log{
   position:relative;height:96px;flex:none;
   background:#fff;border:1px solid var(--panel-line);border-radius:6px;
@@ -264,15 +261,17 @@ body{
   padding:0 12px;
 }
 #skill-area{flex:1;display:flex;align-items:center;gap:4px;min-width:0}
-#skill-slots{display:grid;grid-template-columns:repeat(12,44px);gap:4px}
+#skill-slots{display:grid;grid-template-columns:repeat(12,40px);gap:4px}
 .slot{
-  position:relative;height:44px;border-radius:4px;cursor:pointer;overflow:hidden;
+  position:relative;height:40px;border-radius:4px;cursor:pointer;overflow:hidden;
   background:radial-gradient(circle at 50% 38%,#33405a,#171d29);
   border:1px solid #66788e;box-shadow:inset 0 0 6px #000,0 1px 0 rgba(255,255,255,.35);
   display:grid;place-items:center;
 }
 .slot:hover{border-color:#ffd34d;box-shadow:inset 0 0 6px #000,0 0 6px rgba(255,211,77,.7)}
-.slot svg{width:32px;height:32px;pointer-events:none}
+.slot svg{width:28px;height:28px;pointer-events:none}
+.slot.empty{cursor:default;opacity:.42}
+.slot.empty:hover{border-color:#66788e;box-shadow:inset 0 0 6px #000,0 1px 0 rgba(255,255,255,.35)}
 .slot .key{
   position:absolute;right:2px;bottom:0;font:10px Verdana;color:#cfe0ee;
   text-shadow:0 1px 1px #000;pointer-events:none;
@@ -283,18 +282,6 @@ body{
 }
 .slot .cd.run{animation:cdsweep 1.1s linear}
 @keyframes cdsweep{from{transform:scaleY(1)}to{transform:scaleY(0)}}
-.slot-arrows{display:flex;flex-direction:column;gap:2px;margin-left:2px}
-.slot-arrows button{
-  width:16px;height:20px;cursor:pointer;font:9px/10px SimHei;color:#0d3a55;
-  background:linear-gradient(#fdfefe,#cfe7f3);border:1px solid #7fb0cc;border-radius:3px;
-}
-.slot-arrows button:hover{background:#ffe9ae}
-#vitals{display:flex;flex-direction:column;gap:4px;margin-left:8px;width:110px;flex:none}
-#vitals .v{height:7px;border:1px solid #345;border-radius:3px;background:#1a2830;overflow:hidden}
-#vitals .v i{display:block;height:100%}
-#vitals .hp i{width:100%;background:linear-gradient(#7dfa7d,#18a418)}
-#vitals .mp i{width:74%;background:linear-gradient(#8cd0ff,#1873e0)}
-
 #menu-btns{display:flex;align-items:center}
 #menu-btns button{
   width:58px;height:74px;cursor:pointer;background:none;border:none;
@@ -395,15 +382,10 @@ body{
 #battle-log li.foe{color:#8a2a10}
 #battle-log li.sys{color:#1c8a2e}
 #battle-log li.crit b{color:#e02010;font-size:15px}
-.b-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 12px 10px;border-top:1px solid var(--panel-line)}
-.b-actions button:disabled{opacity:.45;cursor:not-allowed}
 .b-end{display:none;position:absolute;inset:0;z-index:10;flex-direction:column;gap:16px;align-items:center;justify-content:center;background:rgba(240,248,252,.74);font:15px SimSun}
 .b-end.show{display:flex}
 .b-end #b-result{line-height:1.9;text-align:center;color:#1c3a50;background:#fff;border:1px solid #9cc4d8;border-radius:8px;padding:14px 28px;box-shadow:0 6px 18px rgba(20,50,80,.22)}
 .b-end #b-result b{color:#c33812}
-/* 技能栏翻页窗口 */
-#skill-view{width:236px;overflow:hidden;flex:none}
-#skill-slots{transition:transform .25s ease}
 </style>
 </head>
 <body>
@@ -490,15 +472,6 @@ body{
           <polygon points="378,384 376,375 371,382" fill="#f5a623" stroke="#c97f10"/>
           <circle cx="367" cy="390" r="1.4" fill="#222"/><circle cx="373" cy="390" r="1.4" fill="#222"/>
         </g>
-        <!-- 在线奖励礼盒 -->
-        <g id="gift" style="cursor:pointer">
-          <rect x="638" y="66" width="44" height="34" rx="3" fill="#e5484d" stroke="#a32528"/>
-          <rect x="634" y="58" width="52" height="12" rx="3" fill="#f2605e" stroke="#a32528"/>
-          <rect x="655" y="58" width="10" height="42" fill="#ffd34d" stroke="#c99a10"/>
-          <path d="M660 58 Q648 42 642 54 Q640 60 655 58 Z" fill="#ffd34d" stroke="#c99a10"/>
-          <path d="M660 58 Q672 42 678 54 Q680 60 660 58 Z" fill="#ffd34d" stroke="#c99a10"/>
-          <text class="gift-timer" id="gift-timer" x="660" y="122">00:31</text>
-        </g>
         <!-- 编号节点(JS 生成) -->
         <g id="nodes"></g>
       </svg>
@@ -551,12 +524,7 @@ body{
         </div>
         <div class="bt-bottom">
           <ul id="battle-log"></ul>
-          <div class="b-actions" id="b-actions">
-            <button class="cbtn" data-a="atk">⚔ 攻击</button>
-            <button class="cbtn red" data-a="skill">🔥 烈焰拳</button>
-            <button class="cbtn" data-a="def">🛡 防御</button>
-            <button class="cbtn" data-a="run">🏃 逃跑</button>
-          </div>
+          <div style="padding:4px 12px 8px;font:12px SimSun;color:#7c86a0;text-align:center">⚔ 自动战斗中 · 点击底部技能栏可释放技能</div>
         </div>
         <div class="b-end" id="b-end"><div id="b-result"></div><button class="cbtn red" id="b-back">返回地图</button></div>
       </div>
@@ -624,12 +592,7 @@ body{
   <!-- ⑥ 底部操作栏 -->
   <footer id="bottombar" class="panel">
     <div id="skill-area">
-      <div id="skill-view"><div id="skill-slots"></div></div>
-      <div class="slot-arrows">
-        <button id="skill-prev">▲</button>
-        <button id="skill-next">▼</button>
-      </div>
-      <div id="vitals"><div class="v hp"><i></i></div><div class="v mp"><i></i></div></div>
+      <div id="skill-slots"></div>
     </div>
     <nav id="menu-btns"></nav>
   </footer>
@@ -781,7 +744,14 @@ let camX=0, camY=0, camT=null;
 function applyCam(){ $('#map-svg').setAttribute('viewBox', `${camX} ${camY} ${VPW} ${VPH}`); }
 function camTo(id, smooth){
   const n = byId[+id]; if(!n) return;
-  const tx = n[1]-VPW/2, ty = n[2]-VPH/2;
+  /* 取当前节点与所有相邻节点的包围盒中心,保证下一步可走节点一定在画面内 */
+  const pts = [n].concat((ADJ[id]||[]).map(k=>byId[+k]).filter(Boolean));
+  const xs = pts.map(p=>p[1]), ys = pts.map(p=>p[2]);
+  let cx = (Math.min(...xs)+Math.max(...xs))/2, cy = (Math.min(...ys)+Math.max(...ys))/2;
+  /* 镜头不出世界边界 */
+  cx = Math.max(VPW/2, Math.min(690-VPW/2, cx));
+  cy = Math.max(VPH/2, Math.min(594-VPH/2, cy));
+  const tx = cx-VPW/2, ty = cy-VPH/2;
   if(!smooth){ camX=tx; camY=ty; applyCam(); return; }
   const sx=camX, sy=camY, st=performance.now();
   cancelAnimationFrame(camT);
@@ -889,9 +859,6 @@ function bBars(){
   $('#b-mhp').style.width = Math.max(0,b.m.hp)/b.m.maxHp*100 + '%';
   $('#b-mhpt').textContent = `${Math.max(0,b.m.hp)}/${b.m.maxHp}`;
 }
-function bAct(on){
-  document.querySelectorAll('#b-actions button').forEach(x=>x.disabled = !on);
-}
 function unitAnim(sel, cls){
   const u = document.querySelector(sel); if(!u) return;
   u.classList.remove(cls); void u.offsetWidth; u.classList.add(cls);
@@ -908,7 +875,7 @@ function spawnFloat(sel, text, cls){
   setTimeout(()=>f.remove(), 1000);
 }
 function openBattle(m){
-  battle = {m, php:P_MAXHP, pmp:P_MAXMP, def:false, over:false, busy:false};
+  battle = {m, php:P_MAXHP, pmp:P_MAXMP, over:false, nextSkill:null};
   $('#b-loc').textContent = '银光森林' + curNode;
   $('#b-mname').innerHTML = `${m.name} Lv.${m.lv} <span style="font:12px SimSun;color:#39617c">${m.type}</span>`;
   $('#b-mimg').src = m.sprite;
@@ -917,8 +884,9 @@ function openBattle(m){
   $('#battle-log').innerHTML = '';
   $('#b-end').classList.remove('show');
   $('#battle').classList.add('show');
-  bBars(); bAct(true);
+  bBars();
   bLine(`【系统】${m.name}(Lv.${m.lv})向你扑来,战斗开始!`,'sys');
+  battleTimer = setTimeout(battleLoop, 650);
 }
 function playerHit(mult, label){
   const b = battle, m = b.m;
@@ -936,21 +904,34 @@ function playerHit(mult, label){
 function monsterTurn(){
   const b = battle, m = b.m;
   if(b.over) return;
-  const dmg = Math.round(P_MAXHP * rnd(30,60)/1000 * (m.type==='BOSS'?1.6:1) * (b.def?0.5:1));
+  const dmg = Math.round(P_MAXHP * rnd(30,60)/1000 * (m.type==='BOSS'?1.6:1));
   unitAnim('#bt-monster','atk');
   setTimeout(()=>{
+    if(!battle || battle.over) return;
     b.php -= dmg;
     unitAnim('#bt-player','hit');
     spawnFloat('#bt-player', '-'+dmg, 'foe');
     bLine(`${m.name}对你造成 <b>${dmg}</b> 点伤害!`,'foe');
-    b.def = false; bBars();
+    bBars();
     if(b.php <= 0){ b.php = 0; bDefeat(); return; }
-    b.busy = false; bAct(true);
   }, 180);
+}
+/* 自动战斗循环:玩家普攻/技能 → 怪物反击 → 循环,直到一方倒下 */
+let battleTimer = null;
+function battleLoop(){
+  if(!battle || battle.over) return;
+  const sk = battle.nextSkill; battle.nextSkill = null;
+  if(sk){ playerHit(1.7, `释放【${sk}】轰向`); }
+  else{ playerHit(1, '挥出猫爪击向'); }
+  battleTimer = setTimeout(()=>{
+    if(!battle || battle.over) return;
+    monsterTurn();
+    battleTimer = setTimeout(battleLoop, 1500);
+  }, 800);
 }
 function bVictory(){
   const b = battle, m = b.m;
-  b.over = true; bAct(false);
+  b.over = true; clearTimeout(battleTimer);
   document.querySelector('#bt-monster').classList.add('dead');
   const exp = m.rec*8, gold = m.rec*4;
   const drop = m.drops.filter(d=>Math.random()*100 < d[1]);
@@ -973,34 +954,14 @@ function bVictory(){
 }
 function bDefeat(){
   const b = battle, m = b.m;
-  b.over = true; bAct(false);
+  b.over = true; clearTimeout(battleTimer);
   document.querySelector('#bt-player').classList.add('dead');
   bLine(`💀 你被${m.name}打败了,被路过的商队救回了城镇…`,'sys');
   $('#b-result').innerHTML = `💀 <b>战斗失败…</b><br>HP 归零,损失 10% 金币<br>(回到城镇复活)`;
   $('#b-end').classList.add('show');
 }
-$('#b-actions').addEventListener('click',e=>{
-  const btn = e.target.closest('button'); if(!btn || !battle || battle.busy || battle.over) return;
-  battle.busy = true; bAct(false);
-  const a = btn.dataset.a, m = battle.m;
-  if(a === 'run'){
-    if(Math.random() < 0.7){ bLine('你成功逃离了战斗!','sys'); battle.over = true; $('#battle').classList.remove('show'); battle = null; return; }
-    bLine('逃跑失败!','sys');
-  }
-  else if(a === 'atk'){ playerHit(1, '挥出猫爪'); }
-  else if(a === 'skill'){
-    if(battle.pmp < 8000){ bLine('MP 不足,【烈焰拳】释放失败!','sys'); }
- else { battle.pmp -= 8000; playerHit(1.7, '轰出【烈焰拳】'); }
-  }
-  else if(a === 'def'){
-    battle.def = true;
-    battle.pmp = Math.min(P_MAXMP, battle.pmp + 8000);
-    bLine('你摆出防御姿态:本回合受伤减半,并回复了 MP!','me');
-  }
-  bBars();
-  if(!battle.over) setTimeout(monsterTurn, 650);
-});
 $('#b-back').onclick = ()=>{
+  clearTimeout(battleTimer);
   $('#battle').classList.remove('show');
   battle = null;
   renderMonsters();
@@ -1010,7 +971,7 @@ $('#b-back').onclick = ()=>{
    技能快捷栏 / 功能菜单
    ========================================================== */
 (function buildSkills(){
-  $('#skill-slots').innerHTML = SKILLS.map(([name,c1,c2,d],i)=>`
+  let html = SKILLS.map(([name,c1,c2,d],i)=>`
     <div class="slot" data-name="${name}" title="${name}">
       <svg viewBox="0 0 32 32">
         <defs><linearGradient id="sg${i}" x1="0" y1="0" x2="1" y2="1">
@@ -1020,18 +981,19 @@ $('#b-back').onclick = ()=>{
       </svg>
       <span class="key">${i+1}</span><i class="cd"></i>
     </div>`).join('');
+  for(let i=SKILLS.length;i<60;i++) html += `<div class="slot empty" title="空技能位"></div>`;
+  $('#skill-slots').innerHTML = html;
   $('#skill-slots').addEventListener('click',e=>{
-    const s = e.target.closest('.slot'); if(!s) return;
+    const s = e.target.closest('.slot'); if(!s || s.classList.contains('empty')) return;
     const cd = s.querySelector('.cd');
     cd.classList.remove('run'); void cd.offsetWidth; cd.classList.add('run');
-    pushChat('Klay', `使用了【${s.dataset.name}】!`, true);
+    if(battle && !battle.over){
+      battle.nextSkill = s.dataset.name;
+      bLine(`你凝聚力量,下一击将释放【${s.dataset.name}】!`,'me');
+    }else{
+      pushChat('Klay', `使用了【${s.dataset.name}】!`, true);
+    }
   });
-  let page = 0;
-  const PER = 5, STRIDE = 48, pages = Math.ceil(SKILLS.length/PER);
-  const flip = d => { page = (page + d + pages) % pages;
-    $('#skill-slots').style.transform = `translateX(${-page*(PER*STRIDE)}px)`; };
-  $('#skill-prev').onclick = ()=>flip(-1);
-  $('#skill-next').onclick = ()=>flip(1);
 })();
 
 (function buildMenus(){
@@ -1203,21 +1165,6 @@ camTo('01', false);
 /* ==========================================================
    礼盒倒计时 / 顶部按钮 / 复古提示框
    ========================================================== */
-let giftSec = 31;
-setInterval(()=>{
-  giftSec--;
-  if(giftSec < 0){
-    giftSec = 31 + rnd(0,60);
-    pushChat('', '【系统】在线奖励已发放:初级升级石x1', false)
-      .querySelector('a').remove();
-    chatList.lastChild.classList.add('sys');
-    chatList.lastChild.textContent = '【系统】在线奖励已发放:初级升级石x1 (=^･ω･^=)';
-  }
-  $('#gift-timer').textContent = mmss(giftSec);
-}, 1000);
-
-$('#gift').addEventListener('click', ()=> toast(`在线奖励剩余 ${mmss(giftSec)},再等等喵~`));
-
 let toastTimer;
 function toast(msg){
   const t = $('#toast');
