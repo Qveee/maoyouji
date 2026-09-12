@@ -553,6 +553,74 @@ body{
 .t-member a{color:var(--link-blue);cursor:pointer;flex:none}
 .t-member a:hover{text-decoration:underline}
 
+/* ---------- 宠物栏(角色装备/属性) ---------- */
+#pet-win{
+  position:absolute;left:940px;top:190px;z-index:41;
+  width:355px;height:520px;display:none;flex-direction:column;
+  background:#fff;border:1px solid #4a4a4a;
+  box-shadow:2px 2px 7px rgba(20,40,60,.35);
+  font-family:SimSun,"宋体",serif;
+}
+#pet-win.show{display:flex}
+#pet-win.min{height:auto}
+#pet-win.min .p-body{display:none}
+.p-head{
+  height:26px;flex:none;display:flex;align-items:center;gap:6px;padding:0 4px 0 10px;
+  background:linear-gradient(var(--panel-top),var(--panel-bot));
+  border-bottom:1px solid var(--panel-line);cursor:move;user-select:none;
+}
+.p-head b{font:bold 13px SimHei,"黑体";color:var(--ink-navy)}
+#pet-win .win-btns{margin-left:auto;display:flex;gap:2px}
+#pet-win .win-btn{width:19px;height:19px;border:1px solid #8aa8b8;border-radius:0;cursor:pointer;padding:0;background:linear-gradient(#ffffff,#dcecf5);color:#14506e;display:grid;place-items:center}
+#pet-win .win-btn:hover{background:linear-gradient(#fffbe8,#ffe9ae);border-color:#d8a94e}
+#pet-win .win-btn svg{width:11px;height:11px;display:block}
+.p-body{flex:1;overflow-y:auto;padding:8px 12px 12px;scrollbar-width:auto;scrollbar-color:#d4d4d4 #efefef}
+.p-body::-webkit-scrollbar{width:10px}
+.p-body::-webkit-scrollbar-track{background:#efefef;border-left:1px solid #d8d8d8}
+.p-body::-webkit-scrollbar-thumb{background:#d4d4d4;border:1px solid #a8a8a8}
+.p-name-row{display:flex;align-items:baseline;gap:8px}
+.p-name{font:bold 15px SimHei,"黑体";color:var(--ink-navy)}
+.p-sub{font:12px SimSun;color:#8a93a6}
+.p-expbar{height:8px;background:#e0e6ec;border:1px solid #9aa8b8;border-radius:2px;position:relative;margin-top:6px}
+.p-expbar i{display:block;height:100%;background:linear-gradient(90deg,#4a9de0,#7ab8f0)}
+.p-expbar span{position:absolute;right:4px;top:-2px;font:9px Verdana;color:#34506e}
+.p-sec{font:bold 13px SimHei,"黑体";color:var(--ink-navy);margin:12px 0 7px;border-left:3px solid #7fb0cc;padding-left:7px}
+.p-equip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px 6px}
+.p-slot{display:flex;flex-direction:column;align-items:center;gap:2px}
+.p-slot-box{
+  width:40px;height:40px;position:relative;cursor:pointer;
+  background:#1c2330;border:1px dashed #3a4456;
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.55);
+}
+.p-slot-box.equipped{background:#2a3242;border:2px solid;box-shadow:inset 0 0 6px rgba(0,0,0,.45)}
+.p-slot-box.equipped:hover{filter:brightness(1.35)}
+.p-slot-box svg{width:32px;height:32px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.p-slot-name{font:10px SimSun;color:#8a93a6}
+.p-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px 16px;font:12px SimSun}
+.p-stat{display:flex;justify-content:space-between;border-bottom:1px dotted #dde4ea;padding:2px 1px}
+.p-stat b{color:#39617c;font-weight:normal}
+.p-stat span{color:#111}
+.p-points{color:#c43a12;font-weight:bold}
+/* 装备 tooltip 浮窗 */
+#p-tip{
+  position:fixed;z-index:60;display:none;pointer-events:none;
+  background:#fffbe6;border:1px solid #14506e;
+  box-shadow:2px 2px 5px rgba(20,40,60,.3);
+  padding:6px 9px;font:12px SimSun;color:#222;max-width:210px;
+}
+#p-tip .t-name{font-weight:bold}
+#p-tip .t-part{color:#8a93a6;margin:2px 0 4px}
+#p-tip .t-ent{color:#333;line-height:1.6}
+#p-tip .t-hint{margin-top:4px;color:#8a93a6;border-top:1px dashed #c9b98a;padding-top:3px}
+/* 装备操作小菜单 */
+#p-menu{
+  position:absolute;z-index:61;display:none;
+  background:#fff;border:1px solid #7fb0cc;
+  box-shadow:2px 2px 5px rgba(20,40,60,.3);font:12px SimSun;
+}
+#p-menu a{display:block;padding:4px 16px;color:var(--link-blue);cursor:pointer;white-space:nowrap}
+#p-menu a:hover{background:#eaf3fa;text-decoration:underline}
+
 /* ---------- 复古小提示框 ---------- */
 #toast{
   position:fixed;right:26px;bottom:118px;z-index:99;display:none;
@@ -945,7 +1013,21 @@ body{
     <div class="t-body" id="t-body"></div>
   </div>
 
+  <!-- 宠物栏(角色装备/属性) -->
+  <div id="pet-win">
+    <div class="p-head">
+      <b>宠物信息</b>
+      <div class="win-btns">
+        <button class="win-btn" id="p-min" title="最小化"><svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="currentColor"/></svg></button>
+        <button class="win-btn" id="p-close" title="关闭"><svg viewBox="0 0 12 12"><g stroke="currentColor" stroke-width="2" stroke-linecap="square"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></g></svg></button>
+      </div>
+    </div>
+    <div class="p-body" id="p-body"></div>
+    <div id="p-menu"><a id="p-replace">替换</a><a id="p-unequip">卸下</a></div>
+  </div>
+
 </div>
+<div id="p-tip"></div>
 <div id="modal-mask"><div id="modal" class="panel"></div></div>
 <div id="toast"></div>
 
@@ -1385,6 +1467,7 @@ $('#menu-btns').addEventListener('click',e=>{
   if(b.dataset.label === '公会'){ openGuild(); return; }
   if(b.dataset.label === '好友'){ openFriends(); return; }
   if(b.dataset.label === '队伍'){ openTeam(); return; }
+  if(b.dataset.label === '宠物'){ openPet(); return; }
   toast(`【${b.dataset.label}】功能建设中,敬请期待喵~ (=^･ω･^=)`);
 });
 })();
@@ -1862,6 +1945,120 @@ $('#t-body').addEventListener('click',e=>{
   let drag = null;
   head.addEventListener('mousedown',e=>{
     if(e.target.closest('a') || e.target.closest('.win-btn')) return;
+    const r = win.getBoundingClientRect(), g = $('#game').getBoundingClientRect();
+    drag = {dx:e.clientX-r.left, dy:e.clientY-r.top, g:g};
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!drag) return;
+    let x = e.clientX - drag.g.left - drag.dx, y = e.clientY - drag.g.top - drag.dy;
+    x = Math.max(0, Math.min(drag.g.width - win.offsetWidth, x));
+    y = Math.max(0, Math.min(drag.g.height - win.offsetHeight, y));
+    win.style.left = x+'px'; win.style.top = y+'px';
+  });
+document.addEventListener('mouseup',()=> drag = null);
+})();
+
+/* ==========================================================
+   宠物栏(角色装备/属性)
+   ========================================================== */
+const PET_INFO = {
+  name:'大橘为重', breed:'橘猫', job:'战士系', lv:20, exp:45, points:2,
+  stats:[['体力',25],['力量',20],['敏捷',15],['智力',10],['精神',12],['幸运',8]],
+  derived:[['HP','550/550'],['MP','180/180'],['物攻','55'],['魔攻','20'],['物防','30'],['魔防','24'],['速度','40'],['命中','85%'],['闪避','10%'],['暴击','12%']]
+};
+const P_SLOTS = ['主手','副手','头部','胸部','肩部','手套','腰带','护腿','鞋','戒指','项链','披风'];
+const ICON_CLAW = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="14" y="21" width="4" height="7" fill="#6a4a2a"/><rect x="12" y="27" width="8" height="3" fill="#8a6238"/><rect x="8" y="6" width="3" height="4" fill="#d8e0ea"/><rect x="7" y="10" width="3" height="4" fill="#c2cdd8"/><rect x="6" y="14" width="3" height="4" fill="#a8b4c4"/><rect x="15" y="4" width="3" height="5" fill="#e8eef4"/><rect x="15" y="9" width="3" height="5" fill="#c2cdd8"/><rect x="15" y="14" width="3" height="4" fill="#a8b4c4"/><rect x="22" y="6" width="3" height="4" fill="#d8e0ea"/><rect x="23" y="10" width="3" height="4" fill="#c2cdd8"/><rect x="24" y="14" width="3" height="4" fill="#a8b4c4"/><rect x="15" y="4" width="3" height="2" fill="#c9a0f0"/><rect x="8" y="6" width="3" height="2" fill="#b48ae8"/><rect x="9" y="18" width="15" height="3" fill="#8a97a8"/></svg>`;
+const ICON_HAT = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="14" y="4" width="4" height="4" fill="#a8e078"/><rect x="10" y="8" width="12" height="4" fill="#6ab848"/><rect x="8" y="12" width="16" height="4" fill="#5aa83c"/><rect x="7" y="16" width="18" height="4" fill="#4a9834"/><rect x="5" y="20" width="22" height="3" fill="#3a882c"/><rect x="12" y="9" width="4" height="2" fill="#8fd862"/><rect x="17" y="13" width="3" height="2" fill="#7ac852"/></svg>`;
+const ICON_FISH = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="4" y="13" width="5" height="6" fill="#4a8de0"/><rect x="3" y="15" width="2" height="2" fill="#2a6ab8"/><rect x="5" y="15" width="2" height="2" fill="#fff"/><rect x="9" y="15" width="14" height="2" fill="#c8d8e8"/><rect x="12" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="12" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="16" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="16" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="20" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="20" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="24" y="13" width="3" height="6" fill="#4a8de0"/><rect x="27" y="11" width="2" height="10" fill="#2a6ab8"/></svg>`;
+const PET_EQUIPS = {
+  '主手':{name:'银月弯爪 +3', quality:'紫色', qcolor:'#93f', entries:['STR+6','暴击+3%','物攻+15'], icon:ICON_CLAW},
+  '头部':{name:'绒毛头帽', quality:'绿色', qcolor:'#3a3', entries:['VIT+4','HP+30'], icon:ICON_HAT},
+  '项链':{name:'鱼骨链', quality:'蓝色', qcolor:'#36f', entries:['LUK+3','闪避+2%'], icon:ICON_FISH}
+};
+let petMenuSlot = null;
+function renderPet(){
+  $('#p-body').innerHTML = `
+    <div class="p-name-row"><span class="p-name">${PET_INFO.name}</span><span class="p-sub">${PET_INFO.breed} · ${PET_INFO.job} · Lv.${PET_INFO.lv}</span></div>
+    <div class="p-expbar"><i style="width:${PET_INFO.exp}%"></i><span>EXP ${PET_INFO.exp}%</span></div>
+    <div class="p-sec">装备栏</div>
+    <div class="p-equip-grid" id="p-grid">${P_SLOTS.map(sl=>{
+      const eq = PET_EQUIPS[sl];
+      return `<div class="p-slot">
+        <div class="p-slot-box${eq?' equipped':''}" data-slot="${sl}" style="${eq?`border-color:${eq.qcolor}`:''}">${eq?eq.icon:''}</div>
+        <span class="p-slot-name">${sl}</span>
+      </div>`;
+    }).join('')}</div>
+    <div class="p-sec">属性</div>
+    <div class="p-stats">
+      <div>${PET_INFO.stats.map(([k,v])=>`<div class="p-stat"><b>${k}</b><span>${v}</span></div>`).join('')}
+        <div class="p-stat"><b>可分配</b><span class="p-points">${PET_INFO.points}</span></div></div>
+      <div>${PET_INFO.derived.map(([k,v])=>`<div class="p-stat"><b>${k}</b><span>${v}</span></div>`).join('')}</div>
+    </div>`;
+}
+function openPet(){
+  renderPet();
+  $('#pet-win').classList.remove('min');
+  $('#pet-win').classList.add('show');
+}
+$('#p-close').onclick = ()=> $('#pet-win').classList.remove('show');
+$('#p-min').onclick = ()=> $('#pet-win').classList.toggle('min');
+/* tooltip 跟随鼠标 */
+(function(){
+  const tip = $('#p-tip');
+  $('#pet-win').addEventListener('mousemove',e=>{
+    const box = e.target.closest('.p-slot-box.equipped');
+    if(!box){ tip.style.display='none'; return; }
+    const eq = PET_EQUIPS[box.dataset.slot]; if(!eq) return;
+    tip.innerHTML = `
+      <div class="t-name" style="color:${eq.qcolor}">${eq.name}</div>
+      <div class="t-part">部位：${box.dataset.slot}｜品质：${eq.quality}</div>
+      <div class="t-ent">${eq.entries.map(x=>`<div>${x}</div>`).join('')}</div>
+      <div class="t-hint">左键点击操作</div>`;
+    tip.style.display = 'block';
+    const x = Math.min(e.clientX + 14, window.innerWidth - 220);
+    const y = Math.min(e.clientY + 14, window.innerHeight - 130);
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  });
+  $('#pet-win').addEventListener('mouseleave',()=> tip.style.display='none');
+})();
+/* 点击已装备格 → 操作小菜单 */
+$('#pet-win').addEventListener('click',e=>{
+  const box = e.target.closest('.p-slot-box.equipped');
+  const menu = $('#p-menu');
+  if(!box || e.target.closest('#p-menu')){ menu.style.display='none'; petMenuSlot = null; return; }
+  petMenuSlot = box.dataset.slot;
+  const wr = $('#pet-win').getBoundingClientRect(), br = box.getBoundingClientRect();
+  menu.style.display = 'block';
+  menu.style.left = (br.right - wr.left + 4) + 'px';
+  menu.style.top = (br.top - wr.top - 2) + 'px';
+  e.stopPropagation();
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#p-menu') && !e.target.closest('.p-slot-box')){ $('#p-menu').style.display='none'; petMenuSlot=null; }
+});
+$('#p-replace').onclick = ()=>{
+  toast(`已打开背包,高亮可替换的【${petMenuSlot}】装备(接口预留)`);
+  openBag();
+  $('#p-menu').style.display='none';
+};
+$('#p-unequip').onclick = ()=>{
+  if(!petMenuSlot) return;
+  const eq = PET_EQUIPS[petMenuSlot];
+  delete PET_EQUIPS[petMenuSlot];
+  BAG_ITEMS.push({name:eq.name, qty:1, unit:'件', desc:`${petMenuSlot}装备 · 品质${eq.quality}`, icon:eq.icon});
+  renderBag();
+  renderPet();
+  toast(`已卸下【${eq.name}】,放回了背包`);
+  $('#p-menu').style.display='none';
+  petMenuSlot = null;
+};
+/* 宠物窗口拖动(限制在游戏窗口内) */
+(function(){
+  const win = $('#pet-win'), head = win.querySelector('.p-head');
+  let drag = null;
+  head.addEventListener('mousedown',e=>{
+    if(e.target.closest('.win-btn')) return;
     const r = win.getBoundingClientRect(), g = $('#game').getBoundingClientRect();
     drag = {dx:e.clientX-r.left, dy:e.clientY-r.top, g:g};
     e.preventDefault();
