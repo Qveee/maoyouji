@@ -18,7 +18,7 @@
   .sec small{display:block;font:12px SimSun;opacity:.6;font-weight:normal}
 
   /* ============ 面板基础骨架 ============ */
-  .pwin{width:355px;height:520px;display:flex;flex-direction:column;cursor:pointer;overflow:hidden;position:relative}
+  .pwin{width:355px;height:568px;display:flex;flex-direction:column;cursor:pointer;overflow:hidden;position:relative}
   .cell.picked .pwin{outline:3px solid #5adf6a;outline-offset:2px}
   .pw-title{flex:none;padding:7px 12px;font-weight:bold;font-size:14px}
   .pw-char{padding:8px 12px 4px}
@@ -28,10 +28,13 @@
   .pw-exp i{display:block;height:100%}
   .pw-exp span{position:absolute;right:5px;top:-2px;font-size:9px;font-family:Verdana}
   .pw-sec{flex:none;padding:8px 12px 6px;font-weight:bold;font-size:13px;letter-spacing:2px}
-  .pw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 6px;padding:0 12px}
+  /* DNF式纸娃娃布局:角色居中,装备环绕 */
+  .pw-doll{display:grid;grid-template-columns:72px 1fr 72px;gap:4px 4px;padding:2px 12px 4px;align-items:center;justify-items:center}
+  .pw-center{display:flex;align-items:center;justify-content:center;min-height:230px}
+  .pw-center svg{height:228px;width:auto;filter:drop-shadow(0 3px 5px rgba(0,0,0,.28))}
   .pw-slot{display:flex;flex-direction:column;align-items:center;gap:2px}
-  .pw-box{width:40px;height:40px;position:relative}
-  .pw-box svg{width:32px;height:32px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+  .pw-box{width:44px;height:44px;position:relative}
+  .pw-box svg{width:34px;height:34px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
   .pw-slotn{font-size:10px;opacity:.75}
   .pw-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px 14px;padding:0 12px 12px;font-size:12px}
   .pw-row{display:flex;justify-content:space-between;padding:2px 1px;border-bottom:1px dotted}
@@ -170,7 +173,7 @@
 <body>
 
 <h1>🐱 宠物栏 · 8 款风格参考</h1>
-<p class="tip">同一内容（角色/装备栏/属性），完全不同的设计语言 —— <b>点击窗口选择你喜欢的风格</b>，告诉我编号即可应用到游戏</p>
+<p class="tip"><b>DNF 式纸娃娃布局</b>：角色立绘居中 · 12 装备位环绕 · 8 种设计语言 —— <b>点击窗口选择风格</b>，告诉我编号即可应用到游戏</p>
 
 <div class="grid" id="grid"></div>
 <div id="picked-tip">已选择：<b id="picked-name">—</b>（回复"宠物栏用风格X"即可应用）</div>
@@ -182,6 +185,41 @@ const ICON_HAT = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="14" y="4" width="4"
 const ICON_FISH = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="4" y="13" width="5" height="6" fill="#4a8de0"/><rect x="3" y="15" width="2" height="2" fill="#2a6ab8"/><rect x="5" y="15" width="2" height="2" fill="#fff"/><rect x="9" y="15" width="14" height="2" fill="#c8d8e8"/><rect x="12" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="12" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="16" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="16" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="20" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="20" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="24" y="13" width="3" height="6" fill="#4a8de0"/><rect x="27" y="11" width="2" height="10" fill="#2a6ab8"/></svg>`;
 const SLOTS = ['主手','副手','头部','胸部','肩部','手套','腰带','护腿','鞋','戒指','项链','披风'];
 const EQUIPS = {'主手':{q:'#93f',icon:ICON_CLAW},'头部':{q:'#3a3',icon:ICON_HAT},'项链':{q:'#36f',icon:ICON_FISH}};
+/* DNF式装备位布局:角色立绘居中,12格环绕 */
+const SLOT_POS = {
+  '头部':{r:1,c:2}, '肩部':{r:2,c:1}, '披风':{r:2,c:3},
+  '主手':{r:3,c:1}, '副手':{r:3,c:3},
+  '手套':{r:4,c:1}, '项链':{r:4,c:3},
+  '胸部':{r:5,c:1}, '戒指':{r:5,c:3},
+  '护腿':{r:6,c:1}, '腰带':{r:6,c:2}, '鞋':{r:6,c:3}
+};
+const CAT_DOLL = `<svg viewBox="0 0 90 120">
+  <path d="M22 92 Q4 84 8 66" fill="none" stroke="#e8940f" stroke-width="7" stroke-linecap="round"/>
+  <rect x="30" y="88" width="10" height="22" rx="3" fill="#f5a623"/>
+  <rect x="46" y="88" width="10" height="22" rx="3" fill="#f5a623"/>
+  <ellipse cx="35" cy="111" rx="9" ry="5" fill="#7a4a1a"/>
+  <ellipse cx="51" cy="111" rx="9" ry="5" fill="#7a4a1a"/>
+  <path d="M26 52 Q45 44 64 52 L66 92 Q45 98 24 92 Z" fill="#f5a623"/>
+  <path d="M26 52 Q45 44 64 52 L65 66 Q45 60 25 66 Z" fill="#8a5a2a"/>
+  <rect x="24" y="64" width="42" height="7" rx="2" fill="#c9a55a"/>
+  <circle cx="24" cy="60" r="5" fill="#f5a623"/>
+  <ellipse cx="16" cy="70" rx="10" ry="13" fill="#9aa7b8" stroke="#5c6878"/>
+  <ellipse cx="16" cy="70" rx="5" ry="7" fill="#c8321e"/>
+  <circle cx="66" cy="58" r="5" fill="#f5a623"/>
+  <rect x="63" y="14" width="6" height="44" rx="2" fill="#dfe8f0" stroke="#8a97a8"/>
+  <rect x="56" y="52" width="20" height="5" rx="2" fill="#b8862f"/>
+  <rect x="64" y="57" width="4" height="9" fill="#7a4c12"/>
+  <polygon points="66,8 70,16 62,16" fill="#ffd34d" stroke="#c99a10"/>
+  <circle cx="45" cy="30" r="17" fill="#f5a623"/>
+  <polygon points="32,20 34,4 43,15" fill="#f5a623" stroke="#c97f10"/>
+  <polygon points="58,20 56,4 47,15" fill="#f5a623" stroke="#c97f10"/>
+  <path d="M27 22 Q45 8 63 22 L63 26 L27 26 Z" fill="#9aa7b8" stroke="#5c6878"/>
+  <rect x="27" y="25" width="36" height="4" fill="#c8321e"/>
+  <circle cx="39" cy="33" r="2.6" fill="#222"/>
+  <circle cx="52" cy="33" r="2.6" fill="#222"/>
+  <path d="M40 41 Q45 44 50 41" stroke="#7a3c00" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M30 36 L22 34 M30 39 L23 39 M60 36 L68 34 M60 39 L67 39" stroke="#c97f10" stroke-width="1.2"/>
+</svg>`;
 const SIX = [['体力',25],['力量',20],['敏捷',15],['智力',10],['精神',12],['幸运',8]];
 const DERIVED = [['HP','550/550'],['MP','180/180'],['物攻','55'],['魔攻','20'],['物防','30'],['魔防','24'],['速度','40'],['命中','85%'],['闪避','10%'],['暴击','12%']];
 const STYLES = [
@@ -196,8 +234,10 @@ const STYLES = [
 ];
 const slotsHtml = SLOTS.map(sl=>{
   const eq = EQUIPS[sl];
-  return `<div class="pw-slot"><div class="pw-box${eq?' eq':''}" style="${eq?`border-color:${eq.q}`:''}">${eq?eq.icon:''}</div><span class="pw-slotn">${sl}</span></div>`;
+  const p = SLOT_POS[sl];
+  return `<div class="pw-slot" style="grid-row:${p.r};grid-column:${p.c}"><div class="pw-box${eq?' eq':''}" style="${eq?`border-color:${eq.q}`:''}">${eq?eq.icon:''}</div><span class="pw-slotn">${sl}</span></div>`;
 }).join('');
+const dollHtml = `<div class="pw-doll">${slotsHtml}<div class="pw-center" style="grid-row:2/6;grid-column:2">${CAT_DOLL}</div></div>`;
 const sixHtml = SIX.map(([k,v])=>`<div class="pw-row"><b>${k}</b><span>${v}</span></div>`).join('') + `<div class="pw-row"><b>可分配</b><span class="pts">2</span></div>`;
 const derHtml = DERIVED.map(([k,v])=>`<div class="pw-row"><b>${k}</b><span>${v}</span></div>`).join('');
 const winHtml = ([id,name,desc])=>`
@@ -208,7 +248,7 @@ const winHtml = ([id,name,desc])=>`
       <div class="pw-char"><div class="pw-name">大橘为重<span class="pw-sub">橘猫 · 战士系 · Lv.20</span></div>
       <div class="pw-exp"><i style="width:45%"></i><span>EXP 45%</span></div></div>
       <div class="pw-sec">装 备</div>
-      <div class="pw-grid">${slotsHtml}</div>
+      ${dollHtml}
       <div class="pw-sec">属 性</div>
       <div class="pw-stats"><div>${sixHtml}</div><div>${derHtml}</div></div>
     </div>
