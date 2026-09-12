@@ -428,6 +428,12 @@ body{
 .g-acts{margin-left:auto;display:flex;gap:8px;font:12px SimSun}
 .g-acts a{color:var(--ink-navy);cursor:pointer}
 .g-acts a:hover{color:#c33812}
+#guild-win .win-btns{display:flex;gap:2px;flex:none;margin-left:8px}
+#guild-win .win-btn{width:19px;height:19px;border:1px solid #8aa8b8;border-radius:0;cursor:pointer;padding:0;background:linear-gradient(#ffffff,#dcecf5);color:#14506e;display:grid;place-items:center}
+#guild-win .win-btn:hover{background:linear-gradient(#fffbe8,#ffe9ae);border-color:#d8a94e}
+#guild-win .win-btn svg{width:11px;height:11px;display:block}
+#guild-win.min{height:auto}
+#guild-win.min .g-list-head,#guild-win.min .g-list{display:none}
 .g-nav{display:flex;gap:6px;padding:6px 0 5px;border-bottom:2px solid #9cc4d8;font:12px SimSun}
 .g-nav a{color:var(--ink-navy);cursor:pointer}
 .g-nav a:hover{color:#c33812}
@@ -802,6 +808,10 @@ body{
         <div class="g-acts">
           <a id="g-refresh">【刷新】</a>
           <a id="g-leave">【离开公会】</a>
+        </div>
+        <div class="win-btns">
+          <button class="win-btn" id="g-min" title="最小化"><svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="currentColor"/></svg></button>
+          <button class="win-btn" id="g-close" title="关闭"><svg viewBox="0 0 12 12"><g stroke="currentColor" stroke-width="2" stroke-linecap="square"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></g></svg></button>
         </div>
       </div>
       <div class="g-nav">
@@ -1577,8 +1587,11 @@ function renderGuild(){
 }
 function openGuild(){
   renderGuild();
+  $('#guild-win').classList.remove('min');
   $('#guild-win').classList.add('show');
 }
+$('#g-close').onclick = ()=> $('#guild-win').classList.remove('show');
+$('#g-min').onclick = ()=> $('#guild-win').classList.toggle('min');
 $('#g-refresh').onclick = ()=>{ renderGuild(); toast('公会信息已刷新喵~ (=^･ω･^=)'); };
 $('#g-leave').onclick = ()=> toast('离开公会将失去城战奖励,确定要离开吗喵?(建设中)');
 $('#g-self').onclick = ()=> toast('这就是你自己喵~');
@@ -1599,7 +1612,7 @@ $('#g-list').addEventListener('click',e=>{
   const win = $('#guild-win'), head = win.querySelector('.g-head');
   let drag = null;
   head.addEventListener('mousedown',e=>{
-    if(e.target.closest('a')) return;
+    if(e.target.closest('a') || e.target.closest('.win-btn')) return;
     const r = win.getBoundingClientRect(), g = $('#game').getBoundingClientRect();
     drag = {dx:e.clientX-r.left, dy:e.clientY-r.top, g:g};
     e.preventDefault();
