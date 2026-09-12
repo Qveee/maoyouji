@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>宠物栏 · 8 款风格参考</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#242830;font:14px/1.6 "Microsoft YaHei",SimSun,sans-serif;color:#d8dee9;padding:26px 20px 60px}
+  h1{font:bold 22px SimHei;color:#5eead4;text-align:center;margin-bottom:6px}
+  .tip{text-align:center;color:#9aa5b6;font-size:13px;margin-bottom:24px}
+  .tip b{color:#5eead4}
+  .grid{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;max-width:1280px;margin:0 auto}
+  .cell{width:355px}
+  .cap{text-align:center;margin-bottom:8px;font:bold 15px SimHei}
+  .cap small{display:block;font:12px SimSun;opacity:.7;font-weight:normal;margin-top:2px}
+  .cell.picked .cap::after{content:' ✓ 已选择';color:#5adf6a}
+  .sec{width:100%;text-align:center;font:bold 19px SimHei;margin:6px 0 2px}
+  .sec small{display:block;font:12px SimSun;opacity:.6;font-weight:normal}
+
+  /* ============ 面板基础骨架 ============ */
+  .pwin{width:355px;height:520px;display:flex;flex-direction:column;cursor:pointer;overflow:hidden;position:relative}
+  .cell.picked .pwin{outline:3px solid #5adf6a;outline-offset:2px}
+  .pw-title{flex:none;padding:7px 12px;font-weight:bold;font-size:14px}
+  .pw-char{padding:8px 12px 4px}
+  .pw-name{font-weight:bold;font-size:16px}
+  .pw-sub{font-size:12px;opacity:.65;font-weight:normal;margin-left:8px}
+  .pw-exp{height:8px;margin-top:6px;position:relative;border:1px solid}
+  .pw-exp i{display:block;height:100%}
+  .pw-exp span{position:absolute;right:5px;top:-2px;font-size:9px;font-family:Verdana}
+  .pw-sec{flex:none;padding:8px 12px 6px;font-weight:bold;font-size:13px;letter-spacing:2px}
+  .pw-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 6px;padding:0 12px}
+  .pw-slot{display:flex;flex-direction:column;align-items:center;gap:2px}
+  .pw-box{width:40px;height:40px;position:relative}
+  .pw-box svg{width:32px;height:32px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+  .pw-slotn{font-size:10px;opacity:.75}
+  .pw-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px 14px;padding:0 12px 12px;font-size:12px}
+  .pw-row{display:flex;justify-content:space-between;padding:2px 1px;border-bottom:1px dotted}
+  .pw-row b{font-weight:normal;opacity:.8}
+  .pts{color:#e05252;font-weight:bold}
+
+  /* ============ 1 暗金浮雕 ============ */
+  .s1 .pwin{background:#17130c;border:2px solid #8a6a2a;box-shadow:inset 0 0 0 1px #4a3a18,0 0 18px rgba(138,106,42,.25);color:#d8c090;font-family:SimSun}
+  .s1 .pw-title{background:linear-gradient(#3a2e16,#241c0e);color:#e8c87a;text-align:center;letter-spacing:6px;border-bottom:1px solid #8a6a2a;text-shadow:0 1px 1px #000}
+  .s1 .pw-name{color:#f0d898}
+  .s1 .pw-exp{border-color:#6a542e;background:#241c10}
+  .s1 .pw-exp i{background:linear-gradient(90deg,#8a6a2a,#e8c87a)}
+  .s1 .pw-exp span{color:#c9a55a}
+  .s1 .pw-sec{color:#c9a55a}
+  .s1 .pw-sec::before{content:'◆ '}
+  .s1 .pw-box{background:#241c10;border:1px solid #4a3a18;box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}
+  .s1 .pw-box.eq{border-width:2px;background:#2e2412}
+  .s1 .pw-row{border-color:#3a2e18}
+  .s1 .cap{color:#e8c87a}
+
+  /* ============ 2 羊皮卷 ============ */
+  .s2 .pwin{background:radial-gradient(ellipse at 30% 20%,#f6ecd2,#ead8b0 75%,#e0ca98);border:4px double #8a5a2a;color:#4a3010;font-family:"KaiTi","楷体",SimSun}
+  .s2 .pw-title{text-align:center;letter-spacing:8px;color:#5a3a10;border-bottom:1px solid #b8934a;font-size:16px}
+  .s2 .pw-name{color:#3a2410}
+  .s2 .pw-exp{border-color:#a88040;background:#e0ca98}
+  .s2 .pw-exp i{background:linear-gradient(90deg,#8a5a2a,#b8803a)}
+  .s2 .pw-exp span{color:#6a4a20}
+  .s2 .pw-sec{color:#7a4a18}
+  .s2 .pw-sec::before{content:'❦ '}
+  .s2 .pw-box{background:#f2e4c0;border:1px dashed #a88040}
+  .s2 .pw-row{border-color:#c9a468}
+  .s2 .cap{color:#e8c87a}
+
+  /* ============ 3 赛博终端 ============ */
+  .s3 .pwin{background:#0a0f0c;border:1px solid rgba(42,255,154,.27);box-shadow:0 0 16px rgba(26,255,138,.13),inset 0 0 40px rgba(10,255,106,.06);color:#7fe87f;font-family:Consolas,"Courier New",monospace}
+  .s3 .pwin::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.18) 2px 4px)}
+  .s3 .pw-title{background:#0f2416;color:#3aff5a;border-bottom:1px solid #1e5a2e}
+  .s3 .pw-title::before{content:'▸ '}
+  .s3 .pw-name{color:#a8ffa8}
+  .s3 .pw-exp{border-color:#1e5a2e;background:#0c1a10}
+  .s3 .pw-exp i{background:#3aff5a;box-shadow:0 0 8px #3aff5a}
+  .s3 .pw-exp span{color:#3aff5a}
+  .s3 .pw-sec{color:#3aff5a;letter-spacing:1px}
+  .s3 .pw-sec::before{content:'// '}
+  .s3 .pw-box{background:#0c1a10;border:1px solid #1e3a22}
+  .s3 .pw-box.eq{box-shadow:0 0 8px rgba(58,255,90,.33)}
+  .s3 .pw-row{border-color:#1a3a22}
+  .s3 .pts{color:#ffd34d}
+  .s3 .cap{color:#7fe87f}
+
+  /* ============ 4 和风绘卷 ============ */
+  .s4 .pwin{background:#f7f3ea;border:1px solid #222;box-shadow:inset 0 0 0 3px #f7f3ea,inset 0 0 0 4px #b83a2a;color:#333;font-family:"KaiTi","楷体",SimSun}
+  .s4 .pw-title{text-align:center;color:#222;letter-spacing:10px;border-bottom:1px solid #222;font-size:15px;position:relative}
+  .s4 .pw-title::after{content:'猫';position:absolute;right:10px;top:6px;width:18px;height:18px;background:#b83a2a;color:#fff;font:11px/18px SimSun;text-align:center;border-radius:2px;letter-spacing:0}
+  .s4 .pw-name{color:#b83a2a}
+  .s4 .pw-exp{border-color:#b83a2a;background:#efe8da}
+  .s4 .pw-exp i{background:linear-gradient(90deg,#d86a4a,#b83a2a)}
+  .s4 .pw-sec{color:#222;text-align:center;letter-spacing:4px}
+  .s4 .pw-sec::before{content:'─ ';color:#b83a2a}
+  .s4 .pw-sec::after{content:' ─';color:#b83a2a}
+  .s4 .pw-box{background:#fff;border:1px solid #d8cfc0}
+  .s4 .pw-row{border-color:#e0d8c8}
+  .s4 .pts{color:#b83a2a}
+  .s4 .cap{color:#f0c078}
+
+  /* ============ 5 全息科幻 ============ */
+  .s5 .cell{background:linear-gradient(150deg,#0c1e3a,#123a5a 60%,#0e4a5a);padding:10px;border-radius:14px}
+  .s5 .pwin{background:linear-gradient(165deg,rgba(60,160,255,.16),rgba(20,80,160,.22));border:1px solid rgba(120,220,255,.55);box-shadow:0 0 18px rgba(80,200,255,.25),inset 0 0 30px rgba(80,200,255,.08);color:#bfeaff;font-family:"Segoe UI","Microsoft YaHei",sans-serif}
+  .s5 .pwin::before{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(60deg,transparent 0 14px,rgba(120,220,255,.05) 14px 15px)}
+  .s5 .pw-title{background:linear-gradient(90deg,rgba(80,200,255,.3),transparent 75%);color:#dff4ff;letter-spacing:3px;border-bottom:1px solid rgba(120,220,255,.35)}
+  .s5 .pw-title::before{content:'▸ '}
+  .s5 .pw-name{color:#fff;text-shadow:0 0 8px rgba(120,220,255,.6)}
+  .s5 .pw-exp{border-color:rgba(120,220,255,.4);background:rgba(20,60,110,.4)}
+  .s5 .pw-exp i{background:linear-gradient(90deg,#3ab8ff,#a8e8ff);box-shadow:0 0 8px rgba(80,200,255,.8)}
+  .s5 .pw-sec{color:#8fd8ff;letter-spacing:3px}
+  .s5 .pw-box{background:rgba(20,60,110,.35);border:1px solid rgba(120,220,255,.3)}
+  .s5 .pw-box.eq{box-shadow:0 0 10px rgba(120,220,255,.4)}
+  .s5 .pw-row{border-color:rgba(120,220,255,.18)}
+  .s5 .pts{color:#ffd88a}
+  .s5 .cap{color:#8fd8ff}
+
+  /* ============ 6 手账贴纸 ============ */
+  .s6 .cell{background:#fdf6ec;padding:10px}
+  .s6 .pwin{background:#fff;border:2px solid #ffd9b8;border-radius:16px;box-shadow:0 6px 0 #f4d4bc,0 10px 20px rgba(200,120,80,.15);color:#6a5a52;font-family:"Microsoft YaHei",sans-serif;transform:rotate(-.6deg)}
+  .s6 .pwin::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%) rotate(-2deg);width:90px;height:18px;background:rgba(255,200,120,.5);border:1px dashed rgba(200,140,60,.4)}
+  .s6 .pw-title{text-align:center;color:#e07856;letter-spacing:4px;border-bottom:2px dashed #ffd0c2;font-size:15px}
+  .s6 .pw-name{color:#8a5a48}
+  .s6 .pw-exp{border-color:#ffb89a;background:#fff3ec;border-radius:99px}
+  .s6 .pw-exp i{background:linear-gradient(90deg,#ff9a70,#ffc08a);border-radius:99px}
+  .s6 .pw-exp span{color:#c07858}
+  .s6 .pw-sec{color:#e07856;letter-spacing:2px}
+  .s6 .pw-sec::before{content:'🐾 '}
+  .s6 .pw-box{background:#fff7f0;border:2px solid #ffd9c9;border-radius:10px}
+  .s6 .pw-row{border-color:#ffe4d6}
+  .s6 .pts{color:#ff7043}
+  .s6 .cap{color:#ffb08a}
+
+  /* ============ 7 极简数据卡 ============ */
+  .s7 .pwin{background:#fff;border:none;box-shadow:0 1px 3px rgba(0,0,0,.12);color:#1f2937;font-family:"Segoe UI","Microsoft YaHei",sans-serif}
+  .s7 .pw-title{font:600 11px "Segoe UI";letter-spacing:2.5px;color:#9ca3af;border-bottom:1px solid #f3f4f6}
+  .s7 .pw-name{font-size:21px;font-weight:700;color:#111827}
+  .s7 .pw-sub{color:#6b7280}
+  .s7 .pw-exp{border:none;background:#f3f4f6;height:4px;border-radius:99px}
+  .s7 .pw-exp i{background:#111827;border-radius:99px}
+  .s7 .pw-exp span{top:-5px;color:#374151;font-weight:600}
+  .s7 .pw-sec{font:600 11px "Segoe UI";letter-spacing:2px;color:#9ca3af;border-bottom:1px solid #f3f4f6;padding-bottom:4px}
+  .s7 .pw-box{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px}
+  .s7 .pw-box.eq{border-width:2px}
+  .s7 .pw-row{border-color:#f3f4f6}
+  .s7 .pw-row span{font-weight:600;font-variant-numeric:tabular-nums}
+  .s7 .pts{color:#ef4444}
+  .s7 .cap{color:#93c5fd}
+
+  /* ============ 8 掌机 LCD ============ */
+  .s8 .cell{background:#d4d0c8;padding:12px;border:2px solid #a8a49c;border-radius:6px 6px 14px 14px}
+  .s8 .pwin{background:#9bbc0f;border:3px solid #0f380f;color:#0f380f;font-family:"Courier New",monospace;box-shadow:inset 2px 2px 0 rgba(138,172,15,.53),inset -2px -2px 0 #c8e04a}
+  .s8 .pw-title{background:#0f380f;color:#9bbc0f;letter-spacing:2px}
+  .s8 .pw-title::before{content:'▶ '}
+  .s8 .pw-name{color:#0f380f}
+  .s8 .pw-exp{border-color:#0f380f;background:#8bac0f}
+  .s8 .pw-exp i{background:#0f380f}
+  .s8 .pw-exp span{color:#0f380f;font-weight:bold}
+  .s8 .pw-sec{letter-spacing:1px}
+  .s8 .pw-sec::before{content:'== '}
+  .s8 .pw-box{background:#8bac0f;border:2px solid #0f380f;box-shadow:inset 1px 1px 0 #6a900f}
+  .s8 .pw-box.eq{background:#aac42a}
+  .s8 .pw-row{border-color:rgba(15,56,15,.33)}
+  .s8 .pts{color:#0f380f;font-weight:bold}
+  .s8 .cap{color:#c8e04a}
+
+  #picked-tip{position:fixed;left:0;right:0;bottom:0;background:#1b202a;border-top:1px solid #3a4456;padding:10px;text-align:center;color:#9aa5b6;font-size:13px;display:none}
+  #picked-tip.show{display:block}
+  #picked-tip b{color:#5adf6a}
+</style>
+</head>
+<body>
+
+<h1>🐱 宠物栏 · 8 款风格参考</h1>
+<p class="tip">同一内容（角色/装备栏/属性），完全不同的设计语言 —— <b>点击窗口选择你喜欢的风格</b>，告诉我编号即可应用到游戏</p>
+
+<div class="grid" id="grid"></div>
+<div id="picked-tip">已选择：<b id="picked-name">—</b>（回复"宠物栏用风格X"即可应用）</div>
+
+<script>
+const CRISP = 'shape-rendering="crispEdges"';
+const ICON_CLAW = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="14" y="21" width="4" height="7" fill="#6a4a2a"/><rect x="12" y="27" width="8" height="3" fill="#8a6238"/><rect x="8" y="6" width="3" height="4" fill="#d8e0ea"/><rect x="7" y="10" width="3" height="4" fill="#c2cdd8"/><rect x="6" y="14" width="3" height="4" fill="#a8b4c4"/><rect x="15" y="4" width="3" height="5" fill="#e8eef4"/><rect x="15" y="9" width="3" height="5" fill="#c2cdd8"/><rect x="15" y="14" width="3" height="4" fill="#a8b4c4"/><rect x="22" y="6" width="3" height="4" fill="#d8e0ea"/><rect x="23" y="10" width="3" height="4" fill="#c2cdd8"/><rect x="24" y="14" width="3" height="4" fill="#a8b4c4"/><rect x="15" y="4" width="3" height="2" fill="#c9a0f0"/><rect x="8" y="6" width="3" height="2" fill="#b48ae8"/><rect x="9" y="18" width="15" height="3" fill="#8a97a8"/></svg>`;
+const ICON_HAT = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="14" y="4" width="4" height="4" fill="#a8e078"/><rect x="10" y="8" width="12" height="4" fill="#6ab848"/><rect x="8" y="12" width="16" height="4" fill="#5aa83c"/><rect x="7" y="16" width="18" height="4" fill="#4a9834"/><rect x="5" y="20" width="22" height="3" fill="#3a882c"/><rect x="12" y="9" width="4" height="2" fill="#8fd862"/><rect x="17" y="13" width="3" height="2" fill="#7ac852"/></svg>`;
+const ICON_FISH = `<svg viewBox="0 0 32 32" ${CRISP}><rect x="4" y="13" width="5" height="6" fill="#4a8de0"/><rect x="3" y="15" width="2" height="2" fill="#2a6ab8"/><rect x="5" y="15" width="2" height="2" fill="#fff"/><rect x="9" y="15" width="14" height="2" fill="#c8d8e8"/><rect x="12" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="12" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="16" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="16" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="20" y="10" width="2" height="5" fill="#d8e8f0"/><rect x="20" y="17" width="2" height="5" fill="#d8e8f0"/><rect x="24" y="13" width="3" height="6" fill="#4a8de0"/><rect x="27" y="11" width="2" height="10" fill="#2a6ab8"/></svg>`;
+const SLOTS = ['主手','副手','头部','胸部','肩部','手套','腰带','护腿','鞋','戒指','项链','披风'];
+const EQUIPS = {'主手':{q:'#93f',icon:ICON_CLAW},'头部':{q:'#3a3',icon:ICON_HAT},'项链':{q:'#36f',icon:ICON_FISH}};
+const SIX = [['体力',25],['力量',20],['敏捷',15],['智力',10],['精神',12],['幸运',8]];
+const DERIVED = [['HP','550/550'],['MP','180/180'],['物攻','55'],['魔攻','20'],['物防','30'],['魔防','24'],['速度','40'],['命中','85%'],['闪避','10%'],['暴击','12%']];
+const STYLES = [
+  [1,'暗金浮雕','黑底鎏金双线框·宋体金字·雕花章节符,端游质感'],
+  [2,'羊皮卷','羊皮纸纹理·双线棕框·楷体·花体章节符,冒险家手册'],
+  [3,'赛博终端','黑底荧光绿·等宽字体·扫描线·发光进度条,黑客风'],
+  [4,'和风绘卷','米白和纸·红黑配色·楷体·印章角标·居中章节,东方雅致'],
+  [5,'全息科幻','深蓝底半透明面板·青色辉光·斜纹全息底纹,未来感'],
+  [6,'手账贴纸','奶油底·胶带贴纸卡·圆角糖果色·爪印章节·微倾斜,可爱'],
+  [7,'极简数据卡','纯白无框·发丝级分隔线·大数字·灰色小标英文,现代性冷淡'],
+  [8,'掌机LCD','经典绿屏·等宽字·粗像素边框·斜面高光,GameBoy怀旧']
+];
+const slotsHtml = SLOTS.map(sl=>{
+  const eq = EQUIPS[sl];
+  return `<div class="pw-slot"><div class="pw-box${eq?' eq':''}" style="${eq?`border-color:${eq.q}`:''}">${eq?eq.icon:''}</div><span class="pw-slotn">${sl}</span></div>`;
+}).join('');
+const sixHtml = SIX.map(([k,v])=>`<div class="pw-row"><b>${k}</b><span>${v}</span></div>`).join('') + `<div class="pw-row"><b>可分配</b><span class="pts">2</span></div>`;
+const derHtml = DERIVED.map(([k,v])=>`<div class="pw-row"><b>${k}</b><span>${v}</span></div>`).join('');
+const winHtml = ([id,name,desc])=>`
+  <div class="cell s${id}" data-name="风格${id} · ${name}">
+    <div class="cap">风格${id} · ${name}<small>${desc}</small></div>
+    <div class="pwin">
+      <div class="pw-title">宠物信息</div>
+      <div class="pw-char"><div class="pw-name">大橘为重<span class="pw-sub">橘猫 · 战士系 · Lv.20</span></div>
+      <div class="pw-exp"><i style="width:45%"></i><span>EXP 45%</span></div></div>
+      <div class="pw-sec">装 备</div>
+      <div class="pw-grid">${slotsHtml}</div>
+      <div class="pw-sec">属 性</div>
+      <div class="pw-stats"><div>${sixHtml}</div><div>${derHtml}</div></div>
+    </div>
+  </div>`;
+document.getElementById('grid').innerHTML =
+  `<h2 class="sec" style="color:#ffd34d">🏺 幻想质感系<small>暗金 / 羊皮卷 / 赛博 / 和风</small></h2>` +
+  STYLES.slice(0,4).map(winHtml).join('') +
+  `<h2 class="sec" style="color:#5eead4">🚀 现代设计系<small>全息 / 手账 / 极简 / 掌机</small></h2>` +
+  STYLES.slice(4).map(winHtml).join('');
+document.getElementById('grid').addEventListener('click',e=>{
+  const cell = e.target.closest('.cell'); if(!cell) return;
+  document.querySelectorAll('.cell').forEach(c=>c.classList.remove('picked'));
+  cell.classList.add('picked');
+  document.getElementById('picked-name').textContent = cell.dataset.name;
+  document.getElementById('picked-tip').classList.add('show');
+});
+</script>
+</body>
+</html>
