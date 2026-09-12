@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>道具背包 · 风格参考（6 款）</title>
+<title>道具背包 · 风格参考（10 款）</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   body{background:#2e3440;font:14px/1.6 "Microsoft YaHei",SimSun,sans-serif;color:#d8dee9;padding:26px 20px 60px}
@@ -162,6 +162,117 @@
   .skin-f .bag-list::-webkit-scrollbar-thumb{background:#c0c0c0;box-shadow:inset -1px -1px 0 #404040,inset 1px 1px 0 #fff,inset -2px -2px 0 #808080,inset 2px 2px 0 #dfdfdf}
   .skin-f .cap{color:#d8d8d8}
 
+  /* ============ 分组标题 ============ */
+  .sec{width:100%;text-align:center;font:bold 19px SimHei;margin:8px 0 4px}
+  .sec small{display:block;font:12px SimSun;opacity:.65;font-weight:normal;margin-top:2px}
+  .sec-retro{color:#ffd34d}
+  .sec-modern{color:#5eead4}
+
+  /* ============ 容量进度条（现代系列专用） ============ */
+  .capbar{display:none;flex:none;height:16px;margin:0 14px 6px;position:relative;background:#e2e8f0;border-radius:99px}
+  .capbar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#3b82f6,#60a5fa)}
+  .capbar span{position:absolute;right:8px;top:50%;transform:translateY(-50%);font:700 10px Verdana;color:#64748b}
+  .skin-g .capbar,.skin-h .capbar,.skin-i .capbar,.skin-j .capbar{display:block}
+  .skin-g .bag-row,.skin-h .bag-row,.skin-i .bag-row,.skin-j .bag-row{transition:background .15s}
+
+  /* ============ 风格G：现代扁平 ============ */
+  .skin-g .win{border:none;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(30,40,60,.16)}
+  .skin-g .bag-title{height:auto;padding:12px 14px 6px;background:#fff;border-bottom:none}
+  .skin-g .bag-title b{font:600 14px "Microsoft YaHei","PingFang SC",system-ui,sans-serif;color:#1a2233;letter-spacing:.3px}
+  .skin-g .win-btn{border:none;border-radius:6px;background:transparent;color:#64748b}
+  .skin-g .win-btn:hover{background:#eef2f7;color:#1a2233}
+  .skin-g .bag-sub{height:auto;padding:2px 14px 8px;background:#fff;border-bottom:none}
+  .skin-g .bag-sub a{font:500 13px "Microsoft YaHei",sans-serif;color:#3b82f6;text-decoration:none}
+  .skin-g .bag-sub a:hover{text-decoration:underline}
+  .skin-g .bag-money{font:600 13px "Segoe UI",sans-serif;color:#64748b}
+  .skin-g .bag-row{height:46px;padding:0 14px;border:none}
+  .skin-g .bag-row:nth-child(even){background:#f8fafc}
+  .skin-g .bag-row:hover{background:#eef4fb}
+  .skin-g .bag-row .ic{border:none;border-radius:8px;background:#f1f5f9}
+  .skin-g .bag-row .nm{font:500 13px "Microsoft YaHei",sans-serif;color:#334155}
+  .skin-g .bag-row .qt{font:700 13px "Segoe UI",sans-serif;color:#3b82f6;background:#eef4ff;padding:2px 10px;border-radius:10px;font-variant-numeric:tabular-nums}
+  .skin-g .bag-list{scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent}
+  .skin-g .bag-list::-webkit-scrollbar{width:8px}
+  .skin-g .bag-list::-webkit-scrollbar-track{background:transparent}
+  .skin-g .bag-list::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:99px}
+  .skin-g .cap{color:#93c5fd}
+
+  /* ============ 风格H：玻璃拟态 ============ */
+  .skin-h .cell{background:linear-gradient(135deg,#7f7fd5,#86a8e7,#91eae4);padding:14px;border-radius:18px}
+  .skin-h .win{border:1px solid rgba(255,255,255,.7);border-radius:14px;background:rgba(255,255,255,.55);backdrop-filter:blur(14px);box-shadow:0 8px 32px rgba(31,38,135,.28)}
+  .skin-h .bag-title{height:auto;padding:12px 14px 4px;background:transparent;border-bottom:none}
+  .skin-h .bag-title b{font:600 14px "Microsoft YaHei",sans-serif;color:#1e293b}
+  .skin-h .win-btn{border:none;border-radius:6px;background:rgba(255,255,255,.5);color:#334155}
+  .skin-h .win-btn:hover{background:rgba(255,255,255,.9)}
+  .skin-h .bag-sub{height:auto;padding:2px 14px 8px;background:transparent;border-bottom:none}
+  .skin-h .bag-sub a{font:500 13px "Microsoft YaHei",sans-serif;color:#4f46e5;text-decoration:none}
+  .skin-h .bag-money{font:600 13px "Segoe UI",sans-serif;color:#334155}
+  .skin-h .bag-row{height:46px;padding:0 14px;border:none;border-bottom:1px solid rgba(255,255,255,.55)}
+  .skin-h .bag-row:nth-child(odd){background:rgba(255,255,255,.22)}
+  .skin-h .bag-row:nth-child(even){background:rgba(255,255,255,.4)}
+  .skin-h .bag-row:hover{background:rgba(255,255,255,.7)}
+  .skin-h .bag-row .ic{border:none;border-radius:8px;background:rgba(255,255,255,.6)}
+  .skin-h .bag-row .nm{font:500 13px "Microsoft YaHei",sans-serif;color:#1e293b}
+  .skin-h .bag-row .qt{font:700 13px "Segoe UI",sans-serif;color:#4f46e5;background:rgba(79,70,229,.14);padding:2px 10px;border-radius:10px;font-variant-numeric:tabular-nums}
+  .skin-h .capbar{background:rgba(255,255,255,.55)}
+  .skin-h .capbar i{background:linear-gradient(90deg,#4f46e5,#818cf8)}
+  .skin-h .capbar span{color:#1e293b}
+  .skin-h .bag-list{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.9) transparent}
+  .skin-h .bag-list::-webkit-scrollbar{width:8px}
+  .skin-h .bag-list::-webkit-scrollbar-track{background:transparent}
+  .skin-h .bag-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.9);border-radius:99px}
+  .skin-h .cap{color:#e0e7ff}
+
+  /* ============ 风格I：暗夜霓虹 ============ */
+  .skin-i .win{border:1px solid #2a2f45;border-radius:12px;background:#12141c;box-shadow:0 0 22px rgba(124,58,237,.28)}
+  .skin-i .bag-title{background:linear-gradient(90deg,rgba(124,58,237,.3),transparent 70%);border-bottom:1px solid #232842;padding:0 12px;height:30px}
+  .skin-i .bag-title b{font:700 13px "Microsoft YaHei",sans-serif;color:#e2e8f0;letter-spacing:1px}
+  .skin-i .win-btn{border:1px solid #2a3048;border-radius:6px;background:#181c2c;color:#8b93b8}
+  .skin-i .win-btn:hover{color:#22d3ee;border-color:#22d3ee}
+  .skin-i .bag-sub{background:#12141c;border-bottom:1px solid #232842}
+  .skin-i .bag-sub a{font:500 13px "Microsoft YaHei",sans-serif;color:#22d3ee;text-decoration:none}
+  .skin-i .bag-sub a:hover{text-shadow:0 0 8px rgba(34,211,238,.6)}
+  .skin-i .bag-money{font:600 12px "Segoe UI",sans-serif;color:#94a3b8}
+  .skin-i .bag-row{height:46px;padding:0 14px;border-bottom:1px solid #1c2135}
+  .skin-i .bag-row:nth-child(even){background:#171b29}
+  .skin-i .bag-row:nth-child(odd){background:#12141c}
+  .skin-i .bag-row:hover{background:#1e2436}
+  .skin-i .bag-row .ic{border:1px solid #2a3048;border-radius:8px;background:#0e1120}
+  .skin-i .bag-row .nm{font:500 13px "Microsoft YaHei",sans-serif;color:#cbd5e1}
+  .skin-i .bag-row .qt{font:700 13px Consolas,monospace;color:#22d3ee;font-variant-numeric:tabular-nums;text-shadow:0 0 8px rgba(34,211,238,.45)}
+  .skin-i .capbar{background:#232842}
+  .skin-i .capbar i{background:linear-gradient(90deg,#22d3ee,#a78bfa);box-shadow:0 0 8px rgba(34,211,238,.5)}
+  .skin-i .capbar span{color:#94a3b8}
+  .skin-i .bag-list{scrollbar-width:thin;scrollbar-color:#3a4166 #0e1120}
+  .skin-i .bag-list::-webkit-scrollbar{width:8px}
+  .skin-i .bag-list::-webkit-scrollbar-track{background:#0e1120}
+  .skin-i .bag-list::-webkit-scrollbar-thumb{background:#3a4166;border-radius:99px}
+  .skin-i .cap{color:#67e8f9}
+
+  /* ============ 风格J：圆润卡通 ============ */
+  .skin-j .win{border:2px solid #ffb4a8;border-radius:16px;background:#fffdf8;box-shadow:0 6px 0 #f4c4ba,0 10px 22px rgba(200,90,70,.2)}
+  .skin-j .bag-title{background:linear-gradient(90deg,#ffd9c9,#ffc3b0);border-bottom:2px solid #ffb4a8;border-radius:14px 14px 0 0;padding:0 10px}
+  .skin-j .bag-title b{font:700 14px "Microsoft YaHei",sans-serif;color:#8a4a3a}
+  .skin-j .win-btn{border:2px solid #ffb4a8;border-radius:999px;background:#fff;color:#e07856}
+  .skin-j .win-btn:hover{background:#ffe9de}
+  .skin-j .bag-sub{background:#fff5ee;border-bottom:2px dashed #ffd0c2}
+  .skin-j .bag-sub a{font:600 13px "Microsoft YaHei",sans-serif;color:#e07856}
+  .skin-j .bag-money{font:700 12px "Segoe UI",sans-serif;color:#b06a4a}
+  .skin-j .bag-row{height:48px;padding:0 12px;border-bottom:1px solid #ffe9de}
+  .skin-j .bag-row:nth-child(even){background:#fff3ec}
+  .skin-j .bag-row:hover{background:#ffe9de}
+  .skin-j .bag-row .ic{border:2px solid #ffd9c9;border-radius:10px;background:#fff}
+  .skin-j .bag-row .nm{font:600 13px "Microsoft YaHei",sans-serif;color:#5a4a42}
+  .skin-j .bag-row .qt{font:700 12px "Microsoft YaHei",sans-serif;color:#fff;background:linear-gradient(90deg,#ff8a70,#ffab8a);padding:3px 12px;border-radius:999px;font-variant-numeric:tabular-nums}
+  .skin-j .capbar{background:#ffe4d9;height:18px}
+  .skin-j .capbar i{background:linear-gradient(90deg,#ff8a70,#ffb08a)}
+  .skin-j .capbar span{color:#b06a4a}
+  .skin-j .bag-list{scrollbar-width:thin;scrollbar-color:#ffbca8 #fff3ec}
+  .skin-j .bag-list::-webkit-scrollbar{width:10px}
+  .skin-j .bag-list::-webkit-scrollbar-track{background:#fff3ec;border-radius:99px}
+  .skin-j .bag-list::-webkit-scrollbar-thumb{background:#ffbca8;border-radius:99px}
+  .skin-j .cap{color:#ffb08a}
+
   #picked-tip{position:fixed;left:0;right:0;bottom:0;background:#1b202a;border-top:1px solid #3a4456;padding:10px;text-align:center;color:#9aa5b6;font-size:13px;display:none}
   #picked-tip.show{display:block}
   #picked-tip b{color:#5adf6a}
@@ -169,8 +280,8 @@
 </head>
 <body>
 
-<h1>🎒 道具背包 · 6 款风格参考</h1>
-<p class="tip">同样的内容与交互，不同皮肤 —— <b>点击窗口选择你喜欢的风格</b>，告诉我编号即可应用到游戏</p>
+<h1>🎒 道具背包 · 10 款风格参考</h1>
+<p class="tip">复古系列（宋体·经典页游） vs 现代系列（雅黑无衬线·圆角·质感）—— <b>点击窗口选择你喜欢的风格</b>，告诉我编号即可应用到游戏</p>
 
 <div class="grid" id="grid"></div>
 <div id="picked-tip">已选择：<b id="picked-name">—</b>（回复"用风格X"即可应用）</div>
@@ -193,7 +304,11 @@ const SKINS = [
   ['C','羊皮卷武侠','羊皮纸底色+描金边框,剑侠江湖怀旧味'],
   ['D','暗黑魔幻','深蓝黑底+青色霓虹描边,魔幻游戏冷冽感'],
   ['E','木质暖调','木纹标题+奶油底+双线木框,梦幻式温暖'],
-  ['F','Win95复古灰','纯 Windows 95 灰+立体斜面边框,极致怀旧']
+  ['F','Win95复古灰','纯 Windows 95 灰+立体斜面边框,极致怀旧'],
+  ['G','现代扁平','雅黑600字重+圆角卡片+容量进度条+药丸数量徽章,当代手游戏'],
+  ['H','玻璃拟态','毛玻璃透底+渐变背景+半透明行,潮流质感'],
+  ['I','暗夜霓虹','深色圆角+青紫渐变发光+等宽数字+悬浮高亮,赛博现代'],
+  ['J','圆润卡通','大圆角+糖果色+圆形渐变数量徽章+果冻按钮,可爱休闲']
 ];
 const winBtns = `
   <div class="win-btns">
@@ -215,15 +330,21 @@ const listHtml = rows.map(([name,qty,unit,desc,icon])=>`
     <a class="nm" title="${desc}">${name}</a>
     <span class="qt">${qty} ${unit}</span>
   </div>`).join('');
-document.getElementById('grid').innerHTML = SKINS.map(([id,name,desc])=>`
+const winHtml = ([id,name,desc])=>`
   <div class="cell skin-${id.toLowerCase()}" data-id="${id}" data-name="风格${id} · ${name}">
     <div class="cap">风格${id} · ${name}<small>${desc}</small></div>
     <div class="win">
       <div class="bag-title"><b>携带道具: 16 / 300</b>${winBtns}</div>
       <div class="bag-sub"><a>【兑换猫眼】</a>${money}</div>
+      <div class="capbar"><i style="width:5.3%"></i><span>16 / 300</span></div>
       <div class="bag-list">${listHtml}</div>
     </div>
-  </div>`).join('');
+  </div>`;
+document.getElementById('grid').innerHTML =
+  `<h2 class="sec sec-retro">🕰️ 复古怀旧系列<small>宋体/黑体 · 经典网页游戏语言</small></h2>` +
+  SKINS.slice(0,6).map(winHtml).join('') +
+  `<h2 class="sec sec-modern">🚀 现代游戏系列<small>微软雅黑/无衬线 · 圆角 · 进度条 · 现代排版</small></h2>` +
+  SKINS.slice(6).map(winHtml).join('');
 document.getElementById('grid').addEventListener('click',e=>{
   const cell = e.target.closest('.cell'); if(!cell) return;
   document.querySelectorAll('.cell').forEach(c=>c.classList.remove('picked'));
