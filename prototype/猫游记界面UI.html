@@ -822,7 +822,7 @@ function renderMonsters(){
     return;
   }
   let html = roster.map(m=>`<li data-uid="${m.uid}" title="点击名称看详情,点击红剑攻击"><span style="cursor:pointer">${m.name} <i style="font-style:normal;font-size:12px;color:#39617c">Lv.${m.lv}·${m.type}</i></span>${SWORD}</li>`).join('');
-  html += corpseArr.map(c=>`<li class="corpse" title="1分钟后自动清除">💀 ${c.name}的尸体</li>`).join('');
+  html += corpseArr.map(c=>`<li class="corpse" title="1分钟后自动清除">${c.name}的尸体</li>`).join('');
   $('#monster-list').innerHTML = html;
 }
 $('#monster-list').addEventListener('click',e=>{
