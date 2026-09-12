@@ -192,6 +192,8 @@ body{
 #monster-list li:hover{background:#ffe9ae;box-shadow:0 0 0 1px #e8b95e inset}
 #monster-list li svg{width:19px;height:19px;flex:none}
 #monster-list li.hit{animation:hitflash .5s}
+#monster-list li.corpse{color:#8a93a0;cursor:default}
+#monster-list li.corpse:hover{background:none;box-shadow:none}
 @keyframes hitflash{0%,60%{background:#ffc9c2}100%{background:transparent}}
 
 /* ==========================================================
@@ -472,8 +474,6 @@ body{
         </g>
         <!-- 编号节点(JS 生成) -->
         <g id="nodes"></g>
-        <!-- 怪物尸体标记(击败后保留1分钟) -->
-        <g id="corpses"></g>
       </svg>
       <!-- ⚔ 战斗画面:覆盖整个地图区域,双方形象登场 -->
       <div id="battle">
@@ -816,11 +816,14 @@ function arrive(id){
 }
 function renderMonsters(){
   const roster = (nodeRoster[curNode]||[]).filter(m=>m.hp>0);
-  if(!roster.length){
+  const corpseArr = nodeCorpses[curNode] || [];
+  if(!roster.length && !corpseArr.length){
     $('#monster-list').innerHTML = `<li class="empty">${curNode===TOWN_NODE?'安全区,没有怪物':'当前节点没有怪物,走动到其他节点探索吧'}</li>`;
     return;
   }
-  $('#monster-list').innerHTML = roster.map(m=>`<li data-uid="${m.uid}" title="点击名称看详情,点击红剑攻击"><span style="cursor:pointer">${m.name} <i style="font-style:normal;font-size:12px;color:#39617c">Lv.${m.lv}·${m.type}</i></span>${SWORD}</li>`).join('');
+  let html = roster.map(m=>`<li data-uid="${m.uid}" title="点击名称看详情,点击红剑攻击"><span style="cursor:pointer">${m.name} <i style="font-style:normal;font-size:12px;color:#39617c">Lv.${m.lv}·${m.type}</i></span>${SWORD}</li>`).join('');
+  html += corpseArr.map(c=>`<li class="corpse" title="1分钟后自动清除">💀 ${c.name}的尸体</li>`).join('');
+  $('#monster-list').innerHTML = html;
 }
 $('#monster-list').addEventListener('click',e=>{
   const li = e.target.closest('li'); if(!li || !li.dataset.uid) return;
@@ -837,30 +840,18 @@ function attackMonster(uid){
   openBattle(m);
 }
 
-/* ---------- 怪物尸体:死亡格显示"XX的尸体",保留1分钟 ---------- */
-const corpses = [];
+/* ---------- 怪物尸体:显示在怪物列表(灰色字体),保留1分钟 ---------- */
+const nodeCorpses = {};
 function addCorpse(nodeId, name){
-  const n = byId[+nodeId]; if(!n) return;
-  const g = document.createElementNS(NS,'g');
-  g.setAttribute('class','corpse');
-  g.setAttribute('pointer-events','none');
-  const stack = corpses.filter(c=>c.node===nodeId).length;
-  const rect = document.createElementNS(NS,'rect');
-  rect.setAttribute('x',-44); rect.setAttribute('y',-11);
-  rect.setAttribute('width',88); rect.setAttribute('height',15); rect.setAttribute('rx',3);
-  rect.setAttribute('fill','rgba(255,255,255,.9)');
-  rect.setAttribute('stroke','#c9a0a0');
-  const t = document.createElementNS(NS,'text');
-  t.setAttribute('text-anchor','middle');
-  t.setAttribute('y',1);
-  t.setAttribute('style','font:10px SimSun;fill:#8a2a10');
-  t.textContent = '💀' + name + '的尸体';
-  g.appendChild(rect); g.appendChild(t);
-  g.setAttribute('transform',`translate(${n[1]},${n[2] + 17 + Math.min(stack,2)*15})`);
-  $('#corpses').appendChild(g);
-  const c = {node:nodeId, el:g};
-  corpses.push(c);
-  setTimeout(()=>{ g.remove(); const i = corpses.indexOf(c); if(i > -1) corpses.splice(i,1); }, 60000);
+  const arr = nodeCorpses[nodeId] = nodeCorpses[nodeId] || [];
+  const c = {name: name, until: Date.now() + 60000};
+  arr.push(c);
+  if(curNode === nodeId) renderMonsters();
+  setTimeout(()=>{
+    const i = arr.indexOf(c);
+    if(i > -1) arr.splice(i, 1);
+    if(curNode === nodeId) renderMonsters();
+  }, 60000);
 }
 
 /* ==========================================================
