@@ -356,28 +356,50 @@ body{
 .cbtn.red{background:linear-gradient(#ffe3dc,#f5b9a8);border-color:#c05a3a;color:#8a1e08;font-weight:bold}
 .cbtn:hover{filter:brightness(1.05)}
 /* ---------- 战斗页面 ---------- */
-#battle-mask{position:fixed;inset:0;background:rgba(15,40,60,.5);display:none;align-items:center;justify-content:center;z-index:80}
-#battle-mask.show{display:flex}
-#battle{width:470px;max-width:94vw;padding:0;display:flex;flex-direction:column;overflow:hidden}
-.b-vs{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(#f4fafd,#dceef7);border-bottom:1px solid var(--panel-line)}
-.b-side{flex:1;display:flex;flex-direction:column;gap:3px}
-.b-side .b-name{font:bold 14px SimHei;color:var(--ink-navy)}
-.b-side .bar{width:100%}
-.b-vs-x{font:bold 22px SimHei;color:#c33812;text-shadow:0 1px 0 #fff;flex:none}
-#battle-log{list-style:none;height:190px;overflow-y:auto;padding:6px 12px;font:14px SimSun;background:#fff;flex:1;scrollbar-width:thin;scrollbar-color:#8fbdd6 #e8f3f8}
+#battle{position:absolute;inset:0;z-index:6;display:none;flex-direction:column;border-radius:6px;background:linear-gradient(#dceef7,#b8d9ea 46%,#9cc48b 46%,#8dbd72);overflow:hidden}
+#battle.show{display:flex}
+.bt-head{flex:none;display:flex;align-items:center;gap:8px;padding:5px 12px;font:bold 15px SimHei;color:#8a1e08;background:linear-gradient(#ffe3dc,#f5b9a8);border-bottom:1px solid #c05a3a}
+.bt-head .sub{font:12px SimSun;color:#7a3c2a;font-weight:normal}
+.bt-stage{flex:1;position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 10px;min-height:0}
+.bt-stage::before{content:'';position:absolute;left:0;right:0;bottom:0;height:44%;background:radial-gradient(ellipse at 50% 100%,rgba(50,90,40,.16),rgba(255,255,255,0) 70%);pointer-events:none}
+.bt-unit{display:flex;flex-direction:column;align-items:center;gap:5px;z-index:2;width:196px}
+.bt-plate{font:bold 14px SimHei;color:#123;background:rgba(255,255,255,.88);border:1px solid #7fb0cc;border-radius:4px;padding:1px 10px;white-space:nowrap}
+.bt-unit .bar{width:100%}
+.bt-sprite{height:124px;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 3px 2px rgba(20,40,20,.3))}
+.bt-sprite svg{height:122px;width:auto}
+.bt-sprite img{height:114px;image-rendering:pixelated}
+.bt-shadow{width:88px;height:13px;border-radius:50%;background:rgba(30,60,30,.22)}
+.bt-vs{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);font:bold 32px SimHei;color:#c33812;text-shadow:0 2px 0 #fff,0 0 8px #ffd34d;pointer-events:none}
+/* 出招 / 受击 / 阵亡动画 */
+.bt-player.atk .bt-sprite{animation:lungeR .5s ease}
+.bt-monster.atk .bt-sprite{animation:lungeL .5s ease}
+@keyframes lungeR{35%{transform:translateX(56px)}}
+@keyframes lungeL{35%{transform:translateX(-56px)}}
+.bt-unit.hit .bt-sprite{animation:shake .42s}
+.bt-unit.hit img{filter:brightness(2.4) saturate(.2)}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+.bt-unit.dead .bt-sprite{filter:grayscale(1) brightness(.65);transform:translateY(12px) rotate(9deg);transition:all .6s ease}
+/* 飘字 */
+.bt-float{position:absolute;z-index:9;pointer-events:none;font:bold 22px Verdana;color:#14506e;text-shadow:0 1px 2px #fff;animation:floatUp .95s ease-out forwards}
+.bt-float.crit{color:#e02010;font-size:28px}
+.bt-float.foe{color:#8a2a10}
+@keyframes floatUp{from{opacity:1;transform:translateY(0)}70%{opacity:1}to{opacity:0;transform:translateY(-54px)}}
+/* 战斗日志 / 行动条 / 结算 */
+.bt-bottom{flex:none;display:flex;flex-direction:column;border-top:1px solid var(--panel-line);background:rgba(255,255,255,.93)}
+#battle-log{list-style:none;height:100px;overflow-y:auto;padding:4px 12px;font:14px SimSun;scrollbar-width:thin;scrollbar-color:#8fbdd6 #e8f3f8}
 #battle-log::-webkit-scrollbar{width:9px}
 #battle-log::-webkit-scrollbar-thumb{background:linear-gradient(#cde9f5,#8fbdd6);border:1px solid #7fb0cc;border-radius:5px}
-#battle-log li{line-height:22px;white-space:nowrap}
+#battle-log li{line-height:20px;white-space:nowrap}
 #battle-log li.me{color:#14506e}
 #battle-log li.me b{color:#c33812}
 #battle-log li.foe{color:#8a2a10}
 #battle-log li.sys{color:#1c8a2e}
 #battle-log li.crit b{color:#e02010;font-size:15px}
-.b-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:10px 12px;border-top:1px solid var(--panel-line)}
+.b-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 12px 10px;border-top:1px solid var(--panel-line)}
 .b-actions button:disabled{opacity:.45;cursor:not-allowed}
-.b-end{display:none;flex-direction:column;gap:10px;align-items:center;padding:14px;border-top:1px solid var(--panel-line);font:15px SimSun}
+.b-end{display:none;position:absolute;inset:0;z-index:10;flex-direction:column;gap:16px;align-items:center;justify-content:center;background:rgba(240,248,252,.74);font:15px SimSun}
 .b-end.show{display:flex}
-.b-end #b-result{line-height:1.8;text-align:center;color:#1c3a50}
+.b-end #b-result{line-height:1.9;text-align:center;color:#1c3a50;background:#fff;border:1px solid #9cc4d8;border-radius:8px;padding:14px 28px;box-shadow:0 6px 18px rgba(20,50,80,.22)}
 .b-end #b-result b{color:#c33812}
 /* 技能栏翻页窗口 */
 #skill-view{width:236px;overflow:hidden;flex:none}
@@ -480,6 +502,64 @@ body{
         <!-- 编号节点(JS 生成) -->
         <g id="nodes"></g>
       </svg>
+      <!-- ⚔ 战斗画面:覆盖整个地图区域,双方形象登场 -->
+      <div id="battle">
+        <div class="bt-head">⚔ 战斗 · <span id="b-loc">银光森林01</span><span class="sub">回合制 · 选择行动作战</span></div>
+        <div class="bt-stage">
+          <div class="bt-unit bt-player" id="bt-player">
+            <div class="bt-plate">Klay 🐱 Lv.71 剑士</div>
+            <div class="bar hp"><i id="b-php" style="width:100%"></i><span id="b-phpt">247117/247117</span></div>
+            <div class="bar mp"><i id="b-pmp" style="width:100%"></i><span id="b-pmpt">104699/104699</span></div>
+            <div class="bt-sprite">
+              <svg viewBox="0 0 90 120">
+                <path d="M22 92 Q4 84 8 66" fill="none" stroke="#e8940f" stroke-width="7" stroke-linecap="round"/>
+                <rect x="30" y="88" width="10" height="22" rx="3" fill="#f5a623"/>
+                <rect x="46" y="88" width="10" height="22" rx="3" fill="#f5a623"/>
+                <ellipse cx="35" cy="111" rx="9" ry="5" fill="#7a4a1a"/>
+                <ellipse cx="51" cy="111" rx="9" ry="5" fill="#7a4a1a"/>
+                <path d="M26 52 Q45 44 64 52 L66 92 Q45 98 24 92 Z" fill="#f5a623"/>
+                <path d="M26 52 Q45 44 64 52 L65 66 Q45 60 25 66 Z" fill="#8a5a2a"/>
+                <rect x="24" y="64" width="42" height="7" rx="2" fill="#c9a55a"/>
+                <circle cx="24" cy="60" r="5" fill="#f5a623"/>
+                <ellipse cx="16" cy="70" rx="10" ry="13" fill="#9aa7b8" stroke="#5c6878"/>
+                <ellipse cx="16" cy="70" rx="5" ry="7" fill="#c8321e"/>
+                <circle cx="66" cy="58" r="5" fill="#f5a623"/>
+                <rect x="63" y="14" width="6" height="44" rx="2" fill="#dfe8f0" stroke="#8a97a8"/>
+                <rect x="56" y="52" width="20" height="5" rx="2" fill="#b8862f"/>
+                <rect x="64" y="57" width="4" height="9" fill="#7a4c12"/>
+                <polygon points="66,8 70,16 62,16" fill="#ffd34d" stroke="#c99a10"/>
+                <circle cx="45" cy="30" r="17" fill="#f5a623"/>
+                <polygon points="32,20 34,4 43,15" fill="#f5a623" stroke="#c97f10"/>
+                <polygon points="58,20 56,4 47,15" fill="#f5a623" stroke="#c97f10"/>
+                <path d="M27 22 Q45 8 63 22 L63 26 L27 26 Z" fill="#9aa7b8" stroke="#5c6878"/>
+                <rect x="27" y="25" width="36" height="4" fill="#c8321e"/>
+                <circle cx="39" cy="33" r="2.6" fill="#222"/>
+                <circle cx="52" cy="33" r="2.6" fill="#222"/>
+                <path d="M40 41 Q45 44 50 41" stroke="#7a3c00" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M30 36 L22 34 M30 39 L23 39 M60 36 L68 34 M60 39 L67 39" stroke="#c97f10" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <div class="bt-shadow"></div>
+          </div>
+          <div class="bt-vs">VS</div>
+          <div class="bt-unit bt-monster" id="bt-monster">
+            <div class="bt-plate" id="b-mname">怪物</div>
+            <div class="bar hp"><i id="b-mhp" style="width:100%;background:linear-gradient(#ff8a70,#e05252)"></i><span id="b-mhpt"></span></div>
+            <div class="bt-sprite"><img id="b-mimg" src="sprites/monster-snake.png" alt="怪物形象"></div>
+            <div class="bt-shadow"></div>
+          </div>
+        </div>
+        <div class="bt-bottom">
+          <ul id="battle-log"></ul>
+          <div class="b-actions" id="b-actions">
+            <button class="cbtn" data-a="atk">⚔ 攻击</button>
+            <button class="cbtn red" data-a="skill">🔥 烈焰拳</button>
+            <button class="cbtn" data-a="def">🛡 防御</button>
+            <button class="cbtn" data-a="run">🏃 逃跑</button>
+          </div>
+        </div>
+        <div class="b-end" id="b-end"><div id="b-result"></div><button class="cbtn red" id="b-back">返回地图</button></div>
+      </div>
       <div id="zone-tag">卡斯特平原</div>
     </div>
     <div id="chat-log">
@@ -555,29 +635,6 @@ body{
   </footer>
 
 </div>
-<div id="battle-mask"><div id="battle" class="panel">
-  <div class="m-head">⚔ 战斗 · <span id="b-loc">银光森林01</span><span class="x" id="b-close" style="display:none" title="结束战斗">✕</span></div>
-  <div class="b-vs">
-    <div class="b-side">
-      <div class="b-name">Klay 🐱 Lv.71 剑士</div>
-      <div class="bar hp"><i id="b-php" style="width:100%"></i><span id="b-phpt">247117/247117</span></div>
-      <div class="bar mp"><i id="b-pmp" style="width:100%"></i><span id="b-pmpt">104699/104699</span></div>
-    </div>
-    <div class="b-vs-x">VS</div>
-    <div class="b-side" style="align-items:flex-end">
-      <div class="b-name" id="b-mname">怪物</div>
-      <div class="bar hp"><i id="b-mhp" style="width:100%;background:linear-gradient(#ff8a70,#e05252)"></i><span id="b-mhpt"></span></div>
-    </div>
-  </div>
-  <ul id="battle-log"></ul>
-  <div class="b-actions" id="b-actions">
-    <button class="cbtn" data-a="atk">⚔ 攻击</button>
-    <button class="cbtn red" data-a="skill">🔥 烈焰拳</button>
-    <button class="cbtn" data-a="def">🛡 防御</button>
-    <button class="cbtn" data-a="run">🏃 逃跑</button>
-  </div>
-  <div class="b-end" id="b-end"><div id="b-result"></div><button class="cbtn red" id="b-back">返回地图</button></div>
-</div></div>
 <div id="modal-mask"><div id="modal" class="panel"></div></div>
 <div id="toast"></div>
 
@@ -597,6 +654,9 @@ const MTPL = {
 };
 const MPOOL = ['zhu','zhu','rat','rat','snail','snail','snail','fly','mush','wolf'];
 const TOWN_NODE = '00', BOSS_NODE = '17';
+/* 战斗形象(取自 CC0 素材包 50+ Monsters Pack 2D,编号映射可按视觉调整) */
+const SPRITE = {zhu:'sprites/monster-snake.png',rat:'sprites/monster-rat.png',snail:'sprites/monster-snail.png',
+  fly:'sprites/monster-fly.png',mush:'sprites/monster-mush.png',wolf:'sprites/monster-wolf.png',fire:'sprites/monster-fire.png'};
 
 const SKILLS = [
   ['猫爪连击', '#e8eef4','#9aa7b8','M4 6 L26 26 M26 6 L4 26'],                       // 双爪(剑)
@@ -756,7 +816,7 @@ let curNode = '01';
 function mkInst(key){
   const t = MTPL[key]; const uid = ++uidSeq;
   const m = {uid, name:t.name, lv:t.lv + (Math.random()<0.3?1:0), type:t.type, element:t.element,
-    hp:t.hp, maxHp:t.hp, atk:t.atk, def:t.def, spd:t.spd, rec:t.rec, skills:t.skills, drops:t.drops};
+    hp:t.hp, maxHp:t.hp, atk:t.atk, def:t.def, spd:t.spd, rec:t.rec, skills:t.skills, drops:t.drops, sprite:SPRITE[key]};
   insts[uid] = m; return m;
 }
 function spawnRoster(id){
@@ -832,13 +892,31 @@ function bBars(){
 function bAct(on){
   document.querySelectorAll('#b-actions button').forEach(x=>x.disabled = !on);
 }
+function unitAnim(sel, cls){
+  const u = document.querySelector(sel); if(!u) return;
+  u.classList.remove(cls); void u.offsetWidth; u.classList.add(cls);
+  setTimeout(()=>u.classList.remove(cls), 600);
+}
+function spawnFloat(sel, text, cls){
+  const u = document.querySelector(sel), stage = document.querySelector('.bt-stage'); if(!u||!stage) return;
+  const f = document.createElement('div');
+  f.className = 'bt-float ' + (cls||'');
+  f.textContent = text;
+  f.style.left = (u.offsetLeft + u.offsetWidth/2 - 34 + rnd(-12,12)) + 'px';
+  f.style.top = (u.offsetTop + 26) + 'px';
+  stage.appendChild(f);
+  setTimeout(()=>f.remove(), 1000);
+}
 function openBattle(m){
   battle = {m, php:P_MAXHP, pmp:P_MAXMP, def:false, over:false, busy:false};
   $('#b-loc').textContent = '银光森林' + curNode;
   $('#b-mname').innerHTML = `${m.name} Lv.${m.lv} <span style="font:12px SimSun;color:#39617c">${m.type}</span>`;
+  $('#b-mimg').src = m.sprite;
+  $('#bt-player').className = 'bt-unit bt-player';
+  $('#bt-monster').className = 'bt-unit bt-monster';
   $('#battle-log').innerHTML = '';
   $('#b-end').classList.remove('show');
-  $('#battle-mask').classList.add('show');
+  $('#battle').classList.add('show');
   bBars(); bAct(true);
   bLine(`【系统】${m.name}(Lv.${m.lv})向你扑来,战斗开始!`,'sys');
 }
@@ -846,23 +924,34 @@ function playerHit(mult, label){
   const b = battle, m = b.m;
   const crit = Math.random() < 0.2;
   const dmg = Math.round(m.maxHp * rnd(22,38)/100 * mult * (crit?1.8:1));
-  m.hp -= dmg;
-  bLine(`你${label},对${m.name}造成 <b>${dmg}</b> 点伤害${crit?'<b>(暴击!)</b>':''}`, crit?'me crit':'me');
-  if(m.hp <= 0){ m.hp = 0; bVictory(); }
+  unitAnim('#bt-player','atk');
+  setTimeout(()=>{
+    m.hp -= dmg;
+    unitAnim('#bt-monster','hit');
+    spawnFloat('#bt-monster', '-'+dmg, crit?'crit':'');
+    bLine(`你${label},对${m.name}造成 <b>${dmg}</b> 点伤害${crit?'<b>(暴击!)</b>':''}`, crit?'me crit':'me');
+    if(m.hp <= 0){ m.hp = 0; bVictory(); }
+  }, 180);
 }
 function monsterTurn(){
   const b = battle, m = b.m;
   if(b.over) return;
   const dmg = Math.round(P_MAXHP * rnd(30,60)/1000 * (m.type==='BOSS'?1.6:1) * (b.def?0.5:1));
-  b.php -= dmg;
-  bLine(`${m.name}对你造成 <b>${dmg}</b> 点伤害!`,'foe');
-  b.def = false; bBars();
-  if(b.php <= 0){ b.php = 0; bDefeat(); return; }
-  b.busy = false; bAct(true);
+  unitAnim('#bt-monster','atk');
+  setTimeout(()=>{
+    b.php -= dmg;
+    unitAnim('#bt-player','hit');
+    spawnFloat('#bt-player', '-'+dmg, 'foe');
+    bLine(`${m.name}对你造成 <b>${dmg}</b> 点伤害!`,'foe');
+    b.def = false; bBars();
+    if(b.php <= 0){ b.php = 0; bDefeat(); return; }
+    b.busy = false; bAct(true);
+  }, 180);
 }
 function bVictory(){
   const b = battle, m = b.m;
   b.over = true; bAct(false);
+  document.querySelector('#bt-monster').classList.add('dead');
   const exp = m.rec*8, gold = m.rec*4;
   const drop = m.drops.filter(d=>Math.random()*100 < d[1]);
   bLine(`🏆 你击败了${m.name}!战斗胜利!`,'sys');
@@ -885,6 +974,7 @@ function bVictory(){
 function bDefeat(){
   const b = battle, m = b.m;
   b.over = true; bAct(false);
+  document.querySelector('#bt-player').classList.add('dead');
   bLine(`💀 你被${m.name}打败了,被路过的商队救回了城镇…`,'sys');
   $('#b-result').innerHTML = `💀 <b>战斗失败…</b><br>HP 归零,损失 10% 金币<br>(回到城镇复活)`;
   $('#b-end').classList.add('show');
@@ -894,7 +984,7 @@ $('#b-actions').addEventListener('click',e=>{
   battle.busy = true; bAct(false);
   const a = btn.dataset.a, m = battle.m;
   if(a === 'run'){
-    if(Math.random() < 0.7){ bLine('你成功逃离了战斗!','sys'); battle.over = true; $('#battle-mask').classList.remove('show'); battle = null; return; }
+    if(Math.random() < 0.7){ bLine('你成功逃离了战斗!','sys'); battle.over = true; $('#battle').classList.remove('show'); battle = null; return; }
     bLine('逃跑失败!','sys');
   }
   else if(a === 'atk'){ playerHit(1, '挥出猫爪'); }
@@ -911,7 +1001,7 @@ $('#b-actions').addEventListener('click',e=>{
   if(!battle.over) setTimeout(monsterTurn, 650);
 });
 $('#b-back').onclick = ()=>{
-  $('#battle-mask').classList.remove('show');
+  $('#battle').classList.remove('show');
   battle = null;
   renderMonsters();
 };
