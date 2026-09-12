@@ -523,14 +523,15 @@ body{
 #team-win.min{height:auto}
 #team-win.min .t-body{display:none}
 .t-head{
-  height:26px;flex:none;display:flex;align-items:center;gap:6px;padding:0 4px 0 8px;
+  height:26px;flex:none;display:flex;align-items:center;gap:5px;padding:0 3px 0 7px;
   background:linear-gradient(var(--panel-top),var(--panel-bot));
   border-bottom:1px solid var(--panel-line);cursor:move;user-select:none;
+  white-space:nowrap;overflow:hidden;
 }
-.t-head b{font:bold 13px SimHei,"黑体";color:var(--ink-navy)}
-.t-links{margin-left:auto;display:flex;gap:5px;font:12px SimSun}
+.t-head b{font:bold 13px SimHei,"黑体";color:var(--ink-navy);white-space:nowrap}
+.t-links{margin-left:auto;display:flex;gap:4px;font:11px SimSun;white-space:nowrap;flex:none}
 .t-links a{color:var(--link-blue);cursor:pointer;white-space:nowrap}
-.t-links a:hover{text-decoration:underline}
+.t-links a:hover{color:#e8821e;text-decoration:underline}
 #team-win .win-btns{display:flex;gap:2px;flex:none;margin-left:6px}
 #team-win .win-btn{width:19px;height:19px;border:1px solid #8aa8b8;border-radius:0;cursor:pointer;padding:0;background:linear-gradient(#ffffff,#dcecf5);color:#14506e;display:grid;place-items:center}
 #team-win .win-btn:hover{background:linear-gradient(#fffbe8,#ffe9ae);border-color:#d8a94e}
@@ -932,7 +933,7 @@ body{
   <!-- 队伍列表(小窗口) -->
   <div id="team-win">
     <div class="t-head">
-      <b>我的趴伍</b>
+      <b>我的队伍</b>
       <div class="t-links">
         <a id="t-boss">[boss伤害记录]</a><a id="t-invite">[邀请]</a><a id="t-quit">[退队]</a>
       </div>
