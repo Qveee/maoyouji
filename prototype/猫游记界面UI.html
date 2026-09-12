@@ -308,58 +308,60 @@ body{
 #menu-btns button:hover svg{transform:translateY(-3px) scale(1.08)}
 #menu-btns button:active svg{transform:translateY(0) scale(.96)}
 
-/* ---------- 道具背包(2008经典窗口) ---------- */
+/* ---------- 道具背包(风格H·玻璃拟态) ---------- */
 #game{position:relative}
 #bag-win{
   position:absolute;left:712px;top:76px;z-index:40;
   width:355px;height:430px;display:none;flex-direction:column;
-  background:#fff;border:1px solid #4a4a4a;border-radius:0;
-  box-shadow:2px 2px 7px rgba(20,40,60,.35);
-  font-family:SimSun,"宋体",serif;
+  border:1px solid rgba(255,255,255,.7);border-radius:14px;
+  background:rgba(255,255,255,.55);backdrop-filter:blur(14px);
+  box-shadow:0 8px 32px rgba(31,38,135,.28);
+  font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  overflow:hidden;
 }
 #bag-win.show{display:flex}
 #bag-win.min{height:auto}
-#bag-win.min .bag-sub,#bag-win.min .bag-list{display:none}
+#bag-win.min .bag-sub,#bag-win.min .bag-capbar,#bag-win.min .bag-list{display:none}
 .bag-title{
-  height:26px;flex:none;display:flex;align-items:center;gap:4px;padding:0 3px 0 8px;
-  background:linear-gradient(var(--panel-top),var(--panel-bot));
-  border-bottom:1px solid var(--panel-line);cursor:move;user-select:none;
+  height:auto;flex:none;display:flex;align-items:center;gap:4px;padding:12px 14px 4px;
+  background:transparent;border-bottom:none;cursor:move;user-select:none;
 }
-.bag-title b{font:bold 13px SimHei,"黑体";color:var(--ink-navy);letter-spacing:.5px}
+.bag-title b{font:600 14px "Microsoft YaHei",sans-serif;color:#1e293b;letter-spacing:.3px}
 .win-btns{margin-left:auto;display:flex;gap:2px}
 .win-btn{
-  width:19px;height:19px;border:1px solid #8aa8b8;border-radius:0;cursor:pointer;padding:0;
-  background:linear-gradient(#ffffff,#dcecf5);display:grid;place-items:center;
+  width:22px;height:22px;border:none;border-radius:6px;cursor:pointer;padding:0;
+  background:rgba(255,255,255,.5);color:#334155;display:grid;place-items:center;
 }
-.win-btn:hover{background:linear-gradient(#fffbe8,#ffe9ae);border-color:#d8a94e}
+.win-btn:hover{background:rgba(255,255,255,.9)}
 .win-btn svg{width:11px;height:11px;display:block}
 .bag-sub{
-  height:24px;flex:none;display:flex;align-items:center;gap:6px;padding:0 8px;
-  background:#fafbfc;border-bottom:1px solid #d8d8d8;
+  height:auto;flex:none;display:flex;align-items:center;gap:6px;padding:2px 14px 8px;
+  background:transparent;border-bottom:none;
 }
-.bag-sub a{color:#b06a2e;text-decoration:underline;cursor:pointer;font:12px SimSun}
-.bag-sub a:hover{color:#d98a2e}
-.bag-money{margin-left:auto;display:flex;gap:10px;align-items:center;font:bold 12px Verdana;color:#7a4a10}
+.bag-sub a{font:500 13px "Microsoft YaHei",sans-serif;color:#4f46e5;text-decoration:none;cursor:pointer}
+.bag-sub a:hover{text-decoration:underline}
+.bag-money{margin-left:auto;display:flex;gap:10px;align-items:center;font:600 13px "Segoe UI",sans-serif;color:#334155}
 .bag-money .coin{display:flex;align-items:center;gap:3px}
 .bag-money svg{width:13px;height:13px;display:block}
-.bag-list{flex:1;overflow-y:auto;background:#fff;scrollbar-width:auto;scrollbar-color:#d4d4d4 #efefef}
-.bag-list::-webkit-scrollbar{width:14px}
-.bag-list::-webkit-scrollbar-track{background:#efefef;border-left:1px solid #d8d8d8}
-.bag-list::-webkit-scrollbar-thumb{background:#d4d4d4;border:1px solid #a8a8a8}
-.bag-list::-webkit-scrollbar-thumb:hover{background:#c2c2c2}
+.bag-capbar{flex:none;height:16px;margin:0 14px 8px;position:relative;background:rgba(255,255,255,.55);border-radius:99px}
+.bag-capbar i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#4f46e5,#818cf8);transition:width .3s}
+.bag-capbar span{position:absolute;right:8px;top:50%;transform:translateY(-50%);font:700 10px Verdana;color:#1e293b}
+.bag-list{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.9) transparent}
+.bag-list::-webkit-scrollbar{width:8px}
+.bag-list::-webkit-scrollbar-track{background:transparent}
+.bag-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.9);border-radius:99px}
 .bag-row{
-  display:flex;align-items:center;gap:8px;height:40px;padding:0 8px;
-  border-bottom:1px solid #eef1f3;
+  display:flex;align-items:center;gap:8px;height:46px;padding:0 14px;
+  border-bottom:1px solid rgba(255,255,255,.55);transition:background .15s;
 }
-.bag-row:nth-child(even){background:#f5f7f8}
-.bag-row .ic{
-  width:32px;height:32px;flex:none;display:grid;place-items:center;
-  background:#fff;border:1px solid #e0e4e8;
-}
+.bag-row:nth-child(odd){background:rgba(255,255,255,.22)}
+.bag-row:nth-child(even){background:rgba(255,255,255,.4)}
+.bag-row:hover{background:rgba(255,255,255,.7)}
+.bag-row .ic{width:32px;height:32px;flex:none;display:grid;place-items:center;border:none;border-radius:8px;background:rgba(255,255,255,.6)}
 .bag-row .ic svg{width:28px;height:28px;display:block}
-.bag-row .nm{color:var(--link-blue);cursor:pointer;font:12px SimSun;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bag-row .nm{font:500 13px "Microsoft YaHei",sans-serif;color:#1e293b;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bag-row .nm:hover{text-decoration:underline}
-.bag-row .qt{margin-left:auto;color:#c43a12;font:12px SimSun;white-space:nowrap;flex:none}
+.bag-row .qt{margin-left:auto;font:700 13px "Segoe UI",sans-serif;color:#4f46e5;background:rgba(79,70,229,.14);padding:2px 10px;border-radius:10px;font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
 
 /* ---------- 复古小提示框 ---------- */
 #toast{
@@ -656,13 +658,13 @@ body{
       <b id="bag-count">携带道具: 8 / 300</b>
       <div class="win-btns">
         <button class="win-btn" id="bag-refresh" title="刷新背包">
-          <svg viewBox="0 0 12 12"><g fill="#14506e"><path d="M1 2.5h6v-2l4 3-4 3v-2H1z"/><path d="M11 9.5H5v2l-4-3 4-3v2h6z"/></g></svg>
+          <svg viewBox="0 0 12 12"><g fill="currentColor"><path d="M1 2.5h6v-2l4 3-4 3v-2H1z"/><path d="M11 9.5H5v2l-4-3 4-3v2h6z"/></g></svg>
         </button>
         <button class="win-btn" id="bag-min" title="最小化">
-          <svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="#1a1a1a"/></svg>
+          <svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" fill="currentColor"/></svg>
         </button>
         <button class="win-btn" id="bag-close" title="关闭">
-          <svg viewBox="0 0 12 12"><g stroke="#8a1e08" stroke-width="2" stroke-linecap="square"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></g></svg>
+          <svg viewBox="0 0 12 12"><g stroke="currentColor" stroke-width="2" stroke-linecap="square"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></g></svg>
         </button>
       </div>
     </div>
@@ -674,6 +676,7 @@ body{
         <span class="coin" title="铜币"><svg viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5.5" fill="#d98a50" stroke="#9a5a24" stroke-width="1"/><rect x="4.5" y="4.5" width="4" height="4" fill="#9a5a24"/></svg>38</span>
       </div>
     </div>
+    <div class="bag-capbar" id="bag-capbar"><i style="width:2.7%"></i><span>8 / 300</span></div>
     <div class="bag-list" id="bag-list"></div>
   </div>
 
@@ -1284,6 +1287,8 @@ const BAG_ITEMS = [
 ];
 function renderBag(){
   $('#bag-count').textContent = `携带道具: ${BAG_ITEMS.length} / ${BAG_MAX}`;
+  $('#bag-capbar i').style.width = (BAG_ITEMS.length/BAG_MAX*100).toFixed(1) + '%';
+  $('#bag-capbar span').textContent = `${BAG_ITEMS.length} / ${BAG_MAX}`;
   $('#bag-list').innerHTML = BAG_ITEMS.map((it,i)=>`
     <div class="bag-row">
       <span class="ic" title="${it.desc}">${it.icon}</span>
