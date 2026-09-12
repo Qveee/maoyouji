@@ -408,6 +408,60 @@ body{
 .q-task.done .nm{cursor:default}
 .q-task .done-suffix{color:#9aa3ad}
 
+/* ---------- 公会信息(浅蓝主题) ---------- */
+#guild-win{
+  position:absolute;left:470px;top:14px;z-index:41;
+  width:408px;height:790px;display:none;flex-direction:column;
+  background:#dfeaf2;border:1px solid #7fb0cc;
+  box-shadow:2px 2px 8px rgba(20,60,90,.35);
+  font-family:SimSun,"宋体",serif;
+}
+#guild-win.show{display:flex}
+.g-head{flex:none;padding:8px 10px 0;cursor:move;user-select:none}
+.g-row1{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.g-name{font:bold 15px SimHei,"黑体";color:#111}
+.g-badge{
+  font:10px/14px SimHei;color:#7a4a00;padding:0 6px;border-radius:3px;
+  background:linear-gradient(#ffd34d,#f0a80a);border:1px solid #b8862f;
+}
+.g-self{color:var(--link-blue);text-decoration:underline;cursor:pointer;font:12px SimSun}
+.g-acts{margin-left:auto;display:flex;gap:8px;font:12px SimSun}
+.g-acts a{color:var(--ink-navy);cursor:pointer}
+.g-acts a:hover{color:#c33812}
+.g-nav{display:flex;gap:6px;padding:6px 0 5px;border-bottom:2px solid #9cc4d8;font:12px SimSun}
+.g-nav a{color:var(--ink-navy);cursor:pointer}
+.g-nav a:hover{color:#c33812}
+.g-nav a.on{font-weight:bold;text-decoration:underline}
+.g-list-head{
+  flex:none;position:relative;display:flex;align-items:center;gap:8px;
+  padding:7px 10px 5px;
+}
+.g-list-head b{font:bold 13px SimHei,"黑体";color:var(--ink-navy)}
+.g-off-toggle{color:var(--link-blue);text-decoration:underline;cursor:pointer;font:12px SimSun}
+.g-watermark{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font:bold 13px Verdana;letter-spacing:3px;color:rgba(90,130,160,.22);
+  pointer-events:none;user-select:none;
+}
+.g-list{flex:1;overflow-y:auto;background:#fff;margin:0 6px 8px;border:1px solid #b8cfe0;scrollbar-width:auto;scrollbar-color:#b8cfe0 #eaf2f8}
+.g-list::-webkit-scrollbar{width:10px}
+.g-list::-webkit-scrollbar-track{background:#eaf2f8;border-left:1px solid #cddfe8}
+.g-list::-webkit-scrollbar-thumb{background:#b8cfe0;border:1px solid #8fb3cc}
+.g-member{
+  display:flex;align-items:center;gap:4px;padding:4px 10px;
+  font:12px SimSun;border-bottom:1px dashed #b8cfe0;
+}
+.g-member:nth-child(odd){background:#fff}
+.g-member:nth-child(even){background:#eaf2f8}
+.g-member .mn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.g-member .mn.nm-blk{color:#111}
+.g-member .mn.nm-org{color:#e8821e;font-weight:bold}
+.g-member .mn.nm-me{color:var(--link-blue);text-decoration:underline;cursor:pointer}
+.g-member .mlv{color:#8a93a6;flex:none;width:52px}
+.g-member .mpos{flex:none;width:56px;color:#39617c;text-align:right}
+.g-member.off{opacity:.55}
+.g-member.off .mn{color:#7c93a6}
+
 /* ---------- 复古小提示框 ---------- */
 #toast{
   position:fixed;right:26px;bottom:118px;z-index:99;display:none;
@@ -736,6 +790,30 @@ body{
       </div>
     </div>
     <div class="q-body" id="q-body"></div>
+  </div>
+
+  <!-- 公会信息(浅蓝主题) -->
+  <div id="guild-win">
+    <div class="g-head">
+      <div class="g-row1">
+        <span class="g-name">傲世喵盟</span>
+        <span class="g-badge">会员</span>
+        <span class="g-self" id="g-self" title="这就是你">Klay</span>
+        <div class="g-acts">
+          <a id="g-refresh">【刷新】</a>
+          <a id="g-leave">【离开公会】</a>
+        </div>
+      </div>
+      <div class="g-nav">
+        <a class="on">[信息]</a><a>[同盟]</a><a>[占有城市]</a><a>[城战]</a><a>【论坛】</a>
+      </div>
+    </div>
+    <div class="g-list-head">
+      <b>会员名单（ 73 /212）</b>
+      <a class="g-off-toggle" id="g-off-toggle">[显示离线]</a>
+      <span class="g-watermark">MEMBER LIST</span>
+    </div>
+    <div class="g-list" id="g-list"></div>
   </div>
 
 </div>
@@ -1175,6 +1253,7 @@ $('#menu-btns').addEventListener('click',e=>{
   const b = e.target.closest('button'); if(!b) return;
   if(b.dataset.label === '道具'){ openBag(); return; }
   if(b.dataset.label === '任务'){ openQuest(); return; }
+  if(b.dataset.label === '公会'){ openGuild(); return; }
   toast(`【${b.dataset.label}】功能建设中,敬请期待喵~ (=^･ω･^=)`);
 });
 })();
@@ -1439,6 +1518,88 @@ $('#q-body').addEventListener('click',e=>{
   let drag = null;
   head.addEventListener('mousedown',e=>{
     if(e.target.closest('.win-btn') || e.target.closest('.q-avail')) return;
+    const r = win.getBoundingClientRect(), g = $('#game').getBoundingClientRect();
+    drag = {dx:e.clientX-r.left, dy:e.clientY-r.top, g:g};
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove',e=>{
+    if(!drag) return;
+    let x = e.clientX - drag.g.left - drag.dx, y = e.clientY - drag.g.top - drag.dy;
+    x = Math.max(0, Math.min(drag.g.width - win.offsetWidth, x));
+    y = Math.max(0, Math.min(drag.g.height - win.offsetHeight, y));
+    win.style.left = x+'px'; win.style.top = y+'px';
+  });
+document.addEventListener('mouseup',()=> drag = null);
+})();
+
+/* ==========================================================
+   公会信息(浅蓝主题)
+   ========================================================== */
+const GUILD_NAME = '傲世喵盟';
+const GUILD_MEMBERS = [
+  {n:'多多动物园', lv:70, pos:'会长', cls:'nm-org'},
+  {n:'不是不想一直很安静', lv:99, pos:'管理员', cls:'nm-org'},
+  {n:'独孤求败', lv:95, pos:'管理员', cls:'nm-org'},
+  {n:'Klay', lv:71, pos:'会员', cls:'nm-me'},
+  {n:'Caesar', lv:71, pos:'会员', cls:'nm-blk'},
+  {n:'『暗影狼』', lv:89, pos:'会员', cls:'nm-blk'},
+  {n:'战神刑天', lv:85, pos:'会员', cls:'nm-blk'},
+  {n:'一剑霜寒', lv:82, pos:'会员', cls:'nm-blk'},
+  {n:'月落乌啼', lv:80, pos:'会员', cls:'nm-blk'},
+  {n:'岁月如歌', lv:78, pos:'会员', cls:'nm-blk'},
+  {n:'夺命归来', lv:77, pos:'会员', cls:'nm-blk'},
+  {n:'花涯狠走天涯', lv:75, pos:'会员', cls:'nm-blk'},
+  {n:'大橘为重', lv:74, pos:'会员', cls:'nm-blk'},
+  {n:'咸鱼翻身', lv:73, pos:'会员', cls:'nm-blk'},
+  {n:'猫爪轻轻', lv:72, pos:'会员', cls:'nm-blk'},
+  {n:'雪原之狐', lv:71, pos:'会员', cls:'nm-blk'},
+  {n:'挞天涯', lv:69, pos:'会员', cls:'nm-blk'},
+  {n:'叙石', lv:66, pos:'会员', cls:'nm-blk'},
+  {n:'小寡妇', lv:63, pos:'会员', cls:'nm-blk'},
+  {n:'吴子颜', lv:60, pos:'会员', cls:'nm-blk'}
+];
+const GUILD_OFFLINE = [
+  {n:'那里…不可以', lv:88, pos:'会员', cls:'nm-blk'},
+  {n:'许我财经', lv:76, pos:'会员', cls:'nm-blk'},
+  {n:'鲤鱼王本王', lv:64, pos:'会员', cls:'nm-blk'},
+  {n:'夜半歌声', lv:58, pos:'会员', cls:'nm-blk'}
+];
+let guildShowOffline = false;
+function renderGuild(){
+  const rows = guildShowOffline ? GUILD_MEMBERS.concat(GUILD_OFFLINE.map(m=>({...m, off:true}))) : GUILD_MEMBERS;
+  $('#g-list').innerHTML = rows.map((m,i)=>`
+    <div class="g-member${m.off?' off':''}" data-i="${m.off ? 20 + GUILD_OFFLINE.findIndex(o=>o.n===m.n) : i}" data-off="${m.off?1:0}">
+      <span class="mn ${m.cls}">${m.n}</span>
+      <span class="mlv">Lv.${m.lv}</span>
+      <span class="mpos">${m.pos}</span>
+    </div>`).join('');
+  $('#g-off-toggle').textContent = guildShowOffline ? '[隐藏离线]' : '[显示离线]';
+}
+function openGuild(){
+  renderGuild();
+  $('#guild-win').classList.add('show');
+}
+$('#g-refresh').onclick = ()=>{ renderGuild(); toast('公会信息已刷新喵~ (=^･ω･^=)'); };
+$('#g-leave').onclick = ()=> toast('离开公会将失去城战奖励,确定要离开吗喵?(建设中)');
+$('#g-self').onclick = ()=> toast('这就是你自己喵~');
+$('#g-off-toggle').onclick = ()=>{ guildShowOffline = !guildShowOffline; renderGuild(); };
+document.querySelectorAll('.g-nav a').forEach(a=>a.onclick=()=>{
+  if(a.textContent === '[信息]') return;
+  toast(`公会${a.textContent}页面建设中,敬请期待喵~`);
+});
+$('#g-list').addEventListener('click',e=>{
+  const row = e.target.closest('.g-member'); if(!row) return;
+  if(row.dataset.off === '1') return;
+  const m = GUILD_MEMBERS[+row.dataset.i]; if(!m) return;
+  if(m.cls === 'nm-me'){ toast('这就是你自己喵~'); return; }
+  openPlayer({name:m.n, lv:m.lv, job:m.pos, guild:GUILD_NAME, cell:pad(rnd(0,29)), gear:'猫爪匕首 +7 · 水晶腰带 +5'});
+});
+/* 公会窗口拖动(限制在游戏窗口内) */
+(function(){
+  const win = $('#guild-win'), head = win.querySelector('.g-head');
+  let drag = null;
+  head.addEventListener('mousedown',e=>{
+    if(e.target.closest('a')) return;
     const r = win.getBoundingClientRect(), g = $('#game').getBoundingClientRect();
     drag = {dx:e.clientX-r.left, dy:e.clientY-r.top, g:g};
     e.preventDefault();
