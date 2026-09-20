@@ -1,0 +1,1278 @@
+
+	
+
+<script>
+function delCookie(name){
+	expires=new Date();
+	expires.setTime(expires.getTime()-1);
+		document.cookie=name+"=; expires="+expires.toGMTString()+"; maxage=-1 ; path=/ ; domain=pet.imop.com";
+}
+var noClearCookies=["JSESSIONID","inviteUser","mopet_uniq_ckid","mopet_auto_login","mopet_logon","mopet_status","mopet_authorize"];
+function clearCookies(){
+	var temp=document.cookie.split(";");   
+	var loop3;   
+	var ts;   
+	var has=false;
+	for (loop3=0;loop3<temp.length;loop3++){   
+		has=false;
+		ts=temp[loop3].split("=")[0];
+		for(var i=0;i<noClearCookies.length;i++){
+			if(ts.indexOf(noClearCookies[i])!=-1){
+				has=true;
+				break;
+			}
+		}
+		if(!has){
+			delCookie(ts);
+		}
+	}     
+} 
+clearCookies();
+
+var login_interval;
+  	function loginCountDown() {
+		var timeElement = document.getElementById("login_count_down");
+		if(!timeElement) {
+			return;
+		}
+		
+		var time = timeElement.innerHTML;
+		var testResult = time.match(/\d+/g);
+		var minute = Number(testResult[0]);
+		var second = Number(testResult[1]);
+
+		if(second > 0) {
+			second = second - 1;
+		} else if(minute > 0) {
+			minute = minute - 1;
+			second = 59;
+		} else {
+			window.clearInterval(login_interval);
+			return;
+		}
+
+		var secondStr;
+		var minuteStr;
+		if(second < 10) {
+			secondStr = "0" + second;
+		} else {
+			secondStr = second;
+		}
+
+		if(minute < 10) {
+			minuteStr = "0" + minute;
+		} else {
+			minuteStr = minute;
+		}
+		
+		if(second==0 && minute==0){
+			document.getElementById("login_gift").innerHTML = "<img style='cursor:hand' onClick=\"p.cmd('fetchtimeprize');\" src=images/login_gift.gif></img>";
+		}
+		
+		document.getElementById("login_count_down").innerHTML =minuteStr + ":" + secondStr;
+	}
+	
+	function setLoginInteval(){
+		if(login_interval){
+			window.clearInterval(login_interval);
+		}
+		login_interval = setInterval("loginCountDown()", 1000);
+	}
+	
+	//登陆奖励倒计时
+	setLoginInteval();
+
+</script>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<link rel='stylesheet' href='include/style.css?ver=2008-5-27'>
+<link rel='stylesheet' href='include/select/dhtml_select.css?ver=2008-5-27'>
+<link href="pet_css/pet_main.css" rel="stylesheet" type="text/css" />
+<script language=javascript src='include/select/dhtml_select.js?ver=2008-5-27'></script>
+<script src="include/XmlHttp.js?ver=2005-12-7"></script>
+<script src="swfobject.js" language="javascript"></script>
+<script>
+	if(top.location==location){
+		location.href="mopet.html";
+	}
+	else{
+		try{
+			if (parent.location==location){
+				location.href="mopet.html";
+			}
+		}catch (exce){
+			location.href="mopet.html";
+		}
+	}
+
+var p=this;
+
+var petPic_nor="img/pet/32_32/BaHaMuTe.gif";
+</script>
+
+<script>
+function showShoot(petid){
+   if(deconcept.SWFObjectUtil.getPlayerVersion().major>7){
+
+    shoot = new SWFObject("LoadIng.swf?petid="+petid, "load", "500", "324", "9", "#000000");
+		shoot.addParam("quality", "high");
+		shoot.addParam("name", "shoot");
+		shoot.addParam("id", "shoot");
+		shoot.addParam("AllowScriptAccess", "sameDomain");
+		shoot.addParam("menu", "false");
+		shoot.addParam("wmode", "opaque");//opaque  transparent
+		shoot.addParam("pluginspage", "http://www.adobe.com/go/getflashplayer");
+		shoot.write("flashcontent");
+		document.getElementById("flashcontent").style.width=1;
+		document.getElementById("flashcontent").style.height=1;
+
+	}else{
+	showTips();
+	}
+	sendNof(deconcept.SWFObjectUtil.getPlayerVersion().major);
+  }
+  function sendNof(ver){
+  requestPage(getXMLHTTP(),"countst.jsp;jsessionid="+parent.sessionId+"?action=total&ver="+ver);
+  }
+  function exitShoot(){
+  	 setTimeout(function(){document.getElementById("flashcontent").innerHTML=""; },10);
+    
+  }
+  function resizeShoot(){
+  		document.getElementById("flashcontent").style.width=500;
+		document.getElementById("flashcontent").style.height=324;
+    
+  }
+ function answer(value){
+	  if(confirm("确定["+value+"]？选错了后果很严重哦！"))
+	    { document.getElementById("load").answer();}
+  }
+  
+  
+  function shootViewPic(url){
+  	window.open(url);
+  }
+  
+  </script>
+<title>Loading...</title>
+
+</head>
+
+<body topmargin="0" leftmargin="0" link="#145EC0" vlink="#145EC0" alink="#145EC0" style="overflow-y:auto;overflow-x:auto;">
+
+
+<!--顶部-->    
+<table width="900" border="0" cellspacing="0" cellpadding="0" class="p25_top">
+    <tr>
+		
+        <td width="380" height="25" align="center" background="images/pet25_tlinebg1.gif" class="pet25_tsp_r p25_ta_1">[<a href="#" onClick="openOption('sys');return false;">功能</a>]&nbsp;[<a href="#" onClick="openOption('help');return false;">帮助</a>]&nbsp;&nbsp;[<a href="#" onClick="changeSoundPlayer();return false;">电台</a>]&nbsp;[<a href="card.jsp" target="_blank">卡片</a>]&nbsp;[<a href="invite.jsp" target="_blank">邀请</a>]&nbsp;&nbsp;[<a href="#" onClick="tujian(myId);return false;"><font color=red>图鉴</font></a>]&nbsp;[<a href="#" onClick="openPaiHang(myId);return false;"><font color=red>战斗力</font></a>]&nbsp;[<a href="#" onClick="openJingJiChang(myId,71);return false;"><font color=red>竞技场</font></a>]&nbsp;[<a href="#" onClick="openChengJiu(myId);return false;"><font color=red>成就</font></a>]&nbsp;[<a href="#" onClick="openOption('huodong');return false;"><font color=red>活动</font></a>]
+		&nbsp;&nbsp;<!-- [<a href="http://passport.imop.com/bt/login.jsp?username=klay011&sign=aa48a109035e5c883ebc2c672741521c&backUrl=http://hi.imop.com&call_id=20260915" target="_blank"><font color=red>空间</font></a>] -->
+		</td>
+        <td width="62" align="center" background="images/pet25_tlinebg1.gif" class="pet25_tsp_r pet25_tsp_l p25_ta_2"><a href='./consign/index.jsp' target='_blank' border='0' hidefocus=true><img src="/images/tiao.gif" border=0></a> </td>
+        <td width="238" align="center" background="images/pet25_tlinebg1.gif" class="pet25_tsp_r pet25_tsp_l">
+        
+        <table width="90%" border="0" cellpadding="0" cellspacing="1" bgcolor="#FFFFFF" style="border:1px solid #58b1d8">
+          <tr>
+		  
+            <td width="20%" height="15" align="center" background="images/pet25_tnewsbg.gif" id="publicPost"></td>
+            </tr>
+        </table>
+        
+        </td>			
+		<td align="center" background="images/pet25_tlinebg2.gif" class="pet25_tsp_l">
+		<img title="您有留言" width=14 height=11 id="newMessageImg" style="display:none;cursor:pointer;" onClick="showPMes();setNewMessage(false);">&nbsp;&nbsp;
+		<span style="color:#fff;display:none;" id="onlineText">负荷:<iframe width=0 height=14 frameborder="0"  scrolling="no" id="selfOnline" allowTransparency="true"></iframe></span>
+		
+		<span style="color:#fff;" id="userNameTopLine"><FONT COLOR=WHITE>klay011</FONT></span>
+		
+		<img src=img/rank.gif style='display:none;margin-left:5px;cursor:hand;' id=rankLogo alt=你正处于一个队伍中 onClick="showFriend('rankReaderOut');"></td>
+    </tr>
+    </table>	
+<!--/顶部--> 
+
+<table width="900" height="465"  cellpadding="0" cellspacing="0" style="margin-bottom:0px;">
+
+
+<table id="outTable" width="900" height="465" border="0" cellpadding="0" cellspacing="0" bgcolor="#c2e1eb" style="margin-left:0px;">
+  <tr>
+  <td width=625 style="padding-top:3px;padding-bottom:5px;padding-left:6px;padding-right:5px;" valign=top>
+<!-- 个人状态 No 1-->
+	<iframe name="petWin" id="petWin" src="init.html" width="100%" height="465" ALLOWTRANSPARENCY='true' border=0 frameborder=0></iframe>
+</td>
+
+<td>
+	
+	
+	<table border=0 cellpadding="0" cellspacing="0" height=225 width=267 id="chatReaderOut" style='position: absolute; left: 630;top: 27;visibility:visible;z-index: 15;border:1px solid #58b1d8;'>
+	<tr><td>
+		<div id="chatReaderTable" style='overflow-y:auto;height:100%;width:100%;word-break:break-all;display:;'>
+		<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#c2e1eb" align="center" style="table-layout:fixed;word-break:break-all;">
+		<tr><td valign=top class="scrollbar" style="padding-top:5px;padding-bottom:5px;padding-left:8px;padding-right:8px;"id="chatReader"><font color=#2669B3>目前为场景聊天模式,即只有和你在同一场景的用户能看到你的聊天信息!</font><br><br><font color=#153A64>如需发布全局聊天(全部玩家都能看到),请选择[全局]模式!<br><Br>如对某玩家的言论感觉不适,请点&nbsp;[功能] - <a href=# onClick="p.openBlindWin();return false;">[屏蔽列表]</a> 将该玩家加入屏蔽</font><hr size=1 color="#5AA2BA"></td></tr>
+		</table>
+		</div>
+	</td></tr>
+	</table>
+	
+	
+	<table border=0 cellpadding="0" cellspacing="0" height=216 width=267 id="chatReaderMyOut" style='position: absolute; left: 630;top: 255;visibility:visible;z-index: 15;border:1px solid #58b1d8;'>
+	<tr><td>
+		<div id="chatReaderMyTable" style='overflow-y:auto;height:100%;width:100%;word-break:break-all;display:'>
+		<table width="100%" height="100%" border="0"  cellpadding="0" cellspacing="0" bgcolor="#c2e1eb" align="center" style="table-layout:fixed;word-break:break-all;">
+		<tr><td valign=top class="scrollbar" style="padding-top:5px;padding-bottom:5px;padding-left:8px;padding-right:8px;" id="chatMyReader"><font color=#2669B3>私人信息显示窗口,你的聊天和别人对你的聊天显示在本窗口</font><br></td></tr>
+		</table>
+		</div>
+	</td></tr>
+	</table>
+	
+
+	
+	<table width="440" border="0" cellpadding="0" cellspacing="0" bgcolor="#98D7E0" id="chatReaderMyOut1" style='position: absolute; left: 457;top:471;visibility:visible;z-index: 15; '>
+  <tr>
+    <td width="90" height="27" valign="middle">
+	<FORM METHOD="POST" ACTION="action.jsp?" target="actionWin_my" id="mesForm" name="mesForm" onSubmit="messageSubmit();return false;">
+	<INPUT TYPE="hidden" name="action" value="inputCommand"><INPUT TYPE="hidden" name="inputCommand" value="">
+	<INPUT TYPE="hidden" id="chatChannel" name="chatChannel">
+		<INPUT TYPE="hidden" name="talkToId" id="talkToId" value="-1">
+		
+		<script>dhtml_select( 'meet_gen',["区域","世界", "公会","队伍","私聊...","战场","我方"], ["-1","-2", "-3", "-4","-5","-7","-8"], "_onChangeSelect(this.value);", 90, 20, "color: #4B6479;");</script>
+		
+		
+    </td>
+    <td width="309" align="center" valign="middle"><input type="text" name="input" maxLength=100 id="inputid" style="width:265px;height:18px;border:0" />
+	<INPUT TYPE="hidden" name="itemname" value=""><INPUT TYPE="hidden" name="itemindex" value=""><INPUT TYPE="hidden" name="itemtype" value="">
+	</td>
+    <td width="51" align="center" valign="middle"><input type="submit" style="cursor:hand;" name="button" id="button" value="输 入" class="p25_but1" /></td>
+	<td width="51" align="center" valign="middle"><img src="/img/button/biaoqing.gif" onclick="cmd('listbiaoqing');return false;" style="cursor:hand;" title="表情" /></td>
+  </tr>
+  </FORM>
+</table>
+	
+
+	<table id="biaoQingReaderOut" width='235' align='center' cellpadding='0' cellspacing='1' bgcolor='#FFFFFF' style="display:none;position: absolute; left: 895;top: 341;z-index:1000;border:1px solid #000000">
+	<tr>
+	<td width="100%"><table  width="70" align=left cellpadding='0' cellspacing='0'><tr><td width='40' align=left><b  id="buttonbiaoqingcom" style="cursor:hand;color:blue;" onclick="showBiaoQingList('biaoqingcomlist','buttonbiaoqingviplist')">[普通]</b></td><td width='30' align=left><b id="buttonbiaoqingvip" onclick="showBiaoQingList('buttonbiaoqingviplist','biaoqingcomlist')" style="display: none;cursor:hand;color:blue;">[VIP]</b></td></tr></table>
+	
+	<table width='1' align=right cellpadding='0' cellspacing='0'>
+	<tr><td><a style='cursor:move' title=按住我拖动 onMouseDown="drags(_getWin('biaoQingReaderOut')); " onmouseup='dragapproved=false;'><img src=/img/button/w_2.gif></a><nobr>&nbsp;&nbsp;<img src=/img/button/w_3.gif style='cursor:hand;padding-left:22px;' onClick="offOpenWin('biaoQingReaderOut');">&nbsp;</td></tr></table>
+	</td></tr>
+	
+	<tr height="200"><td bgcolor='#E1E1E1'>
+		<div id="biaoQingReaderTable" style='overflow-y:auto;height:100%;width:100%;word-break:break-all;'>
+		<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center" style="table-layout:fixed;word-break:break-all;">
+		
+		<tr id="biaoqingcomlist" style="display: block;"><td valign=top class="scrollbar" style="padding-top:0px;padding-bottom:5px;padding-left:8px;padding-right:8px;" id="bianQingReader">
+		
+			<span id="showMyBiaoQingImg">
+
+			
+			<img src='/img/bq/001.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/002.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/003.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/004.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/007.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/008.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/009.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/010.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/011.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/013.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/014.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/020.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/022.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/023.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/025.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/027.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/029.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/031.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/033.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/035.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/036.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/039.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/040.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/050.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/057.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/059.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/062.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/063.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/064.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/065.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/068.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/069.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/073.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/111.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/112.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/115.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/117.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/119.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/125.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/127.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/184.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/190.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/194.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/195.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/196.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/197.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/305.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/353.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/913.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/914.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/233.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/253.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/874.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			</span>
+		</td></tr>
+		
+		
+		<tr id="buttonbiaoqingviplist" style="display: none;"><td valign=top class="scrollbar" style="padding-top:0px;padding-bottom:5px;padding-left:8px;padding-right:8px;" id="bianQingReader">
+		
+			<span id="showMyVIPBiaoQingImg">
+			
+			
+			<img src='/img/bq/vip/309.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/355.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/378.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/380.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/429.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/432.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/433.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/479.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/567.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/594.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/599.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/600.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/601.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/602.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/603.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/604.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/605.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/606.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/607.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/608.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/994.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/996.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/997.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			
+			<img src='/img/bq/vip/998.gif' onclick="selectBQ(this)" style="cursor:hand;"/>
+		   
+			</span>
+		</td></tr>
+		</table>
+		</div>
+	</td></tr>
+	</table>
+
+
+	<table id="friendReaderOut" width='235' align='center' cellpadding='0' cellspacing='1' bgcolor='#FFFFFF' style="display:none;position: absolute; left: 245;top: 141;z-index:1000;border:1px solid #000000">
+	<tr><td>
+	<table width='1' align=right cellpadding='0' cellspacing='0'>
+	<tr><td><a style='cursor:move' title=按住我拖动 onMouseDown="drags(_getWin('friendReaderOut')); " onmouseup='dragapproved=false;'><img src=/img/button/w_2.gif></a><nobr>&nbsp;&nbsp;<img src=/img/button/w_3.gif style='cursor:hand;padding-left:22px;' onClick="offOpenWin('friendReaderOut');">&nbsp;</td></tr></table>
+	</td></tr>
+	<tr height="200"><td bgcolor='#E1E1E1'>
+		<div id="friendReaderTable" style='overflow-y:auto;height:100%;width:100%;word-break:break-all;'>
+		<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center" style="table-layout:fixed;word-break:break-all;">
+		<tr><td valign=top class="scrollbar" style="padding-top:5px;padding-bottom:5px;padding-left:8px;padding-right:8px;" id="friendReader"><Br><font color=#153A64>我的好友</font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<a href=# onclick="friendEvent(-1);return false;" target=_blank><font color=blue>好友事迹</font></a>]&nbsp;[<a href=# onClick="addIMUser();return false;"><font color=blue>加好友</font></a>]&nbsp;[<a href=# onClick="removeIMUser();return false;"><font color=blue>删JR</font></a>]
+		<font color=blue>屏蔽爆蓝消息</font><input type=checkbox name=frienddropcheck    onclick=onfrienddrop()>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<font color=blue>屏蔽升级消息</font><input type=checkbox name=friendupcheck   onclick=onfriendup()>
+		<hr size=1 color="#5AA2BA">
+			<span id="showMyIM"></span>
+		</td></tr>
+		</table>
+		</div>
+	</td></tr>
+	</table>
+
+
+
+	
+	
+	
+	<table id="infoReaderOut" width='235' align='center' cellpadding='0' cellspacing='1' bgcolor='#FFFFFF' style="display:none;position: absolute; left: 235;top: 141;z-index:1000;border:1px solid #000000">
+	
+	<tr><td>
+	<table width='1' align=right cellpadding='0' cellspacing='0'>
+	<tr><td><a style='cursor:move' title=按住我拖动 onMouseDown="drags(_getWin('infoReaderOut')); " onmouseup='dragapproved=false;'><img src=/img/button/w_2.gif></a><nobr>&nbsp;&nbsp;<img src=/img/button/w_3.gif style='cursor:hand;padding-left:22px;' onClick="offOpenWin('infoReaderOut');">&nbsp;</td></tr></table>
+	</td></tr>
+	<tr height="200"><td bgcolor='#E1E1E1'>
+		<div id="infoReaderTable" style='overflow-y:auto;height:100%;width:100%;word-break:break-all;'>
+		<table width="100%" height="100%" border="0"  cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center" style="table-layout:fixed;word-break:break-all;">
+		<tr><td valign=top class="scrollbar" style="padding-top:5px;padding-bottom:5px;padding-left:8px;padding-right:8px;"	id="infoReader"><Br><font color=#153A64>此窗口记录游戏中重要的信息</font><hr size=1 color="#5AA2BA"></td></tr>
+		</table>
+		</div>
+	</td></tr>
+	</table>
+	
+	
+	
+	<table id="thingReaderOut" width='235' align='center' cellpadding='0' cellspacing='1' bgcolor='#FFFFFF' style="display:none;position: absolute; left: 235;top: 141;z-index:1000;border:1px solid #000000">
+	
+	<tr><td>
+	<table width='1' align=right cellpadding='0' cellspacing='0'>
+	<tr><td><a style='cursor:move' title=按住我拖动 onMouseDown="drags(_getWin('thingReaderOut')); " onmouseup='dragapproved=false;'><img src=/img/button/w_2.gif></a><nobr>&nbsp;&nbsp;<img src=/img/button/w_3.gif style='cursor:hand;padding-left:22px;' onClick="offOpenWin('thingReaderOut');">&nbsp;</td></tr></table>
+	</td></tr>
+	
+	<tr height="200"><td>
+		<div id="thingReaderTable" style='overflow-y:auto;height:100%;width:100%;word-break:break-all;'>
+		<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center" style="table-layout:fixed;word-break:break-all;">
+		<tr><td valign=top class="scrollbar"  style="padding-top:5px;padding-bottom:5px;padding-left:8px;padding-right:8px;" id="thingReader"><Br><font color=#153A64>此窗口记录游戏中发生的事件和公告</font><hr size=1 color="#5AA2BA"></td></tr>
+		</table>
+		</div>
+	</td></tr>
+	</table>
+	
+	
+	
+	<table id="rankReaderOut" width='235'  align='center' cellpadding='0' cellspacing='1' bgcolor='#ffffff' style="display:none;position: absolute; left: 235;top: 141;z-index:1000;border:1px solid #000000">
+	<tr><td>
+	<table width='1' align=right cellpadding='0' cellspacing='0'>
+	<tr><td><a style='cursor:move' title=按住我拖动 onMouseDown="drags(_getWin('rankReaderOut')); " onmouseup='dragapproved=false;'><img src=/img/button/w_2.gif></a><nobr><img src=/img/button/w_3.gif style='cursor:hand;padding-left:22px;' onClick="offOpenWin('rankReaderOut');"></td></tr></table>
+	</td></tr>
+
+	<tr height="200"><td bgcolor='#E1E1E1' border=1>
+		<div  id="rankReaderTable" style='overflow-y:auto;height:100%;width:100%;word-break:break-all;'>
+		<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" align="center" style="table-layout:fixed;word-break:break-all;">
+		<tr><td valign=top class="scrollbar" style="padding-top:5px;padding-bottom:5px;padding-left:8px;padding-right:8px;" id="rankReader"><Br><font color=#153A64>我的队伍</font>
+		　<a href=# onClick="cmd('bossZhanDou');return false;"><font color=blue>[boss伤害记录]</font></a><a href=# onClick="yaoqingRank();return false;"><font color=blue>[邀请]</font></a><a href=# onClick="cmd('foo rank tui');return false;"><font color=blue>[退队]</font></a>
+						
+
+		<INPUT TYPE="radio" id="rank_roll" style="display:none;"><INPUT TYPE="radio" id="rank_captain" style="display:none;">
+		
+
+		<hr size=1 color="#5AA2BA">
+			<span id="showRank"></span>
+		</td></tr>
+		</table>
+		</div>
+	</td></tr>
+	</table>
+	 
+	</td>
+  </tr>
+  
+  <tr>
+  <td >
+  
+  <!--经验条--> 
+ <table width="900" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="64" align="center" valign="top" background="images/pet25_ucbg.gif">
+    <!--经验条-->
+    <div class="pet25_userexp">
+    <table width="860" border="0" cellspacing="0" cellpadding="0" style="filter:alpha(Opacity=60);">
+      <tr>
+        <td height="7" align="left" background="images/p25_expbg.gif" id="divExpCover">
+		
+		
+		<table style='width:314;height:7;' bgcolor=#E2F7DB  id='expLine_double' name='expLine_double'  border='0' cellpadding='0' cellspacing='0'>
+			<tr><td  width='100%' bgcolor=#E2F7DB >
+			<table style='width:314;height:7;' background="images/p25_expfid.gif"  id='expLine_left' name='expLine_left'  border='0' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>
+			</td></tr>
+		</table>
+		
+		</td>
+      </tr>
+    </table>
+    <table width="860" border="0" cellpadding="0" cellspacing="0" background="images/p25_exp10bg.gif" style="position:relative;top:-7px; background-repeat:repeat-x" title="升级所需经验:551054" id="needUpLvExp_div">
+      <tr>
+        <td height="7" align="left">&nbsp;</td>
+      </tr>
+    </table>
+    </div>
+    <!--/经验条-->
+    
+    <table width="890" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="490" height="48" align="center">
+          
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="4" align="right"><img src="images/pet_item_l.gif" width="8" height="35" /></td>
+               <script>var cutArray=[];
+		  function cutLineOne(){
+	        
+            for(var i = 1;i<=4;i++)
+            {               
+               var dis = document.getElementById("cutlinetable"+i).style.display ;
+               if(dis=='block'||dis=='')
+               {
+                   post = i;
+                   break;                   
+               } 
+            } 
+            if(post==1)
+            {
+               document.getElementById("cutmoveid").style.display = "block" ;
+               return ;
+            }else{
+                 var pt = post-1;
+                 for(var s = 1;s<=4;s++)
+                 {
+                      if(s==pt)
+                      {
+                       document.getElementById("cutlinetable"+s).style.display = 'block';
+       	               document.getElementById('cutlinenum'+s).style.display = 'block';
+                      }else{
+                    	  document.getElementById("cutlinetable"+s).style.display = 'none';
+   	       			       document.getElementById('cutlinenum'+s).style.display = 'none';
+                       }
+                 }
+
+            }
+            
+		  			
+		  }
+		  function cutLineTwo(){
+			 var post = 0 ;
+			  for(var i = 1;i<=4;i++)
+	            {               
+	               var dis = document.getElementById("cutlinetable"+i).style.display ;
+	               if(dis=='block'||dis=='')
+	               {
+	                   post = i;
+	                   break;                   
+	               } 
+	            } 
+	            
+	            if(document.getElementById("cutmoveid").style.display == "block"){
+	            	document.getElementById("cutmoveid").style.display = "none" ;
+	            	return ;
+	            }
+	            	
+	            if(post==4)
+	            {
+	               return ;
+	            }else{
+	                 var pt = post+1;
+	                 for(var s = 1;s<=4;s++)
+	                 {
+	                      if(s==pt)
+	                      {
+	                         document.getElementById("cutlinetable"+s).style.display = 'block';
+	       	                 document.getElementById('cutlinenum'+s).style.display = 'block';
+	                      }else{
+	                    	  document.getElementById("cutlinetable"+s).style.display = 'none';
+	   	       			       document.getElementById('cutlinenum'+s).style.display = 'none';
+	                          }
+	                 }
+
+	            }
+		  }
+		  </script>            
+			  <td id="shortcutBar">           
+ 
+<!--css类pet_comtrans为半透明专用，pet_comnotrans内为不透明内容--> 
+              </td>
+			   <!--翻页按钮-->
+                 
+				  
+         <td width="4"><img src="images/pet_item_r.gif" width="6" height="35" /></td>
+            </tr>
+          </table>
+          
+<!--左侧道具栏数字编号-->   
+          <table border="0" cellspacing="0" cellpadding="0" class="pet25_item_num"  id="cutlinenum1">
+            <tr>
+              <td ><div class="pet_num1u"><div class="pet_num1"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num2"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num3"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num4"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num5"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num6"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num7"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num8"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num9"></div></div></td>
+              <td ><div class="pet_num1u"><div class="pet_num0"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num0"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num1"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num2"></div></div></td>
+            </tr>
+          </table>
+		  
+		   <table border="0" cellspacing="0" cellpadding="0" class="pet25_item_num" style="display:none" id="cutlinenum2">
+            <tr>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num3"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num4"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num5"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num6"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num7"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num8"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num1"></div><div class="pet_num9"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num0"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num1"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num2"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num3"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num4"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num5"></div></div></td>
+            </tr>
+          </table>
+          
+           <table border="0" cellspacing="0" cellpadding="0" class="pet25_item_num" style="display:none" id="cutlinenum3">
+            <tr>
+           
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num6"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num7"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num8"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num2"></div><div class="pet_num9"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num0"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num1"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num2"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num3"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num4"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num5"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num6"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num7"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num8"></div></div></td>
+            </tr>
+          </table>
+           <table border="0" cellspacing="0" cellpadding="0" class="pet25_item_num" style="display:none" id="cutlinenum4">
+            <tr>
+              <td ><div class="pet_num2u"><div class="pet_num3"></div><div class="pet_num9"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num0"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num1"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num2"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num3"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num4"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num5"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num6"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num7"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num8"></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num4"></div><div class="pet_num9"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num5"></div><div class="pet_num0"></div></div></td>
+              <td ><div class="pet_num2u"><div class="pet_num5"></div><div class="pet_num1"></div></div></td>
+            </tr>
+          </table>
+<!--/左侧道具栏数字编号-->  
+
+<!--左侧道具栏--> 			
+	<script>var _oCut="<table border='0' cellspacing='0' cellpadding='0' class='pet25_item' id='cutlinetable1'><tr>";p.cutArray[0]='perform 圣龙烈焰';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(0)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/ShengLongLieYan.gif' title='圣龙烈焰' width='23' height='25' /></div></td>";p.cutArray[1]='perform 十字斩[11级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(1)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/shizizhan.gif' title='十字斩[11级]' width='23' height='25' /></div></td>";p.cutArray[2]='perform 极寒冰霜[3级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(2)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/jihanbingshuang.gif' title='极寒冰霜[3级]' width='23' height='25' /></div></td>";p.cutArray[3]='perform 强力打击[13级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(3)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/shizizhan.gif' title='强力打击[13级]' width='23' height='25' /></div></td>";p.cutArray[4]='perform 猛抽[3级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(4)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/erguang.gif' title='猛抽[3级]' width='23' height='25' /></div></td>";p.cutArray[5]='perform 致命一击[3级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(5)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/zhiming.gif' title='致命一击[3级]' width='23' height='25' /></div></td>";p.cutArray[6]='perform 撕裂[6级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(6)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/silie.gif' title='撕裂[6级]' width='23' height='25' /></div></td>";p.cutArray[7]='perform 压制';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(7)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/YaZhi.gif' title='压制' width='23' height='25' /></div></td>";p.cutArray[8]='use fitems.arm.armor.trinket.lv050.rare.TieQuanHuoJianPao';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(8)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/arm/armor/trinket/TieQuanHuoJianPao.gif' title='铁拳火箭炮' width='23' height='25' /></div></td>";p.cutArray[9]='perform 神龙在天[5级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(9)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/FengYiTianXiang.gif' title='神龙在天[5级]' width='23' height='25' /></div></td>";p.cutArray[10]='use fitems.arm.armor.trinket.lv060.rare.XieDaiBanPoJiaPao';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(10)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/itemlogo/xinshipin/XieDaiBanPoJiaPao.gif' title='携带版破甲炮' width='23' height='25' /></div></td>";p.cutArray[11]='use fitems.arm.armor.trinket.lv050.rare.JiYinGaiZaoSheXian';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(11)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/arm/armor/trinket/JiYinGaiZaoSheXian.gif' title='基因改造射线' width='23' height='25' /></div></td>";p.cutArray[12]='use fitems.arm.armor.trinket.lv060.rare.TianShenHuTiHuiJi';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(12)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/itemlogo/xinshipin/TianShenXiaFanHuiJi.gif' title='复制人手套' width='23' height='25' /></div></td>";_oCut+="<td align='left' style='width:35px'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><div class='item25_up'><a href='#' onClick=cutLineOne(); hidefocus=true><img src='images/pet_itemup.gif' width='29' height='14' border='0' /></a></div><div class='item25_down'><a href='#' onClick=cutLineTwo(); hidefocus=true><img src='images/pet_itemdown.gif' width='29' height='14' border='0' /></a></div></div></td></tr></table>";_oCut+="<table border='0' cellspacing='0' cellpadding='0' class='pet25_item'style='display:none' id='cutlinetable2'><tr>";p.cutArray[13]='perform 十字斩[11级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(13)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/shizizhan.gif' title='十字斩[11级]' width='23' height='25' /></div></td>";p.cutArray[14]='use fitems.pet.huifu.ZhuQingTing';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(14)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/itemlogo/item/zhuqingting.gif' title='竹蜻蜓' width='23' height='25' /></div></td>";p.cutArray[15]='perform 伏击[二级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(15)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/fuji.gif' title='伏击[二级]' width='23' height='25' /></div></td>";p.cutArray[16]='use 79 83 ';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(16)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='null' title='' width='23' height='25' /></div></td>";p.cutArray[17]='talk 幽冥蛇王';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(17)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='16' title='' width='23' height='25' /></div></td>";p.cutArray[18]='use fitems.pet.mm.FuHuo_4_G';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(18)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/itemlogo/other/mm/FuHuo_3.gif' title='超绝魂魄之精' width='23' height='25' /></div></td>";p.cutArray[19]='use fitems.pet.other.ChuanSongShi';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(19)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/itemlogo/other/ChuanSongShi.gif' title='传送石' width='23' height='25' /></div></td>";p.cutArray[20]='perform 传送科技组';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(20)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/HuiChengShu.gif' title='传送科技组' width='23' height='25' /></div></td>";p.cutArray[21]='perform 龙吟';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(21)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/ShengShouQingLong.gif' title='龙吟' width='23' height='25' /></div></td>";p.cutArray[22]='perform 传送拖把城';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(22)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/HuiChengShu.gif' title='传送拖把城' width='23' height='25' /></div></td>";p.cutArray[23]='use A null';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(23)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='112' title='' width='23' height='25' /></div></td>";p.cutArray[24]='use 148';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(24)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='null' title='' width='23' height='25' /></div></td>";p.cutArray[25]='xuyuan yes';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(25)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='null' title='' width='23' height='25' /></div></td>";_oCut+="<td align='left' style='width:35px'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><div class='item25_up'><a href='#' onClick=cutLineOne(); hidefocus=true><img src='images/pet_itemup.gif' width='29' height='14' border='0' /></a></div><div class='item25_down'><a href='#' onClick=cutLineTwo(); hidefocus=true><img src='images/pet_itemdown.gif' width='29' height='14' border='0' /></a></div></div></td></tr></table>";_oCut+="<table border='0' cellspacing='0' cellpadding='0' class='pet25_item'style='display:none' id='cutlinetable3'><tr>";p.cutArray[26]='perform 出血[1级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(26)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/ChuXue.gif' title='出血[1级]' width='23' height='25' /></div></td>";p.cutArray[27]='perform 冥火爪[1级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(27)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/zhua.gif' title='冥火爪[1级]' width='23' height='25' /></div></td>";p.cutArray[28]='use 112 null';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(28)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='K' title='' width='23' height='25' /></div></td>";p.cutArray[29]='use 148';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(29)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='24' title='' width='23' height='25' /></div></td>";p.cutArray[30]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[31]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[32]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[33]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[34]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[35]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[36]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[37]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[38]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";_oCut+="<td align='left' style='width:35px'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><div class='item25_up'><a href='#' onClick=cutLineOne(); hidefocus=true><img src='images/pet_itemup.gif' width='29' height='14' border='0' /></a></div><div class='item25_down'><a href='#' onClick=cutLineTwo(); hidefocus=true><img src='images/pet_itemdown.gif' width='29' height='14' border='0' /></a></div></div></td></tr></table>";_oCut+="<table border='0' cellspacing='0' cellpadding='0' class='pet25_item'style='display:none' id='cutlinetable4'><tr>";p.cutArray[39]='perform 致命一击[3级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(39)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/zhiming.gif' title='致命一击[3级]' width='23' height='25' /></div></td>";p.cutArray[40]='perform 破除护甲[6级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(40)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/pojia.gif' title='破除护甲[6级]' width='23' height='25' /></div></td>";p.cutArray[41]='perform 舍命刺穿[4级]';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(41)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/sheming.gif' title='舍命刺穿[4级]' width='23' height='25' /></div></td>";p.cutArray[42]='perform 横扫';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(42)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/bar/skills/HengSao.gif' title='横扫' width='23' height='25' /></div></td>";p.cutArray[43]='use fitems.arm.armor.trinket.lv060.rare.XieDaiBanPoJiaPao';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(43)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='img/itemlogo/xinshipin/XieDaiBanPoJiaPao.gif' title='携带版破甲炮' width='23' height='25' /></div></td>";p.cutArray[44]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[45]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[46]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[47]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[48]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[49]='null';_oCut+="<td align='left'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'></div></td>";p.cutArray[50]='use 132 133 ';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(50)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='null' title='' width='23' height='25' /></div></td>";p.cutArray[51]='use 84 85 OK ';_oCut+="<td align='left' style='cursor:hand' onclick='useCut(51)'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><img src='null' title='' width='23' height='25' /></div></td>";_oCut+="<td align='left' style='width:35px'><div class='pet25_comtrans1'></div><div class='pet25_comnotrans1'><div class='item25_up'><a href='#' onClick=cutLineOne(); hidefocus=true><img src='images/pet_itemup.gif' width='29' height='14' border='0' /></a></div><div class='item25_down'><a href='#' onClick=cutLineTwo(); hidefocus=true><img src='images/pet_itemdown.gif' width='29' height='14' border='0' /></a></div></div></td></tr></table>";try{p.shortcutBar.innerHTML=_oCut;}catch(x){shortcutBar.innerHTML=_oCut;}</script><script>p.cutLine(1)</script>
+	
+<!--/左侧道具栏-->  
+ 
+<!--数字栏用背景图模式，可自行修改数字-->  
+ 
+          </td>
+          
+          
+          <td width="430" align="center" valign="top">
+<!--右侧按钮--> 
+<!--顺序为：-->
+           <table width="400" border="0" cellpadding="0" cellspacing="0" class="pet25_upl_but">
+            <tr>
+			   <td id="taskbutton" align="center"><a href="#" onClick="doclick('showTask','taskWin');" hidefocus=true><img src="images/pet25_but_08.gif" width="45" height="45" /></a></td>
+
+              <td align="center"><a href="#" onClick="doclick('subs','skillsubs');" hidefocus=true><img src="images/pet25_but_01.gif" width="45" height="45" /></a></td>
+              <td id="daojubutton" align="center"><a href="#" onClick="doclick('i','tools');" hidefocus=true><img src="images/pet25_but_02.gif" width="45" height="45" /></a></td>
+			  <td align="center"><a href="/shop/index.jsp" target="_blank" hidefocus=true><img src="images/baoku.gif" width="45" height="45" /></a></td>
+              <td align="center"><a href="#" onClick="cmd('pet p');" hidefocus=true><img src="images/pet25_but_03.gif" width="45" height="45" /></a></td>
+              <td align="center"><a href="#" onClick="showFriend('friendReaderOut');" hidefocus=true><img src="images/pet25_but_05.gif" width="45" height="45" /></a></td>
+			   <td align="center"><a href="#" onClick="showFriend('rankReaderOut');" hidefocus=true><img src="images/pet25_but_04.gif" width="45" height="45" /></a></td>
+              <td align="center"><a href="#" onClick="showParty();" hidefocus=true><img src="images/pet25_but_06.gif" width="45" height="45" /></a></td>
+              
+             
+            </tr>
+          </table>
+<!--/右侧按钮 带光晕做的半透，细看还是边缘有小问题，另不能更换背景色-->   
+          </td>
+          
+        </tr>
+      </table>
+      
+      
+      </td>
+  </tr>
+</table>
+<!--end 经验条-->
+
+  </td>
+  </tr>
+  </table>
+</table>
+
+
+<!-- 新增快捷栏 start -->
+<div style="position: absolute; left: 5;top: 370;z-index:1000;cursor:move;" style="display:none"
+	onMouseDown="drags(_getWin('cutmoveid')); " 
+	onmouseup='dragapproved=false;' id="cutmoveid">
+       <table border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="48" align="center">
+          
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="4" align="right"><img src="images/pet_item_l.gif" width="8" height="35" /></td>
+               <script>
+               	var cutArray1=[];
+		  	   </script>            
+			 <td id="shortcutBar1"></td>
+			 <td width="4"><img src="images/pet_item_r.gif" width="6" height="35" /></td>
+        	</tr>
+     	 </table>
+     	
+     	 </td>
+     	 </tr>
+     	</table>
+      <script>var _oCut="<table border='0' cellspacing='0' cellpadding='0' class='pet25_item1' ><tr>";p.cutArray1[0]='use fitems.pet.mm.FuHuo_4_G';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(0)'><div class='pet25_comtrans11'><img src='img/itemlogo/other/mm/FuHuo_3.gif' title='超绝魂魄之精' width='23' height='25'/></div></td>";p.cutArray1[1]='perform 拆解[1级]';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(1)'><div class='pet25_comtrans11'><img src='img/bar/skills/ChaiJie.gif' title='拆解[1级]' width='23' height='25'/></div></td>";p.cutArray1[2]='perform 熔岩[5级]';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(2)'><div class='pet25_comtrans11'><img src='img/bar/skills/RongYan.gif' title='熔岩[5级]' width='23' height='25'/></div></td>";p.cutArray1[3]='perform 灵魂吸取';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(3)'><div class='pet25_comtrans11'><img src='img/bar/skills/LingHunXiQu.gif' title='灵魂吸取' width='23' height='25'/></div></td>";p.cutArray1[4]='perform 金属护甲[5级]';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(4)'><div class='pet25_comtrans11'><img src='img/bar/skills/QiangHuaWaiKe.gif' title='金属护甲[5级]' width='23' height='25'/></div></td>";p.cutArray1[5]='perform 坚硬[5级]';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(5)'><div class='pet25_comtrans11'><img src='img/bar/skills/GangTieJingZhui.gif' title='坚硬[5级]' width='23' height='25'/></div></td>";p.cutArray1[6]='perform 镰鼬龙卷[1级]';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(6)'><div class='pet25_comtrans11'><img src='img/bar/skills/lianyou.gif' title='镰鼬龙卷[1级]' width='23' height='25'/></div></td>";p.cutArray1[7]='use fitems.pet.huifu.ZhuQingTing';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(7)'><div class='pet25_comtrans11'><img src='img/itemlogo/item/zhuqingting.gif' title='竹蜻蜓' width='23' height='25'/></div></td>";p.cutArray1[8]='use 98 100 ';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(8)'><div class='pet25_comtrans11'><img src='null' title='' width='23' height='25'/></div></td>";p.cutArray1[9]='use 98 99 ';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(9)'><div class='pet25_comtrans11'><img src='null' title='' width='23' height='25'/></div></td>";p.cutArray1[10]='use 98 100 ';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(10)'><div class='pet25_comtrans11'><img src='null' title='' width='23' height='25'/></div></td>";p.cutArray1[11]='null';_oCut+="<td  align='left'><div class='pet25_comtrans11'></div></td>";p.cutArray1[12]='wantzhanbu jiedu tag';_oCut+="<td  align='left' style='cursor:hand' onclick='useCut1(12)'><div class='pet25_comtrans11'><img src='null' title='' width='23' height='25'/></div></td>";_oCut+="</tr></table>";try{p.shortcutBar1.innerHTML=_oCut;}catch(x){shortcutBar1.innerHTML=_oCut;}</script>      
+ </div>
+<!-- 新增快捷栏 end -->
+
+<!-- 登陆倒计时 start -->
+<div style="position: absolute; left: 405;top: 28;z-index:1000; cursor:move;"  onMouseDown="drags(_getWin('logingiftid')); " onmouseup='dragapproved=false;' id="logingiftid">
+            <table width="50" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td ><font id="login_gift"><img style='cursor:hand' onClick="p.cmd('fetchtimeprize');" src=images/login_gift.gif></img></font></td>
+            </tr>
+            <tr>
+              <td align=center><b><font color=red id="login_count_down">00:00</font></b></td>
+            </tr>
+          </table>
+  </div>
+<!-- 登陆倒计时 end -->
+
+
+<div class="pet_uinfo" style="position: absolute; left: 0;top: 27;" style='cursor:move' title=按住我拖动 onMouseDown="drags(_getWin('hpspid')); " onmouseup='dragapproved=false;' id="hpspid">
+                <div class="pet_comtrans"></div>
+                <div class="pet_comnotrans">
+                <table width="168" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                <td width="38" valign="middle" height="36"><img src="img/pet/32_32/BaHaMuTe.gif" class="pet_info_ava"  border=1 style="border-color:#5F9FBF;cursor:hand;" width=32 height=32 align=top title="巴哈姆特" id="_petRace" onClick="p.cmd('pet p');p.hideWelcome(); return false;"/></td>
+                <td width="130">
+                
+<!--HP SP EXP-->                
+			<!--HP SP EXP-->                
+			<table  border='0' cellpadding='0' cellspacing='0'>
+			<tr><td colspan=4 height=1></td></tr>
+			<tr><td width=16><font face=arial style="line-height:9px;font-size:7.5pt;" color="#8ae776">HP</font></td><td width=92>
+				<table width='92' border='0' cellpadding='0' cellspacing='1' bgcolor=#4797B2><tr>
+				<td width='100%' bgcolor='#247410' width='90'>
+				<table style='width:90;height:7px;' bgcolor=#89E773 id='hpLine_left' name='hpLine_left'  border='0' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>
+				</td></tr></table>
+			</td>
+			<span style="position:absolute; left:70px; top:2px; z-index:10"><font face=arial style="line-height:9px;font-size:7.5pt;"><span id='hpLine_left_no' style="color:#008400;">247117</span>/<span id='hpLine_left_max_no'>247117</span></font></span>
+			
+			
+			</tr>
+			<tr><td colspan=4 height=3></td></tr>
+			<tr><td width=16><font face=arial style="line-height:9px;font-size:7.5pt;" color="#63b2ff">SP</font></td><td width=92>
+				<table width='92' border='0' cellpadding='0' cellspacing='1' bgcolor=#4797B2><tr>
+				<td width='100%' bgcolor='#035B9C' width='90'>
+				<table style='width:90;height:7px;' bgcolor=#63B2FF id='mpLine_left' name='mpLine_left'  border='0' cellpadding='0' cellspacing='0'><tr><td></td></tr></table>
+				</td></tr></table>
+			</td>
+			<span style="position:absolute; left:70px; top:14px; z-index:10"><font face=arial style="line-height:9px;font-size:7.5pt;"><span id='mpLine_left_no' style="color:#008400;">104699</span>/<span id='mpLine_left_max_no'>104699</span></font></span>
+			<td style="position:absolute; left:150px; top:5px;"><img src="/images/fight.png"  title="切换战斗画面" style="cursor:hand;" onClick="if(p.getPageState()=='zone'){cmd('lookatt');}else{cmd('look');};return false;"/></td>
+			<td style="position:absolute; left:150px; top:24px;"><img src= "/images/pingBi1.gif" title="屏蔽信息" style="cursor:hand;" id="pingBiInfo" onClick="changePingBi()"/></td>
+			</tr>
+			<tr><td colspan=4 height=3></td></tr>
+			<tr title="升级所需经验:551054" id='needUpLvExp'>
+				<td width=16><font face=arial style="line-height:9px;font-size:7.5pt;  margin-top:auto" color="#ffffff">Ex</font></td>
+				<td colspan="3"><font face=arial style="line-height:9px;font-size:7.5pt;color:#fff">
+					Lv <span id="nowLv" style="color:red;">71</span>
+					&nbsp;&nbsp;<font color="#ffffff"><span id="expBai">36</span>%</font>
+				 	<span id="nowExpTo">&nbsp;&nbsp;</span></font></td>
+					
+				
+			</tr>	
+			</table>
+			
+			
+<!--HP SP EXP--> 
+<!--HP SP EXP-->                
+                
+                </td> 
+				
+                </tr>
+				
+				
+                </table>
+				<span id="miracleShow" style="height:20px;width:140px;overflow-x:hidden;overflow-y:hidden;overflow:hidden"></span>
+                </div>
+            </div>
+
+
+<div  style="display:block;width:1px;height:1px;overflow:hidden;position: absolute; left: 0;top: 0;z-index:2000;" id="flashcontent" ></div>
+<!-- No 1-->
+
+<!-- 房间名称-->
+<span id="s_nowRoom" style="width:172;height:18;position:absolute;left:450;top:32;overflow-y:hidden;text-align:center;vertical-align:middle;z-index:1000;color:#002146;font-size:10.5pt;" onclick="if(p.getPageState()=='zone'){cmd('lookatt');}else{cmd('look');}" style="cursor:hand;"></span>
+<!-- 房间名称ＥＮＤ-->
+
+	
+	<table style="position: absolute; left: 2245;top: 141;display:none"  width="100%" height="50" border="0" cellpadding="0" cellspacing="0" bgcolor="#5AA2BA">
+	<tr><td width=3></td><td bgcolor="#A0CAD8" style="padding-left:10px;padding-top:5px;" valign=top>
+	
+		<table  width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr><td valign=top width=100 rowspan="2">
+			<!--span id="s_nowRoom" style="color:#002146;font-size:10.5pt;" onclick="if(p.getPageState()=='zone'){cmd('lookatt');}else{cmd('look');}" style="cursor:hand;"></span-->
+		</td><td valign=top align=right style="padding-right:6px;padding-bottom:0px;" nowrap>
+		<!--	
+			<INPUT TYPE="button" value="任务" class="smallFont" style="padding-top:2px;padding-left:2px;background-color:#5AA2BA;border:0px solid #FFFFFF;cursor:hand;color:#E9F2F5;" onclick="cmd('showTask');" hidefocus=true>
+			<INPUT TYPE="button" value="道具" class="smallFont" style="padding-top:2px;padding-left:2px;background-color:#5AA2BA;border:0px solid #FFFFFF;cursor:hand;color:#E9F2F5;" onclick="cmd('i');" hidefocus=true>
+			<INPUT TYPE="button" value="宠物" class="smallFont" style="padding-top:2px;padding-left:2px;background-color:#5AA2BA;border:0px solid #FFFFFF;cursor:hand;color:#E9F2F5;" onclick="cmd('pet');" hidefocus=true>
+			<INPUT TYPE="button" value="公会" class="smallFont" style="padding-top:2px;padding-left:2px;background-color:#5AA2BA;border:0px solid #FFFFFF;cursor:hand;color:#E9F2F5;" onclick="showParty();" hidefocus=true>
+	-->
+			<img alt="任务" style="cursor:hand" onClick="cmd('showTask');" hidefocus=true src="/img/button/task.gif">
+			<img alt="技能" style="cursor:hand" onClick="cmd('subs');" hidefocus=true src="img/button/skill.gif">
+			<img alt="道具" style="cursor:hand"  onclick="cmd('i');" hidefocus=true src="/img/button/item.gif">
+			<img alt="宠物" style="cursor:hand"  onclick="cmd('pet');" hidefocus=true src="img/button/pet.gif">
+			<img alt="公会" style="cursor:hand"  onclick="showParty();" hidefocus=true src="img/button/team.gif">
+		
+		</td>
+		<td rowspan="2" valign=top>
+			<span id="_petName" style="margin-top:1px;margin-left:3px;margin-right:2px;cursor:hand;width:50px;height:32px;word-wrap:break-word;word-break:break-all;overflow:hidden;vertical-align:top;" onClick="changeName(this.innerHTML);">Caesar</span>
+		</td><td rowspan="2" width="32" valign="top">
+			<img src="img/pet/32_32/BaHaMuTe.gif">
+		</td><td width=3></td><td valign=top align=left width=115 rowspan="2">
+			
+		</td></tr>
+		
+		
+		
+		</table>
+	
+	</td></tr>
+	<tr><td colspan=2 height=5></td></tr>
+	</table>
+	
+
+<!-- End No 1-->
+
+
+<script>
+function getLv(){
+	var lv = -1;
+	try{
+		lv = 0;
+        
+        lv = 71
+        
+		return lv;
+	}catch(e){
+		return -1;
+	}
+}
+
+function getRandomNum(){
+	return parseInt(Math.random()*2+1);
+}
+
+function getDesc(){
+	var lv = getLv();
+	var rroom = p.getRoom();
+	var randomNum = getRandomNum();
+	if(rroom=='休息室'||rroom=='谈话室'){
+		return '只要三步就可以进入猫隐村了，去看看吧';
+	}else if(rroom=='训练室'){
+		return '从冒险大厅的新手导师那里可以得到不错的东西，要不要去看看呢';
+	}else if(rroom=='冒险大厅'){
+		return '走到那个蓝色光点就可以到达猫游世界了，走过去吧';
+	}else if(lv==''||lv==-1){
+		return '确认退出猫游记？';
+	}else if(lv <7){
+		switch(randomNum){
+			case 1: return '如果有疑问，猫隐村广场的戈多会告诉你怎么做。';
+			case 2: return '猫隐西村的讲武堂和训练室可以学到很多新技能，要不要看看去。';
+			default: return '猫隐村和西村有很多任务等着，再逛逛吗。';
+		}
+	}else if(lv<10){
+		switch(randomNum){
+			case 1: return '很快就要升到下一级了，不再玩会儿吗？';
+			case 2: return '到达10级就可以找专业训练师学习新的战斗技能了';
+			default: return '宠物到达10级就能按照你的喜好选择不同派系的成长了';
+		}
+	}else if(lv<15){
+		switch(randomNum){
+			case 1: return '在旅馆休息，以后打怪时可以获得一些双倍经验效果。';
+			case 2: return '拖把城的神官好像在寻找消灭魔物的勇士。';
+			default: return '雪原城和拖把城之间经常有皮货交易，有心人可以从中获得不小的利润。再玩会儿/ 不了';
+		}
+	}else{
+		return '确认退出猫游记？';
+	}
+}
+
+function window.onbeforeunload(){
+	if(getTimePrizeCloseDesc()&&event.clientX>document.body.clientWidth&&event.clientY<0||event.altKey){
+		window.event.returnValue = getTimePrizeCloseDesc();
+	}
+	else if(openAlertOnWindowClose&&event.clientX>document.body.clientWidth&&event.clientY<0||event.altKey){
+		window.event.returnValue = getDesc();
+	}
+}
+</script>
+
+
+<a href="http://www.pet.imop.com/guide/updatelog.html" target="_blank"><font color=#FFFFFF face=arial style='font-size:7.5pt;'>Mopet Updates Log (V2.1.0.2008-05-26.QW)</font></a>
+ <font color=#FFFFFF face=arial style='font-size:7.5pt;'>3:<span id=cookieSize></span><script>cookieSize.innerHTML=document.cookie.length;</script></font>
+　<font color=ffffff>
+- <a href="http://live800.imop.com/live800/chatClient/chatbox.jsp?companyID=8921&configID=25&skillId=13&enterurl=http%3A%2F%2Flive800%2Ewan%2Erenren%2Ecom%2Flive800%2Fpreview%2Ejsp&pagereferrer=http%3A%2F%2Flive800%2Ewan%2Erenren%2Ecom%2Flive800%2FembedScriptFloatIconAction%2Ejsp&k=1" target="_blank"><font color=ffffff>用户反馈</font></a>
+- <a href="http://www.pet.imop.com/html/maoyouji8195/huabeidianxin5640/200806041402252694.html" target="_blank"><font color=ffffff>警惕简单密码</font></a>
+
+- <a href="http://www.pet.imop.com/html/maoyouji8195/changjianwenti1298/200805261509515662.html" target="_blank"><font color=ffffff>卡巴斯基用户无法游戏的解决办法</font></a>
+<!--- <a href="http://www.pet.imop.com/2/3/93.html" target="_blank"><font color=ffffff>警惕虚假中奖信息</font></a>-->
+<!--- <a href="http://www.pet.imop.com/2/3/340.html" target="_blank"><font color=ffffff>警告小板凳使用者</font></a>-->
+- <a href=# onClick="p.openOnlineHelp();return false;"><font color=ffffff>不会玩就点我<img src=/img/hint.gif border=0 style="margin-left:2px;"></font></a>
+
+<a onClick="return false;">-</a></font>
+<!--castWin-->
+<div id="castWin" style="display:none;position: absolute; left: 238;top: 210;z-index:9999;">
+
+<span id="castName"></span>
+<table width=200 bgcolor=aaaaaa height=8 cellpadding="0" cellspacing="0">
+<tr><td>
+<table id="yongchang_line" bgcolor=red width=1 bgcolor=aaaaaa height=8 cellpadding="0" cellspacing="0">
+<tr><td></td></tr>
+</table>
+</td></tr>
+</table>
+</div>
+<!--castWin-->
+
+<span id="left_talk"  style="position:absolute;left:87;top:208;display:none;"></span>
+<span id="right_talk"  style="position:absolute;left:409;top:208;display:none;"></span>
+
+
+
+
+
+
+
+  
+
+
+
+<script>
+myUserId = "2119393422";
+myId="1491908";
+myName="Caesar";
+myUserName = "klay011";
+petLv=71;
+petName="Caesar";
+validateParam="c70b05d4f20bc52df45121b946f505f1";
+myIM=[[1207837,'缘定三生',false,0,'82713835'],[1224754,'淑旎寶貝',false,0,'jsjyjqm'],[1298179,'啊穷啊穷',false,0,'525136254'],[1325392,'Justin',false,0,'jack19970731'],[1388305,'☆黑白猪★',true,0,'h458310082l'],[1404497,'天星银狼',false,0,'3310961'],[1428543,'卷毛哥哥',false,0,'frizzle'],[1444521,'苏五月不是猪',false,0,'zhaozhaoa'],[1451986,'MrMay',false,0,'mrmay'],[1457707,'IMS杰克',false,0,'18551725805'],[1458459,'回憶殺人',false,0,'24630326qzy'],[1467281,'落叶的位置',true,0,'shanshengchao321'],[1477855,'肖丶自在',true,0,'kzlcl0823'],[1482955,'奈何奈何',false,0,'1236314'],[1485128,'波浪前进',false,0,'zzw170'],[1491737,'一杯美式',true,0,'hl950723'],[1491790,'白色风车',false,0,'leo11lin'],[1491909,'石拳哥',false,0,'zhangguimm'],[1492055,'黑色玖岚',false,0,'1040925350'],[1492139,'春风吹',false,0,'xz5889335'],[1492681,'何问问',false,0,'zmy970210'],[1492843,'嘤嘤嘤仓ku',false,0,'qvee011'],[1492861,'小一',true,0,'13912015327'],[1492883,'卡莎',false,0,'bin190946388huang'],[1493301,'热衷阿',false,0,'15065594163'],[1493941,'Siver',false,0,'siver011'],[1494592,'风吹麦浪',false,0,'zzw170186'],[1494731,'yaowan2',false,0,'t07396630'],[1494740,'于晴',false,0,'15778473347'],[1496431,'水麟',false,0,'96guiwang'],[1502047,'Abelia',false,0,'abelia'],[1504504,'阿里嘎多懒羊羊',false,0,'qingqingcaoyuanlanyangyang'],[1504532,'阿里嘎多灰太狼',true,0,'qingqingcaoyuanlanyangyang'],[1506859,'树莓煎蛋',false,0,'clown1217'],[1507495,'灿若千阳',true,0,'zhiyuan_jing1'],[1508907,'鬼事　',false,0,'saiwenshiyijianjiankangkang'],[1518490,'紫音戀結',false,0,'ziyinziyin'],[1536077,'阿瓦达啃大蛆',true,0,'a97918654'],[1660083379,'风剑苍龙',true,0,'zhusijiacjb'],[1660149225,'打热的',false,0,'1588863567327']];
+message_MY_Tag="<font color=red>你</font>";
+message_THING_Tag="<!--thing-->";
+message_PUBM_Tag="<!--pubm-->";
+message_BR_Tag="<!--br-->";
+message_RUMOR_Tag="<!--rumor-->";
+message_PARTY_Tag="#00468C";
+message_EVENT_Tag="<!--event-->";
+message_PUB_Tag="#000066";
+
+command_Tag="/";
+server_Port="8080";
+client_Id="PET92";
+httpd_Port=location.port;
+pLeft=25;
+pTop=91;
+room="猫隐村广场";
+theTitle='Ｍopet 灵梦峡谷(PVP)';
+lianJiNeng=true;
+kuaiJieJian=1;
+isOpenPvp=false;
+isDoubleOpen=false;
+openPKButton=1;
+openDISPLAYButton=1;
+openDisSecondCode=true;
+openAlertOnWindowClose=false;
+pingBiZhanDouInfo=false;
+showToolsButton=2;
+huaLi=true;
+combatPicTouMing=50;
+_autoToCenter=true;
+task_black_img="img/blank.gif";
+nowMap="map.maoyin";
+channel=[1,1,1];
+noautofightwin=false;
+noShowTipWin=false;
+bosskey=true;
+zidongxiuli=false;//自动修理功能
+frienddrop=false;//屏蔽好友获得物品信息
+friendup=false;//屏蔽好友升级消息
+sessionId="abcFgghVmz2gA4x88KLcA";
+hasNewTalk=true;
+isxiaonei=false;
+xinshoutask="null";
+
+baoziImg="/img/pet/map//BaHaMuTe.gif";
+eGaoPic="null";
+eGaoPicType="-1";
+EGAOPICTYPE_ALL="1";
+EGAOPICTYPE_NOTALL="0";
+
+winList=[
+	"skills",
+	"petinfo",
+	"tools",
+	"alert",
+	"option",	
+	"skillsubs",
+	"vimg",
+	"listSellTools",
+	"onlineUsers",
+	"listStoreTools",
+	"dealWin",
+	"default",
+	"composeFormulas",
+	"composeWin",
+	"composeSkill"
+	//"sellFormula"
+];
+winPos ={
+	"skills"		:[393,156],
+	"petinfo"		:[310,166],
+	"tools"			:[327,166],
+	"alert"			:[263,185],
+	"option"		:[12,71],
+	"skillsubs"		:[430,156],
+	"vimg"			:[327,166],
+	"listSellTools"	:[327,166],
+	"onlineUsers"	:[327,166],
+	"listStoreTools":[357,110],
+	"dealWin"		:[580,105],
+	"default"		:[400,166],
+	"composeFormulas":[400,166],
+	"composeWin"	:[300,100],
+	"composeSkill"	:[500,156]
+};
+winSize ={
+	"skills"		:[300,160],
+	"petinfo"		:[250,-1],
+	"tools"			:[240,290],
+	"alert"			:[300,100],
+	"option"		:[250,-1],
+	"skillsubs"		:[250,225],
+	"vimg"			:[295,-1],
+	"listSellTools"	:[300,-1],
+	"onlineUsers"	:[340,375],
+	"listStoreTools":[240,290],
+	"dealWin"		:[400,-1],
+	"default"		:[240,270],
+	"composeFormulas":[160,-1],
+	"composeWin"	:[260,-1],
+	"composeSkill"	:[260,270]
+};
+</script>
+<script src="include/Common.js?ver=V2.1.0.2008-05-26.QW"></script>
+<script src="include/Cookie.js?ver=V2.1.0.2008-05-26.QW"></script>
+<script src="include/Map.js?ver=V2.1.0.2008-05-26.QW"></script>
+<script src="include/BattleMap.js?ver=V2.1.0.2008-05-26.QW"></script>
+<script src="include/Pet.js?ver=V2.1.0.2008-05-26.QW"></script>
+<script src="include/include.js?ver=V2.1.0.2008-05-26.QW"></script>
+<script>
+initPet();
+//alertPetTalk(hasNewTalk);
+
+var isNewPet=false;
+
+
+
+var publicPosts=[];
+var publicPostNum=0;
+var publicPostRun=false;
+function _publicPostGo(){
+	if(publicPosts.length>0){
+		if(publicPostNum>=publicPosts.length){
+			publicPostNum=0;
+		}
+		getObj("publicPost").innerHTML=publicPosts[publicPostNum];
+		publicPostNum++;
+	}
+	window.setTimeout('_publicPostGo()',10000);
+}
+function addPublicPost(title,linkUrl){
+	try{
+		var addNum=publicPosts.length;
+		if(linkUrl!=null&&linkUrl.length>0&&linkUrl!="null"){
+			publicPosts[addNum]="<a href='"+linkUrl+"' target=_blank><font style='color:#154669;font-family:tahoma'>"+title+"</font></a>";
+		}else{
+			publicPosts[addNum]="<font style='color:#154669;font-family:tahoma'>"+title+"</font>";
+		}
+		publicPostNum=addNum;
+		if(!publicPostRun){
+			_publicPostGo();
+			publicPostRun=true;
+		}
+	}catch(x){alert(x)};
+}
+addPublicPost("欢迎来到猫游记,祝您游戏开心!","null");addPublicPost("加入推广成就银月帝国王者!","http://pet.mop.com/activity/extend/");addPublicPost("分宠说明","http://www.pet.mop.com/html/maoyouji8195/huabeidianxin5640/200807101356077349.html");
+
+p.rankClear();
+
+</script>
+
+
+
+
+
+
+
+<script src="http://topic.mop.com/play/sniper/mop.jsp"></script>
+<script>try{getObj("selfOnline").src="pageinclude/self.html";}catch(x){}</script>
+
+
+	<script>
+		openAd();
+function showWorldMap(){
+	window.open('http://www.pet.imop.com/pet_map_all.html','menubar=no,toolbar=no,location=no,directories=no,status=no,width=316,height=410,scrollbars=yes');
+}
+	</script>
+
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+<script src="/include/count/google.js" type="text/javascript"></script>
+
+
+
+</body>
+</html>
+
+

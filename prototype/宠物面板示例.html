@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>宠物面板示例 - Caesar（按 游戏内截图/装备栏.png 1:1 复刻）</title>
+<style>
+/* ===== 页面与窗口框架（几何/颜色均按截图实测） ===== */
+body{background:#EEEEEE;font-family:"宋体",SimSun,serif;margin:0;padding:24px;color:#000;font-size:16px}
+.win{width:353px;box-sizing:border-box;background:#E1E1E1;border:1px solid #C4C4C4;
+  padding:15px 34px 20px 34px;line-height:21px}
+a{cursor:pointer;text-decoration:none}
+
+/* ===== 头部：运势 / 名字 / 战斗力 ===== */
+.fortune{font-weight:bold}                     /* 今日运势:【 末吉 】 */
+.fname{font-weight:bold;font-family:Arial}     /* 宠物名 */
+.lv{font-family:Arial}
+.lv b{color:red}
+.spk{vertical-align:-12px;margin:0 10px 0 3px}  /* 说话气泡图标 */
+.expline{color:#2747A7}                        /* 战士 Lv */
+.zdl{color:#316AC5}                            /* 战斗力链接 */
+
+/* ===== 分隔线 ===== */
+hr{border:none;border-top:1px solid #C0C0C0;margin:12px 0 13px}
+
+/* ===== 属性表 / 战斗属性表（两列各50%，行距28px） ===== */
+.attr{border-collapse:collapse;width:100%}
+.attr td{padding:3px 2px;width:50%;line-height:22px;vertical-align:middle}
+.add{color:#009900}
+.dmg{color:#105E8B;font-weight:bold}
+.dps{color:#FF4000}
+.atk{color:#F32C77}
+.def{color:#217081}
+
+/* ===== 成就（月亮/星星：21px 图形置于 28px 盒顶部，盒下沉 13px 复现参考图行距） ===== */
+.ic-moon,.ic-star{display:inline-block;width:28px;height:28px;margin-right:-7px;vertical-align:-13px;
+  background-size:21px 21px;background-position:left top;background-repeat:no-repeat}
+.ic-moon{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='21' height='21'><mask id='m'><rect width='21' height='21' fill='white'/><circle cx='15.3' cy='8.8' r='6.6' fill='black'/></mask><circle cx='10.2' cy='11.4' r='9' fill='%23E8940A' mask='url(%23m)'/><circle cx='10.2' cy='11.4' r='8.2' fill='%23FFD94A' mask='url(%23m)'/><path d='M5.5 7 Q7.5 5 10 5.5' fill='none' stroke='%23FFF3B0' stroke-width='1.4' stroke-linecap='round'/></svg>")}
+.ic-star{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='21' height='21'><polygon points='10.5,2 13.1,8.4 20,8.9 14.7,13.2 16.4,20 10.5,16.2 4.6,20 6.3,13.2 1,8.9 7.9,8.4' fill='%23FFD94A' stroke='%23E8940A' stroke-width='1.2' stroke-linejoin='round'/></svg>")}
+.exp{color:#316AC5}
+
+/* ===== 自动修理 ===== */
+.repair{font-weight:bold}
+.cbox{display:inline-block;width:15px;height:15px;border:2px solid #8F8F8F;background:#fff;
+  vertical-align:-4px;margin-left:38px}
+
+/* ===== 装备列表（图标列32px / 名字列172px 控制换行 / 按钮右对齐） ===== */
+.eqs{border-collapse:separate;border-spacing:0 6px;width:100%;margin-top:-4px}
+.eqs td{vertical-align:middle;padding:0}
+.eqs .ic{width:32px}
+.eqs .ic svg{display:block}
+.eqs .ic .ph,.eqs .ic .ic-orb{width:31px;height:31px}
+.eqs .nm{width:172px;line-height:22px}
+.eqs .nm a{font-weight:bold}
+.eqs .ops{text-align:right;padding-right:15px;white-space:nowrap}
+.q-b{color:#0070DD}.q-p{color:#A335EE}.q-w{color:#333}
+.pislot{color:#000}
+.ph{display:inline-block;width:30px;height:30px;box-sizing:border-box;
+  background:linear-gradient(#DDD9D1,#C6C2BA);border:1px solid #A8A49C}  /* 未知图标占位 */
+
+/* 图形按钮：蓝色减号（修理）+ 纸箱绿箭头（快捷），按截图右端对齐至 x≈315 */
+.b-repair{display:inline-block;width:17px;height:17px;margin-right:2px;vertical-align:middle;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='17' height='17'><rect x='.7' y='.7' width='15.6' height='15.6' rx='4' fill='%2329A9E0' stroke='%231B7FB0' stroke-width='.6'/><rect x='4' y='6.5' width='9' height='4' rx='2' fill='%23FFFFFF'/></svg>") no-repeat}
+.b-swap{display:inline-block;width:21px;height:19px;vertical-align:middle;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='21' height='19'><path d='M2 4 L8 1.2 L14 4 L14 12 L8 14.8 L2 12 Z' fill='%23E2ECF4' stroke='%23215F93' stroke-width='1.3'/><path d='M2 4 L8 6.8 L14 4 M8 6.8 L8 14.8' fill='none' stroke='%23215F93' stroke-width='1.1'/><rect x='6.6' y='6.6' width='7.6' height='4.2' fill='%235FA845' stroke='%233D7A2E' stroke-width='1'/><path d='M13.5 3.8 L20 9 L13.5 14.2 Z' fill='%235FA845' stroke='%233D7A2E' stroke-width='1'/></svg>") no-repeat}
+
+/* 蓝色泉水珠（魔法之泉），复用两次 */
+.ic-orb{display:inline-block;width:30px;height:30px;
+  background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><defs><radialGradient id='g' cx='35%25' cy='30%25' r='75%25'><stop offset='0' stop-color='%23C8ECF8'/><stop offset='.45' stop-color='%232E9BE0'/><stop offset='1' stop-color='%230B57A8'/></radialGradient></defs><circle cx='15' cy='15' r='13' fill='url(%23g)' stroke='%230A3E78' stroke-width='1.5'/><ellipse cx='10.5' cy='9.5' rx='4' ry='2.5' fill='%23E8F8FF' opacity='.85' transform='rotate(-25 10.5 9.5)'/></svg>") no-repeat}
+</style>
+</head>
+<body>
+<div class="win">
+  <!-- ① 头部信息 -->
+  <div class="fortune">今日运势:【 末吉 】</div>
+  <div><span class="fname">Caesar</span><svg class="spk" width="27" height="25" viewBox="0 0 27 25"><path d="M6 1.5 H21.5 A3.5 3.5 0 0 1 25 5 V13.5 A3.5 3.5 0 0 1 21.5 17 H12 L5.5 23 V17 H5.5 A3.5 3.5 0 0 1 2 13.5 V5 A3.5 3.5 0 0 1 5.5 1.5 Z" fill="#fff" stroke="#454F63" stroke-width="1.6"/><rect x="6" y="5.5" width="14" height="2" fill="#454F63"/><rect x="6" y="9.5" width="14" height="2" fill="#454F63"/><rect x="6" y="13.5" width="10" height="2" fill="#454F63"/></svg><span class="expline">战士 <span class="lv">Lv <b>71</b></span></span></div>
+  <div><a class="zdl">战斗力:12117</a></div>
+  <hr>
+
+  <!-- ② 六维属性 -->
+  <table class="attr"><tr>
+    <td>力量:&thinsp;<span class="add">20077</span></td><td>敏捷:&thinsp;<span class="add">6642</span></td></tr><tr>
+    <td>体力:&thinsp;<span class="add">11800</span></td><td>智力:&thinsp;<span class="add">7704</span></td></tr><tr>
+    <td>精神:&thinsp;<span class="add">3031</span></td><td></td></tr></table>
+  <hr>
+
+  <!-- ③ 战斗属性 -->
+  <table class="attr"><tr>
+    <td>伤害:&thinsp;<b class="dmg">14825 - 18442</b></td><td>秒伤:&thinsp;<span class="dps">5735.7</span></td></tr><tr>
+    <td>攻击:&thinsp;<span class="atk">41507</span></td><td>防御:&thinsp;<span class="def">30692</span></td></tr><tr>
+    <td>重击:&thinsp;362.91%</td><td>攻速:&thinsp;2.9</td></tr><tr>
+    <td colspan="2">资历:&thinsp;<span class="add">272839</span></td></tr>
+    <tr><td colspan="2">成就: <span class="ic-moon"></span><span class="ic-moon"></span><span class="ic-moon"></span><span class="ic-moon"></span><span class="ic-moon"></span><span class="ic-moon"></span><span class="ic-moon"></span><span class="ic-star"></span><span class="ic-star"></span> <a class="exp">[展开]</a></td></tr></table>
+  <hr>
+
+  <!-- ④ 自动修理 -->
+  <div class="repair">自动修理<span class="cbox"></span></div>
+
+  <!-- ⑤ 装备列表 -->
+  <table class="eqs">
+    <tr><td class="ic"><svg width="31" height="31" viewBox="0 0 30 30"><rect x="1.5" y="1.5" width="27" height="27" rx="3" fill="#F6C400" stroke="#6A5A00"/><rect x="4.5" y="4.5" width="9.5" height="9.5" rx="2.5" fill="#C4788E" stroke="#7E3E56"/><rect x="16" y="4.5" width="9.5" height="9.5" rx="2.5" fill="#B86A82" stroke="#7E3E56"/><rect x="4.5" y="16" width="9.5" height="9.5" rx="2.5" fill="#B86A82" stroke="#7E3E56"/><rect x="16" y="16" width="9.5" height="9.5" rx="2.5" fill="#AC5E78" stroke="#7E3E56"/><circle cx="7" cy="7" r="1" fill="#F2D8E0"/><circle cx="19" cy="7" r="1" fill="#F2D8E0"/><circle cx="7" cy="19" r="1" fill="#F2D8E0"/><circle cx="19" cy="19" r="1" fill="#F2D8E0"/><rect x="13.5" y="27" width="3" height="2.5" fill="#3A3020"/></svg></td><td class="nm"><a class="q-p">强效拦截者护符</a><span class="pislot">(护符)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><svg width="31" height="31" viewBox="0 0 30 30"><path d="M15 1.5 L27.5 5.5 V15 Q27.5 24.5 15 28.5 Q2.5 24.5 2.5 15 V5.5 Z" fill="#8E2430" stroke="#D8B830" stroke-width="1.6"/><circle cx="15" cy="7" r="3" fill="#E23448" stroke="#F2D060"/><path d="M7 20 V13 Q7 10.5 9.25 10.5 Q11.5 10.5 11.5 13 V20 Q9.25 21 7 20 Z" fill="#C05060" stroke="#F2D060" stroke-width=".8"/><path d="M23 20 V13 Q23 10.5 20.75 10.5 Q18.5 10.5 18.5 13 V20 Q20.75 21 23 20 Z" fill="#C05060" stroke="#F2D060" stroke-width=".8"/></svg></td><td class="nm"><a class="q-p">强效暗杀者护符</a><span class="pislot">(护符)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ic-orb"></span></td><td class="nm"><a class="q-b">魔法之泉(Lv4)</a><span class="pislot">(治愈之力)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ic-orb"></span></td><td class="nm"><a class="q-b">魔法之泉(Lv4)</a><span class="pislot">(治愈之力)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><svg width="31" height="31" viewBox="0 0 30 30"><rect x="10.8" y="4" width="3.8" height="25" rx="1.9" transform="rotate(-40 12.7 16.5)" fill="#9A6632" stroke="#54350F"/><path d="M9 8 Q16 0.5 27.5 4 Q26.5 12.5 17.5 15.5 Q11.5 13.5 9 8 Z" fill="#EFC832" stroke="#8A6A10" stroke-width="1.2"/><path d="M11 8 Q16.5 2.5 25.5 5" fill="none" stroke="#FFF0A0" stroke-width="1.2"/></svg></td><td class="nm"><a class="q-b">鬼斧神工</a><span class="pislot">(鬼斧神工)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><svg width="31" height="31" viewBox="0 0 30 30"><rect x="13.4" y="2" width="3.2" height="24" rx="1.6" transform="rotate(35 15 14)" fill="#3E4854" stroke="#171D26"/><rect x="14" y="4" width="1" height="20" transform="rotate(35 15 14)" fill="#9FB4C8"/><rect x="9" y="22.5" width="6" height="2.4" rx="1" transform="rotate(35 12 23.7)" fill="#2A3038"/><circle cx="7" cy="25.5" r="2.2" fill="#D06898"/></svg></td><td class="nm"><a class="q-p">暴雨梨花针</a><span class="pislot">(暗器)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">万象图</a><span class="pislot">(万象图)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">朗基努斯枪</a><span class="pislot">(圣之赐)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-w">昆仑镜</a><span class="pislot">(法宝)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">八卦神符</a><span class="pislot">(神符)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">斥候披风</a><span class="pislot">(背)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">堕落之伤</a><span class="pislot">(颈)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">水鱼龙</a><span class="pislot">(召唤兽)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">强效剑圣护符</a><span class="pislot">(护符)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">魂器</a><span class="pislot">(命格)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">闪光指环</a><span class="pislot">(手指)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">战神魔轮</a><span class="pislot">(魔轮)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">碧空指环</a><span class="pislot">(手指)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">Mophone</a><span class="pislot">(手机)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">打工护符</a><span class="pislot">(护符)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">基因改造射线</a><span class="pislot">(饰品)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">铁拳火箭炮</a><span class="pislot">(饰品)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">携带版破甲炮</a><span class="pislot">(饰品)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">复制人手套</a><span class="pislot">(饰品)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">恶魔翼灵</a><span class="pislot">(翼灵)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">普通的盖亚护手</a><span class="pislot">(手套)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">精致的拯救肩铠</a><span class="pislot">(肩)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">良好的盖亚护臂</a><span class="pislot">(腕)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">良好的拯救腰带</a><span class="pislot">(腰)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">良好的盖亚腿甲</a><span class="pislot">(腿)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">无瑕的拯救长靴</a><span class="pislot">(脚)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">良好的无畏面具</a><span class="pislot">(头)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">精致的无畏胸甲</a><span class="pislot">(胸)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">神秘护符</a><span class="pislot">(神秘护符)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">灭世之冠</a><span class="pislot">(灭世之冠)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">芙蓉环</a><span class="pislot">(耳朵)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-w">真·芙蓉环</a><span class="pislot">(耳朵)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">幻翼精灵(战)</a><span class="pislot">(羽翼)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">元神·六合纵横</a><span class="pislot">(元神)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">元素罗盘</a><span class="pislot">(元素)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">燃烧宝石</a><span class="pislot">(燃烧宝石)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">星月神话</a><span class="pislot">(星月神话)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">命运女神</a><span class="pislot">(命运女神)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">水晶球</a><span class="pislot">(水晶球)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">守护之星(战士)</a><span class="pislot">(守护之星)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">霸者之核</a><span class="pislot">(霸者之核)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">英雄徽记</a><span class="pislot">(徽记)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">催化神石</a><span class="pislot">(催化神石)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">和谐圣杯Lv9</a><span class="pislot">(圣杯)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">轮舞之剑</a><span class="pislot">(左手,右手)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">融合而成的青龙</a><span class="pislot">(坐骑)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">完美的骑士缰绳</a><span class="pislot">(骑士缰绳)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">完美的沙花守甲</a><span class="pislot">(沙花守甲)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">完美的蹄铁</a><span class="pislot">(蹄铁)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">完美的马鞍</a><span class="pislot">(马鞍)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-p">完美的面具</a><span class="pislot">(面具)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">替身胸甲</a><span class="pislot">(替身胸部)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">替身腿甲</a><span class="pislot">(替身腿部)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+    <tr><td class="ic"><span class="ph"></span></td><td class="nm"><a class="q-b">替身头盔</a><span class="pislot">(替身头部)</span></td><td class="ops"><span class="b-repair"></span><span class="b-swap"></span></td></tr>
+  </table>
+</div>
+</body>
+</html>

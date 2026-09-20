@@ -578,7 +578,8 @@ body{
 .p-body::-webkit-scrollbar{width:10px}
 .p-body::-webkit-scrollbar-track{background:#efefef;border-left:1px solid #d8d8d8}
 .p-body::-webkit-scrollbar-thumb{background:#d4d4d4;border:1px solid #a8a8a8}
-.p-name-row{display:flex;align-items:baseline;gap:8px}
+.p-name-row{display:flex;align-items:center;gap:8px}
+.p-avatar{height:44px;width:auto;flex:none;image-rendering:pixelated}
 .p-name{font:bold 15px SimHei,"黑体";color:var(--ink-navy)}
 .p-sub{font:12px SimSun;color:#8a93a6}
 .p-expbar{height:8px;background:#e0e6ec;border:1px solid #9aa8b8;border-radius:2px;position:relative;margin-top:6px}
@@ -657,30 +658,40 @@ body{
 /* 经典弹窗 */
 #modal-mask{position:fixed;inset:0;background:rgba(20,50,80,.4);display:none;align-items:center;justify-content:center;z-index:90}
 #modal-mask.show{display:flex}
-#modal{width:432px;max-width:94vw;max-height:84vh;overflow:hidden;padding:0;display:flex;flex-direction:column}
+#modal{width:432px;max-width:94vw;max-height:84vh;overflow:hidden;padding:0;display:flex;flex-direction:column;background:#eee}
 .m-head{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--panel-line);font:bold 15px SimHei;color:var(--ink-navy);background:linear-gradient(#e8f4fb,#c3e0ef)}
 .m-head .x{margin-left:auto;cursor:pointer;color:#8a2a10;font:bold 16px SimSun;padding:0 6px}
 .m-body{padding:12px 14px;font:14px SimSun;color:#1c3a50;overflow:auto}
 .kv{display:grid;grid-template-columns:92px 1fr;gap:4px 10px;margin-bottom:10px}
 .kv b{color:#39617c;font-weight:normal}
 .drops span{display:inline-block;margin:2px 4px 2px 0;padding:1px 8px;border:1px solid #9cc4d8;border-radius:3px;background:#eaf5fb;font:12px SimSun}
+.m-monster{display:flex;gap:14px;align-items:flex-start}
+.m-monster img{height:120px;width:auto;flex:none;background:#eee;padding:6px}
+.m-monster-info{flex:1;min-width:0}
+.m-monster-name{font:bold 16px SimHei;color:#14506e}
+.m-monster-sub{font:12px SimSun;color:#39617c;margin-top:3px}
+.m-monster-sec{font:bold 12px SimHei;color:#39617c;margin:9px 0 3px}
 .m-foot{padding:10px 12px;border-top:1px solid var(--panel-line);display:flex;gap:8px;justify-content:flex-end}
 .cbtn{font:14px SimSun;padding:5px 18px;cursor:pointer;background:linear-gradient(#fdfefe,#d9ecf6);border:1px solid #7fb0cc;border-radius:4px;color:#14506e}
 .cbtn.red{background:linear-gradient(#ffe3dc,#f5b9a8);border-color:#c05a3a;color:#8a1e08;font-weight:bold}
 .cbtn:hover{filter:brightness(1.05)}
 /* ---------- 战斗页面 ---------- */
-#battle{position:absolute;inset:0;z-index:6;display:none;flex-direction:column;border-radius:6px;background:linear-gradient(#dceef7,#b8d9ea 46%,#9cc48b 46%,#8dbd72);overflow:hidden}
+#battle{position:absolute;inset:0;z-index:6;display:none;flex-direction:column;border-radius:6px;background:url('../assets/原版参考/战斗背景/银光森林背景图.png') center/cover no-repeat;overflow:hidden}
 #battle.show{display:flex}
 .bt-head{flex:none;display:flex;align-items:center;gap:8px;padding:5px 12px;font:bold 15px SimHei;color:#8a1e08;background:linear-gradient(#ffe3dc,#f5b9a8);border-bottom:1px solid #c05a3a}
 .bt-head .sub{font:12px SimSun;color:#7a3c2a;font-weight:normal}
 .bt-stage{flex:1;position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:0 30px 10px;min-height:0}
 .bt-stage::before{content:'';position:absolute;left:0;right:0;bottom:0;height:44%;background:radial-gradient(ellipse at 50% 100%,rgba(50,90,40,.16),rgba(255,255,255,0) 70%);pointer-events:none}
 .bt-unit{display:flex;flex-direction:column;align-items:center;gap:5px;z-index:2;width:196px}
-.bt-plate{font:bold 14px SimHei;color:#123;background:rgba(255,255,255,.88);border:1px solid #7fb0cc;border-radius:4px;padding:1px 10px;white-space:nowrap}
-.bt-unit .bar{width:100%}
-.bt-sprite{height:124px;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 3px 2px rgba(20,40,20,.3))}
-.bt-sprite svg{height:122px;width:auto}
-.bt-sprite img{height:114px;image-rendering:pixelated}
+/* 顶部状态栏(参考原版战斗界面:血条在顶部,不贴近场上形象) */
+.bt-status{flex:none;display:flex;justify-content:space-between;gap:16px;padding:6px 12px;background:linear-gradient(#eaf5fb,#d5eaf6);border-bottom:1px solid #9cc4d8}
+.bt-stat{width:232px;display:flex;flex-direction:column;gap:3px}
+.bt-stat.right{align-items:flex-end}
+.bt-stat-name{font:bold 13px SimHei;color:#123;white-space:nowrap}
+.bt-stat .bar{width:100%}
+.bt-sprite{height:62px;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 3px 2px rgba(20,40,20,.3))}
+.bt-sprite img{height:57px}
+#b-pimg{image-rendering:pixelated}
 .bt-shadow{width:88px;height:13px;border-radius:50%;background:rgba(30,60,30,.22)}
 .bt-vs{position:absolute;left:50%;top:36%;transform:translate(-50%,-50%);font:bold 32px SimHei;color:#c33812;text-shadow:0 2px 0 #fff,0 0 8px #ffd34d;pointer-events:none}
 /* 出招 / 受击 / 阵亡动画 */
@@ -689,7 +700,6 @@ body{
 @keyframes lungeR{35%{transform:translateX(56px)}}
 @keyframes lungeL{35%{transform:translateX(-56px)}}
 .bt-unit.hit .bt-sprite{animation:shake .42s}
-.bt-unit.hit img{filter:brightness(2.4) saturate(.2)}
 @keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
 .bt-unit.dead .bt-sprite{filter:grayscale(1) brightness(.65);transform:translateY(12px) rotate(9deg);transition:all .6s ease}
 /* 飘字 */
@@ -791,47 +801,25 @@ body{
       <!-- ⚔ 战斗画面:覆盖整个地图区域,双方形象登场 -->
       <div id="battle">
         <div class="bt-head">⚔ 战斗 · <span id="b-loc">银光森林01</span><span class="sub">回合制 · 选择行动作战</span></div>
-        <div class="bt-stage">
-          <div class="bt-unit bt-player" id="bt-player">
-            <div class="bt-plate">Klay 🐱 Lv.71 剑士</div>
+        <div class="bt-status">
+          <div class="bt-stat">
+            <div class="bt-stat-name">Klay 🐱 Lv.71 剑士</div>
             <div class="bar hp"><i id="b-php" style="width:100%"></i><span id="b-phpt">247117/247117</span></div>
             <div class="bar mp"><i id="b-pmp" style="width:100%"></i><span id="b-pmpt">104699/104699</span></div>
-            <div class="bt-sprite">
-              <svg viewBox="0 0 90 120">
-                <path d="M22 92 Q4 84 8 66" fill="none" stroke="#e8940f" stroke-width="7" stroke-linecap="round"/>
-                <rect x="30" y="88" width="10" height="22" rx="3" fill="#f5a623"/>
-                <rect x="46" y="88" width="10" height="22" rx="3" fill="#f5a623"/>
-                <ellipse cx="35" cy="111" rx="9" ry="5" fill="#7a4a1a"/>
-                <ellipse cx="51" cy="111" rx="9" ry="5" fill="#7a4a1a"/>
-                <path d="M26 52 Q45 44 64 52 L66 92 Q45 98 24 92 Z" fill="#f5a623"/>
-                <path d="M26 52 Q45 44 64 52 L65 66 Q45 60 25 66 Z" fill="#8a5a2a"/>
-                <rect x="24" y="64" width="42" height="7" rx="2" fill="#c9a55a"/>
-                <circle cx="24" cy="60" r="5" fill="#f5a623"/>
-                <ellipse cx="16" cy="70" rx="10" ry="13" fill="#9aa7b8" stroke="#5c6878"/>
-                <ellipse cx="16" cy="70" rx="5" ry="7" fill="#c8321e"/>
-                <circle cx="66" cy="58" r="5" fill="#f5a623"/>
-                <rect x="63" y="14" width="6" height="44" rx="2" fill="#dfe8f0" stroke="#8a97a8"/>
-                <rect x="56" y="52" width="20" height="5" rx="2" fill="#b8862f"/>
-                <rect x="64" y="57" width="4" height="9" fill="#7a4c12"/>
-                <polygon points="66,8 70,16 62,16" fill="#ffd34d" stroke="#c99a10"/>
-                <circle cx="45" cy="30" r="17" fill="#f5a623"/>
-                <polygon points="32,20 34,4 43,15" fill="#f5a623" stroke="#c97f10"/>
-                <polygon points="58,20 56,4 47,15" fill="#f5a623" stroke="#c97f10"/>
-                <path d="M27 22 Q45 8 63 22 L63 26 L27 26 Z" fill="#9aa7b8" stroke="#5c6878"/>
-                <rect x="27" y="25" width="36" height="4" fill="#c8321e"/>
-                <circle cx="39" cy="33" r="2.6" fill="#222"/>
-                <circle cx="52" cy="33" r="2.6" fill="#222"/>
-                <path d="M40 41 Q45 44 50 41" stroke="#7a3c00" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-                <path d="M30 36 L22 34 M30 39 L23 39 M60 36 L68 34 M60 39 L67 39" stroke="#c97f10" stroke-width="1.2"/>
-              </svg>
-            </div>
+          </div>
+          <div class="bt-stat right">
+            <div class="bt-stat-name" id="b-mname">怪物</div>
+            <div class="bar hp"><i id="b-mhp" style="width:100%;background:linear-gradient(#ff8a70,#e05252)"></i><span id="b-mhpt"></span></div>
+          </div>
+        </div>
+        <div class="bt-stage">
+          <div class="bt-unit bt-player" id="bt-player">
+            <div class="bt-sprite"><img id="b-pimg" src="../宠物资料/恶魔波力.gif" alt="宠物形象"></div>
             <div class="bt-shadow"></div>
           </div>
           <div class="bt-vs">VS</div>
           <div class="bt-unit bt-monster" id="bt-monster">
-            <div class="bt-plate" id="b-mname">怪物</div>
-            <div class="bar hp"><i id="b-mhp" style="width:100%;background:linear-gradient(#ff8a70,#e05252)"></i><span id="b-mhpt"></span></div>
-            <div class="bt-sprite"><img id="b-mimg" src="sprites/monster-snake.png" alt="怪物形象"></div>
+            <div class="bt-sprite"><img id="b-mimg" src="../assets/怪物/怪物图片素材/幽灵.png" alt="怪物形象"></div>
             <div class="bt-shadow"></div>
           </div>
         </div>
@@ -1037,19 +1025,19 @@ body{
    ========================================================== */
 /* 怪物模板(v1.4 规则:抵达节点随机生成,等级浮动,地图上不显示) */
 const MTPL = {
-  zhu:{key:'zhu',name:'竹叶青',lv:12,type:'普通',element:'风 · 被火克制',hp:980,atk:180,def:92,spd:42,rec:60,skills:['毒牙撕咬 物理130%','缠绕 30%减速'],drops:[['蛇胆',35],['青鳞片',50],['初级升级石',8]]},
-  rat:{key:'rat',name:'凶恶的白鼠',lv:11,type:'普通',element:'地 · 被风克制',hp:820,atk:165,def:80,spd:48,rec:52,skills:['啮咬 物理120%'],drops:[['鼠尾',45],['小瓶红药',30]]},
-  snail:{key:'snail',name:'蜗牛',lv:10,type:'普通',element:'地 · 被风克制',hp:1200,atk:120,def:150,spd:15,rec:55,skills:['撞击 物理100% + 减速'],drops:[['蜗牛壳',60],['雪狼皮',10]]},
-  fly:{key:'fly',name:'变异苍蝇',lv:12,type:'普通',element:'风 · 被火克制',hp:760,atk:195,def:70,spd:60,rec:58,skills:['病原体 中毒2回合'],drops:[['蝇翼',40],['幸运四叶草',6]]},
-  mush:{key:'mush',name:'剧毒蘑菇',lv:13,type:'精英',element:'地 · 被风克制',hp:2400,atk:210,def:180,spd:22,rec:120,skills:['毒雾 中毒3回合','孢子扩散 群体80%'],drops:[['毒囊',80],['猫爪匕首',12]]},
-  wolf:{key:'wolf',name:'雪原狼',lv:14,type:'精英',element:'风 · 被火克制',hp:2100,atk:260,def:140,spd:55,rec:130,skills:['冰牙 物理140%','嚎叫 攻击UP'],drops:[['雪狼皮',65],['水晶腰带',10]]},
-  fire:{key:'fire',name:'火魂',lv:18,type:'BOSS',element:'火 · 被水克制',hp:16000,atk:420,def:220,spd:70,rec:520,skills:['烈焰冲击 火180%','灵魂灼烧 灼烧2回合','分裂（阶段2）'],drops:[['虚空宝石',100],['初级升级石x5',100],['称号·灭火英雄',100]]}
+  ghost:{key:'ghost',name:'幽灵',lv:12,type:'普通',element:'暗 · 被光克制',hp:980,atk:180,def:92,spd:42,rec:60,skills:['幽爪撕咬 物理130%','惊惧 30%减速'],drops:[['幽魂珠',35],['夜雾结晶',50],['初级升级石',8]]},
+  pirate:{key:'pirate',name:'海盗鼠',lv:11,type:'普通',element:'风 · 被火克制',hp:820,atk:165,def:80,spd:48,rec:52,skills:['啮咬 物理120%'],drops:[['珍珠',45],['小鱼干',30]]},
+  rabbit:{key:'rabbit',name:'雪兔',lv:10,type:'普通',element:'水 · 被地克制',hp:1200,atk:120,def:150,spd:15,rec:55,skills:['兔踢 物理100% + 减速'],drops:[['兔毛',60],['冰晶',10]]},
+  salamander:{key:'salamander',name:'火蜥蜴',lv:12,type:'普通',element:'火 · 被水克制',hp:760,atk:195,def:70,spd:60,rec:58,skills:['毒液喷吐 中毒2回合'],drops:[['蜥蜴鳞',40],['幸运四叶草',6]]},
+  kraken:{key:'kraken',name:'深渊海妖',lv:13,type:'精英',element:'水 · 被地克制',hp:2400,atk:210,def:180,spd:22,rec:120,skills:['毒雾 中毒3回合','触手横扫 群体80%'],drops:[['毒囊',80],['猫爪匕首',12]]},
+  icewolf:{key:'icewolf',name:'冰狼',lv:14,type:'精英',element:'水 · 被地克制',hp:2100,atk:260,def:140,spd:55,rec:130,skills:['冰牙 物理140%','嚎叫 攻击UP'],drops:[['雪狼皮',65],['水晶腰带',10]]},
+  kula:{key:'kula',name:'炎魔库拉',lv:18,type:'BOSS',element:'火 · 被水克制',hp:16000,atk:420,def:220,spd:70,rec:520,skills:['烈焰冲击 火180%','灵魂灼烧 灼烧2回合','库拉焚世（阶段2）'],drops:[['虚空宝石',100],['初级升级石x5',100],['称号·灭火英雄',100]]}
 };
-const MPOOL = ['zhu','zhu','rat','rat','snail','snail','snail','fly','mush','wolf'];
+const MPOOL = ['ghost','ghost','pirate','pirate','rabbit','rabbit','rabbit','salamander','kraken','icewolf'];
 const TOWN_NODE = '00', BOSS_NODE = '17';
-/* 战斗形象(取自 CC0 素材包 50+ Monsters Pack 2D,编号映射可按视觉调整) */
-const SPRITE = {zhu:'sprites/monster-snake.png',rat:'sprites/monster-rat.png',snail:'sprites/monster-snail.png',
-  fly:'sprites/monster-fly.png',mush:'sprites/monster-mush.png',wolf:'sprites/monster-wolf.png',fire:'sprites/monster-fire.png'};
+/* 战斗形象(取自 assets/怪物/怪物图片素材,与怪物同名映射,均选用透明底图片) */
+const SPRITE = {ghost:'../assets/怪物/怪物图片素材/幽灵.png',pirate:'../assets/怪物/怪物图片素材/海盗鼠.png',rabbit:'../assets/怪物/怪物图片素材/雪兔.png',
+  salamander:'../assets/怪物/怪物图片素材/火蜥蜴.png',kraken:'../assets/怪物/怪物图片素材/深渊海妖.png',icewolf:'../assets/怪物/怪物图片素材/冰狼.png',kula:'../assets/怪物/怪物图片素材/炎魔库拉.png'};
 
 const SKILLS = [
   ['猫爪连击', '#e8eef4','#9aa7b8','M4 6 L26 26 M26 6 L4 26'],                       // 双爪(剑)
@@ -1222,7 +1210,7 @@ function mkInst(key){
 }
 function spawnRoster(id){
   if(id === TOWN_NODE) return [];
-  if(id === BOSS_NODE) return [mkInst('fire')];
+  if(id === BOSS_NODE) return [mkInst('kula')];
   if(Math.random() < 0.5) return [];
   const n = rnd(1,3), r = [];
   for(let i=0;i<n;i++) r.push(mkInst(pick(MPOOL)));
@@ -1399,7 +1387,7 @@ function bVictory(){
   }
   renderMonsters();
   const bt = battle;
-  setTimeout(()=>{ if(battle === bt){ $('#battle').classList.remove('show'); battle = null; } }, 2400);
+  setTimeout(()=>{ if(battle === bt){ $('#battle').classList.remove('show'); battle = null; } }, 100);
 }
 function bDefeat(){
   const b = battle, m = b.m;
@@ -1407,7 +1395,7 @@ function bDefeat(){
   document.querySelector('#bt-player').classList.add('dead');
   bLine(`【战斗失败】你被${m.name}(Lv.${m.lv})打败了,损失 10% 金币,被商队救回城镇…`,'foe');
   const bt = battle;
-  setTimeout(()=>{ if(battle === bt){ $('#battle').classList.remove('show'); battle = null; } }, 2400);
+  setTimeout(()=>{ if(battle === bt){ $('#battle').classList.remove('show'); battle = null; } }, 100);
 }
 
 /* ==========================================================
@@ -1587,17 +1575,19 @@ $('#modal-mask').addEventListener('click',e=>{ if(e.target.id==='modal-mask') cl
 function openMonster(uid){
   const m = insts[uid]; if(!m) return;
   openModal(`
-    <div class="m-head">【怪物详情】${m.name} <span style="font:12px SimSun;color:#39617c">Lv.${m.lv} · ${m.type} · ${m.element}</span><span class="x" onclick="closeModal()">✕</span></div>
+    <div class="m-head">${m.name} <span style="font:12px SimSun;color:#39617c">Lv.${m.lv} · ${m.type} · ${m.element.split(' · ')[0]}</span><span class="x" onclick="closeModal()">✕</span></div>
     <div class="m-body">
-      <div class="kv">
-        <b>所在节点</b><span>银光森林${curNode}</span>
-        <b>HP</b><span>${m.maxHp}</span>
-        <b>物攻 / 物防</b><span>${m.atk} / ${m.def}</span>
-        <b>速度</b><span>${m.spd}</span>
-        <b>经验 / 金币</b><span>${m.rec*8} / ${m.rec*4}</span>
+      <div class="m-monster">
+        <img src="${m.sprite}" alt="${m.name}形象">
+        <div class="m-monster-info">
+          <div class="m-monster-name">${m.name}</div>
+          <div class="m-monster-sub">等级：Lv.${m.lv}</div>
+          <div class="m-monster-sub">类型：${m.type}</div>
+          <div class="m-monster-sub">元素：${m.element.split(' · ')[0]}</div>
+          <div class="m-monster-sec">掉落(基础概率)</div>
+          <div class="drops">${m.drops.map(d=>`<span>${d[0]} ${d[1]}%</span>`).join('')}</div>
+        </div>
       </div>
-      <b>技能</b><div class="drops" style="margin:4px 0 10px">${m.skills.map(s=>`<span>${s}</span>`).join('')}</div>
-      <b>掉落(基础概率)</b><div class="drops">${m.drops.map(d=>`<span>${d[0]} ${d[1]}%</span>`).join('')}</div>
     </div>
     <div class="m-foot">
       <button class="cbtn" onclick="closeModal()">关 闭</button>
@@ -1963,7 +1953,7 @@ document.addEventListener('mouseup',()=> drag = null);
    宠物栏(角色装备/属性)
    ========================================================== */
 const PET_INFO = {
-  name:'大橘为重', breed:'橘猫', job:'战士系', lv:20, exp:45, points:2,
+  name:'恶魔波力', breed:'波力', job:'战士系', lv:20, exp:45, points:2,
   stats:[['体力',25],['力量',20],['敏捷',15],['智力',10],['精神',12],['幸运',8]],
   derived:[['HP','550/550'],['MP','180/180'],['物攻','55'],['魔攻','20'],['物防','30'],['魔防','24'],['速度','40'],['命中','85%'],['闪避','10%'],['暴击','12%']]
 };
@@ -1979,7 +1969,7 @@ const PET_EQUIPS = {
 let petMenuSlot = null;
 function renderPet(){
   $('#p-body').innerHTML = `
-    <div class="p-name-row"><span class="p-name">${PET_INFO.name}</span><span class="p-sub">${PET_INFO.breed} · ${PET_INFO.job} · Lv.${PET_INFO.lv}</span></div>
+    <div class="p-name-row"><img class="p-avatar" src="../宠物资料/恶魔波力.gif" alt="宠物形象"><span class="p-name">${PET_INFO.name}</span><span class="p-sub">${PET_INFO.breed} · ${PET_INFO.job} · Lv.${PET_INFO.lv}</span></div>
     <div class="p-expbar"><i style="width:${PET_INFO.exp}%"></i><span>EXP ${PET_INFO.exp}%</span></div>
     <div class="p-sec">装备栏</div>
     <div class="p-equip-grid" id="p-grid">${P_SLOTS.map(sl=>{

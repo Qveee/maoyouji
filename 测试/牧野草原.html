@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>喵游记 · 牧野草原地图区域</title>
+<style>
+:root{
+  --panel-top:#cde9f5;--panel-bot:#aed7ea;--panel-line:#7fb0cc;--ink:#14506e;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font:12px/1.5 SimSun,"宋体",serif;color:var(--ink);display:grid;place-items:center;min-height:100vh;
+  background:radial-gradient(ellipse at 50% 30%,#a9d3e8 0%,#79aecf 70%,#5f97ba 100%)}
+.panel{background:linear-gradient(var(--panel-top),var(--panel-bot));border:1px solid var(--panel-line);
+  box-shadow:inset 0 1px 0 #f2fbff,0 1px 3px rgba(20,70,100,.28)}
+#scene{position:relative;width:560px;height:540px;overflow:hidden}
+  color:#032b42;background:rgba(223,243,252,.92);border:1px solid var(--panel-line)}
+#mapbox{position:absolute;left:8px;top:32px;width:544px;height:500px;overflow:hidden;background:#7fae62;
+  box-shadow:inset 0 0 20px rgba(30,60,80,.35)}
+#mapview{position:absolute;left:0;top:0;width:180%;height:180%;transition:none;
+  background:url("../assets/原版参考/地图/牧野草原/牧野草原-官方预览图.jpg") center/100% 100% no-repeat}
+.cell{position:absolute;z-index:1;transform:translate(-50%,-50%);cursor:pointer;
+  padding:0 3px;font:bold 12px/14px SimSun;white-space:nowrap;color:#4B4B42;background:#FFFFE1;
+  border:1px solid rgba(13,62,90,.45);box-shadow:0 1px 2px rgba(20,40,60,.25)}
+.cell:hover{background:#fffdf0;border-color:#3a8ec2}
+.cell.cur{color:#fff;background:#338EE1;border-color:#38b6f0;font-weight:bold;
+  box-shadow:0 0 0 2px rgba(56,182,240,.5)}
+#player{position:absolute;z-index:3;pointer-events:none;width:68px;height:34px;margin:-17px 0 0 -34px;
+  transition:none;filter:drop-shadow(0 2px 2px rgba(0,20,40,.5));
+  animation:bob 1.2s ease-in-out infinite}
+#player img{width:100%;height:100%;display:block}
+@keyframes bob{50%{transform:translateY(-3px)}}
+</style>
+</head>
+<body>
+<div id="scene" class="panel">
+  <div id="mapbox">
+    <div id="mapview">
+      <img id="player" src="../assets/原版参考/宠物/恶魔波利.gif" alt="宠物" title="喵小游">
+    </div>
+  </div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const LOCS=[
+  {k:'牧野草原12',n:'12',x:445,y:179},
+  {k:'牧野草原14',n:'14',x:603,y:264},
+  {k:'牧野草原13',n:'13',x:542,y:162},
+  {k:'万马草原_03',n:'万马草原',x:17,y:19},
+  {k:'牧野草原02',n:'02',x:455,y:78},
+  {k:'牧野草原25',n:'25',x:568,y:339},
+  {k:'牧野草原24',n:'24',x:449,y:307},
+  {k:'牧野草原16',n:'16',x:152,y:287},
+  {k:'牧野草原11',n:'11',x:354,y:172},
+  {k:'牧野草原05',n:'05',x:213,y:98},
+  {k:'牧野草原06',n:'06',x:111,y:79},
+  {k:'牧野草原07',n:'07',x:284,y:115},
+  {k:'牧野草原08',n:'08',x:115,y:234},
+  {k:'牧野草原26',n:'26',x:83,y:441},
+  {k:'牧野草原28',n:'28',x:663,y:413},
+  {k:'牧野草原27',n:'27',x:547,y:407},
+  {k:'牧野草原36',n:'36',x:488,y:457},
+  {k:'牧野草原18',n:'18',x:534,y:297},
+  {k:'牧野草原17',n:'17',x:379,y:260},
+  {k:'牧野草原00',n:'00',x:292,y:44},
+  {k:'牧野草原31',n:'31',x:203,y:512},
+  {k:'牧野草原15',n:'15',x:29,y:285},
+  {k:'牧野草原04',n:'04',x:145,y:161},
+  {k:'牧野草原10',n:'10',x:271,y:181},
+  {k:'牧野草原01',n:'01',x:378,y:54},
+  {k:'村口',n:'猫隐村',x:700,y:108},
+  {k:'牧野草原03',n:'03',x:667,y:193},
+  {k:'牧野草原34',n:'34',x:569,y:473},
+  {k:'牧野草原21',n:'21',x:184,y:424},
+  {k:'矮林边界',n:'低矮林地',x:704,y:527},
+  {k:'牧野草原22',n:'22',x:281,y:402},
+  {k:'牧野草原32',n:'32',x:285,y:504},
+  {k:'牧野草原23',n:'23',x:390,y:384},
+  {k:'牧野草原33',n:'33',x:419,y:487},
+  {k:'牧野草原20',n:'20',x:78,y:356},
+  {k:'牧野草原30',n:'30',x:125,y:499},
+  {k:'牧野草原35',n:'35',x:673,y:483},
+  {k:'牧野草原09',n:'09',x:328,y:358},
+];
+
+const GW=800,GH=600;
+const ZOOM=1.8;
+let cur=LOCS[0].k,camX=0,camY=0;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function setCam(cx,cy){
+  camX=clamp(cx-GW/ZOOM/2,0,GW-GW/ZOOM);camY=clamp(cy-GH/ZOOM/2,0,GH-GH/ZOOM);
+}
+function applyView(){
+  const mv=$('#mapview');
+  mv.style.transform=`translate(${-(camX/GW)*mv.clientWidth}px,${-(camY/GH)*mv.clientHeight}px)`;
+}
+function fitMap(){
+  const m=$('#mapbox'),mv=$('#mapview');
+  const mw=Math.min(m.parentElement.clientWidth,m.parentElement.clientHeight*4/3);
+  m.style.width=mw+'px';m.style.height=(mw*3/4)+'px';
+  mv.style.width=(ZOOM*100)+'%';mv.style.height=(ZOOM*100)+'%';
+  applyView();
+}
+window.addEventListener('resize',fitMap);
+function renderCells(){
+  const mv=$('#mapview');
+  LOCS.forEach(l=>{
+    const d=document.createElement('div');
+    d.className='cell'+(l.k===cur?' cur':'');
+    d.textContent=l.n;d.dataset.k=l.k;d.title=l.n;
+    d.style.left=(l.x/GW*100)+'%';d.style.top=(l.y/GH*100)+'%';
+    mv.appendChild(d);l.el=d;
+  });
+}
+function setLoc(k){
+  const to=LOCS.find(l=>l.k===k);if(!to)return;
+  cur=k;
+  const pl=$('#player');
+  pl.style.left=(to.x/GW*100)+'%';pl.style.top=(to.y/GH*100)+'%';
+  setCam(to.x,to.y);applyView();
+  LOCS.forEach(l=>l.el.classList.toggle('cur',l.k===k));
+}
+$('#mapbox').addEventListener('click',e=>{
+  const c=e.target.closest('.cell');
+  if(c)setLoc(c.dataset.k);
+});
+renderCells();fitMap();setLoc('牧野草原00');
+</script>
+</body>
+</html>
