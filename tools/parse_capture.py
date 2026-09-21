@@ -78,7 +78,11 @@ def reassemble(packets):
             elif seq == last_end:
                 buf.extend(payload)
             elif seq > last_end:
-                buf.extend(b"\x00" * (seq - last_end))
+                gap = seq - last_end
+                if gap > 1_000_000:  # 巨大空隙(丢包/中途入网), 截断重对齐
+                    buf.extend(b"\n...\n")
+                else:
+                    buf.extend(b"\x00" * gap)
                 buf.extend(payload)
             # seq < last_end: 乱序重复，跳过（简化处理）
             last_end = seq + len(payload)

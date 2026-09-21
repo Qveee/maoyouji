@@ -1,2 +1,6 @@
 .superpowers/
 .worktrees/
+.pnpm-store/
+__pycache__/
+# 原始抓包数据(单文件最大443MB,超GitHub 100MB限制,仅留本地)
+streams/streams/
